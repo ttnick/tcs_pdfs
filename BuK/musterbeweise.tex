@@ -1,0 +1,315 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{framed}
+\usepackage{tikz}
+\usepackage[justification=centering]{caption}
+\usetikzlibrary{arrows, graphs, shapes}
+\newcommand{\qed}{\hfill\(\square\)}
+\newcommand{\qedb}{\hfill\(\blacksquare\)}
+\begin{document}
+\begin{center}
+	\textbf{\large Muster-Beweise für\\Berechenbarkeit und Komplexit\"at}\\
+	von Niklas Rieken\\[2em]
+\end{center}
+In diesem Dokument wenden wir verschiedene Techniken an um Unberechenbarkeit von Funktionen bzw. Unentscheidbarkeit und \textsf{NP}-Vollständigkeit von Sprachen zu zeigen. Das Alphabet sei im gesamten Dokument einfach \( \Sigma = \{ 0, 1 \} \).
+
+\subsection*{Berechenbarkeit}
+Wir zeigen für eine Funktion, dass sie nicht berechenbar ist. In der Vorlesung und Übung wurden lediglich Sprachen, {d.h.} Funktionen der Form \( \{0, 1\}^\ast \to \{0, 1\} \) betrachtet. Die Herangehensweise bei allgemeineren Funktionen ist jedoch ziemlich gleich und es ist für das Verständnis des Stoffes vermutlich auch ganz gut einen solchen Beweis einmal gesehen zu haben.\\
+Wir benutzen einmal den Satz von Rice und alternativ dazu die (Turing-)Reduktion und zuletzt einmal Unterprogrammtechnik.
+Gegeben sei die Funktion
+\[
+	s: \Sigma^\ast \to \Sigma^\ast, s(x) = \left\lbrace
+		\begin{array}{cl}
+			\left\langle \mathcal{A} \right\rangle & x = \left\langle M \right\rangle \text{ und } L(M) = L(\mathcal{A}) \text{ regul\"ar}\\
+			x & x = \left\langle M \right\rangle \text{ und } L(M) \text{ nicht regul\"ar} \\
+			0 & \text{sonst,}
+			\end{array}
+	\right.
+\]
+wobei \( \mathcal{A} \) ein DFA ist, der die selbe Sprache erkennt wie \( M \) und \( \left\langle \mathcal{A} \right\rangle \) eine geeignete ({d.h.} eindeutige und von TM-Codierung unterscheidbare) DFA-Codierung.\\
+Zeige: \( s \) ist unberechenbar.\\
+\textit{Beweis.} Wir zeigen zunächst folgende Hilfsaussage. Die Sprache
+\[
+	K = \{ \left\langle M \right\rangle \,\vert\, L(M) \text{ ist endlich} \}
+\]
+ist unentscheidbar.\\
+Wir betrachten dazu einmal diese Sprache \( K \) mit dem Satz von Rice: Sei
+\[
+	\mathcal{S} = \{ f_M \,\vert\, \text{ es ex. ein } w_0 \in \Sigma^\ast \text{ {s.d.} {f.a.} } w \text { mit } \left| w \right| \geq \left| w_0 \right| \text{ gilt: } f_M(w) \notin 1\Sigma^\ast \}.
+\]
+\( \mathcal{S} \) ist nicht trivial. Betrachte dazu die berechenbaren Funktionen:
+\[
+	f_i: \Sigma^\ast \to \Sigma \text{ mit } f(w) = i \quad\text{ f.a. } w \in \Sigma^\ast
+\]
+mit \( i \in \{ 0, 1 \} \). Dann ist
+\begin{itemize}
+	\item \( f_0 \in \mathcal{S} \) und
+	\item \( f_1 \notin \mathcal{S} \)
+\end{itemize}
+und damit \( \emptyset \subset \mathcal{S} \subset \mathcal{R} \). Nach Satz von Rice ist dann
+\begin{align*}
+	L(\mathcal{S}) &= \{ \left\langle M \right\rangle \,\vert\, M \text{ berechnet eine Funktion aus } \mathcal{S} \}\\
+		&= \{ \left\langle M \right\rangle \,\vert\, M \text{ {antw.} auf Eingaben ab einer bestimmten L\"ange immer mit } 0 \}\\
+		&= \{ \left\langle M \right\rangle \,\vert\, M \text{ {antw.} nur auf endlich vielen Eingaben mit } 1 \}\\
+		&= \{ \left\langle M \right\rangle \,\vert\, L(M) \text{ ist endlich} \}\\
+		&= K
+\end{align*}
+unentscheidbar. \qedb\\[2em]
+Um auch die Reduktion einmal zu \"uben werden wir die selbe Hilfsaussage auch damit einmal beweisen.\\
+Wir konstruieren eine berechenbare Funktion \( f: \Sigma^\ast \to \Sigma^\ast \), sodass gilt \( x \in \overline{H_\varepsilon} \) {g.d.w.} \( f(x) \in K \), wobei \( \overline{H_\varepsilon} \) das Komplement des gewohnten speziellen Halteproblems ist. Wir konstruieren \( f \) wie folgt:
+\begin{itemize}
+	\item Falls \( x \) keine korrekte Codierung einer TM ist, setze \( f(x) = \left\langle M_0 \right\rangle \), wobei \( M_0 \) die Funktion \( f_0 \) berechnet.
+	\item Andernfalls sei \( x = \left\langle M \right\rangle \) und wir konstruieren eine TM \( M^\ast \) wie folgt:
+		\begin{enumerate}
+			\item \( M^\ast \) bestimmt die Eingabel\"ange \( n \)
+			\item \( M^\ast \) l\"oscht die Eingabe.
+			\item \( M^\ast \) simuliert \( M \) auf \( \varepsilon \), aber h\"ochstens \( n \) Schritte.
+			\item Falls die Simulation von \( M \) gehalten hat, akzeptiert \( M^\ast \), sonst verwirft sie.
+		\end{enumerate}
+		Wir setzen dann \( f(x) = \left\langle M^\ast \right\rangle \).
+\end{itemize}
+Die Funktion \( f \) ist berechenbar, denn (1. Bullet) wir können nat\"urlich f\"ur W\"orter entscheiden, ob es TM-Codierungen sind (regul\"ar) und {ggf.} auf eine einfache TM abbilden. Au\ss erdem können wir (2. Bullet) als ``Preprocessing`` Eingabel\"angen bestimmen und Eingaben l\"oschen (1, 2, siehe \"Ubung), TMs simulieren (3, universelle TM) und danach abh\"angig vom zuletzt besuchten Zustand der Simulation eine Ausgabe machen (4, klar).\\
+Zur Korrektheit: Falls \( x \) keine TM-Codierung war, so ist \( x \in \overline{H_\varepsilon} \) und \( f(x) = \left\langle M_0 \right\rangle \in K \).\\ Sonst betrachte wieder \( x = \left\langle M \right\rangle \).
+\begin{align*}
+	x \in \overline{H_\varepsilon} &\implies M \text{ h\"alt nicht auf } \varepsilon\\
+		&\implies \text{es gibt kein } i \text{, sodass } M \text{ nach sp\"atestens } i \text{ Schritten h\"alt}\\
+		&\implies \text{es gibt keine Eingabe } w \text{, sodass } M^\ast \text{ akzeptiert}\\
+		&\implies \text{auf allen Eingaben verwirft } M^\ast \text{ (sie h\"alt ja immer)} \\
+		&\implies L(M^\ast) = \emptyset\\
+		&\implies L(M^\ast) \text{ ist endlich}\\
+		&\implies f(x) = \left\langle M^\ast \right\rangle \in K.
+\end{align*}
+\begin{align*}
+	x \notin \overline{H_\varepsilon} &\implies M \text{ h\"alt auf } \varepsilon\\
+		&\implies \text{es gibt ein } i \text{, sodass } M \text{ nach sp\"atestens } i \text{ Schritten h\"alt}\\
+		&\implies \text{es gibt ein } w_0 \text{, sodass } M \text{ auf allen } w \text{ mit } \left| w \right| \geq \left| w_0 \right| \text{ sind, h\"alt}\\
+		&\implies \text{es gibt ein } w_0 \text{, sodass } M^\ast \text{ auf allen } w \text{ mit } \left| w \right| \geq \left| w_0 \right| \text{ akzeptiert}\\
+		&\implies \text{auf fast allen Eingaben akzeptiert } M^\ast\\
+		&\text{ (``fast alle`` meint ``auf nur endlich vielen nicht``)} \\
+		&\implies L(M^\ast) \text{ ist unendlich}\\
+		&\implies f(x) = \left\langle M^\ast \right\rangle \notin K.
+\end{align*}
+Damit gilt \( \overline{H_\varepsilon} \leq K \). Da \( \overline{H_\varepsilon} \) unentscheidbar folgt auch, dass \( K \) unentscheidbar ist. \qedb\\[2em]
+Wir kommen nun zum Beweis, dass \( s \) nicht rekursiv ist. Dazu verwenden wir die Unterprogrammtechnik.\\
+Wir nehmen zum Widerspruch an, dass \( s \) berechenbar wäre. Also existiert eine Turingmaschine \( M_s \) die \( s \) berechnet. Wir konstruieren eine Turingmaschine \( M_K \), die \( M_s \) als Unterprogramm verwendet und dann \( K \) entscheiden w\"urde. Eine Skizze der Konstruktion ist in Abbildung~\ref{fig:up}.\\
+Die TM \( M_K \) arbeitet wie folgt:
+\begin{itemize}
+	\item Eingaben \( x \) die keine TM-Codierung sind werden direkt verworfen.
+	\item Falls \( x = \left\langle M \right\rangle \) rufe \( M_s \) als Unterprogramm auf \( \left\langle M \right\rangle \) auf.
+		\begin{itemize}
+			\item Falls \( M_s \) die Ausgabe \( 0 \) ausgibt oder eine TM-Codierung, verwirft \( M_K \)
+			\item Sonst rufe ein weiteres Unterprogramm \( D \) mit \( \left\langle \mathcal{A} \right\rangle \) auf, welches zu einer als DFA gegebenen regul\"aren Sprache entscheidet ob sie endlich ist und \"ubernehme dessen Ausgabe.\\
+			(Bemerkung: Das Problem ist entscheidbar. Erh\"alt man die Sprache als DFA, so kann man \"uberpr\"ufen ob es im Transitionsgraphen vom Startzustand einen Pfad zu einem akzeptierenden Zustand gibt mit Zustandswiederholung ({vgl.} Pumping-Lemma))
+		\end{itemize}
+\end{itemize}
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[>=latex']
+		\draw (0, 0) rectangle node[xshift=-2.2cm, yshift=1.8cm] {$M_K$} (6, -3);
+		\draw (.4, -.5) rectangle node[rotate=90] {Syntax}  (.9, -2.5);
+		\draw (1.9, -1.5) rectangle node {$M_s$}  (2.7, -2.5);
+		\draw (3.5, -.5) rectangle node {$D$}  (5.5, -1.5);
+		\draw[->] (-1, -1.5) -- node[above] {$x$} (.4, -1.5);
+		\draw[->] (.65, -2.5) -- node[below right] {rej.} (.65, -3.5);
+		\draw[->] (.9, -2) -- node[above] {$\left\langle M \right\rangle$} (1.9, -2);
+		\draw[->] (2.7, -2) -- node[below,xshift=1.83cm] {rej.} (6.5, -2);
+		\draw[->] (2.3, -1.5) |- node[above] {$\left\langle \mathcal{A} \right\rangle$} (3.5, -1);
+		\draw[->] (5.5, -.8) -- node[above right] {acc.} (6.5, -.8);
+		\draw[->] (5.5, -1.2) -- node[below right] {rej.} (6.5, -1.2);
+	\end{tikzpicture}
+	\caption{Beweisskizze}
+	\label{fig:up}
+\end{figure}
+Zur Korrektheit: Falls \( x \) keine TM-Codierung ist, so ist \( x \notin K \) und \( M_K \) verwirft. Sei nun \( x = \left\langle M \right\rangle \).
+\begin{align*}
+	x \in K &\implies L(M) \text{ ist endlich}\\
+		&\implies L(M) \text{ ist regul\"ar (da alle endlichen Sprachen regul\"ar sind)}\\
+		&\implies M_s \text{ gibt DFA } \left\langle \mathcal{A} \right\rangle \text{ aus}\\
+		&\implies D \text{ akzeptiert } \left\langle \mathcal{A} \right\rangle\\
+		&\implies M_K \text{ akzeptiert } \left\langle M \right\rangle = x.
+\end{align*}
+\begin{align*}
+	x \notin K &\implies L(M) \text{ ist unendlich}\\
+		&\implies \text{(} L(M) \text{ ist regul\"ar) oder (} L(M) \text{ ist nicht regul\"ar)}\\
+		&\implies \text{(} M_s \text{ gibt DFA } \left\langle \mathcal{A} \right\rangle \text{ aus) oder (} M_s \text{ gibt TM-Codierung aus)}\\
+		&\implies \text{(} D \text{ verwirft) oder (} M_K \text{ verwirft)}\\
+		&\implies M_K \text{ verwirft} \left\langle M \right\rangle = x.
+\end{align*}
+Insgesamt folgt also, dass \( M_K \) akzeptiert \( x \) {g.d.w.} \( x = \left\langle M \right\rangle \) und \( L(M) \) endlich. Damit entscheidet \( M_K \) die Sprache \( K \), welche aber unentscheidbar ist nach unser Hilfsaussage. Das ist ein Widerspruch und es folgt, dass \( M_s \) nicht existieren kann. Also ist auch \( s \) nicht berechenbar. \qed
+
+
+
+\subsection*{Komplexität}
+Das Prinzip der polynomiellen Reduktion (auch Cook-Reduktion) ist quasi das selbe wie die der Turing-Reduktion im vorigen Abschnitt. Der Unterschied besteht allein darin, dass die polynomielle Reduktion eine polynomielle Laufzeit haben muss.\\
+Wir betrachten das folgende Entscheidungsproblem:
+\begin{framed}
+	\textsc{In-Stable}\\
+	\textbf{Input:} gerichteter Graph \( G = (V, E) \), ein Knoten \( v \in V \).\\
+	\textbf{Output:} Ja, {g.d.w.} ein von Neumann-Morgenstern Stable Set \( U \) existiert mit \( v \in U \).
+\end{framed}
+Zunächst klären wir was ein von Neumann-Morgenstern Stable Set (kurz: Stable Set) ist: In einem Graphen \( G = (V, E) \) ist eine Knotenteilmenge \( U \subseteq V \) ein Stable Set, wenn zwei Bedingungen erfüllt sind:
+\begin{description}
+	\item[innere Stabilität] Für alle \( u \neq v \in U \) gilt \( (u, v) \notin E \).
+	\item[äußere Stabilität] Für alle \( u \notin U \) existiert ein \( v \in U \) mit \( (v, u) \in E \).
+\end{description}
+Man kann auch formilieren, dass ein Stable Set eine Graphen \( G \) sowohl ein Independent Set (innere Stabilität) als auch ein Dominating Set (äußere Stabilität) ist. Beachte, dass unser Ziel nicht ist, wie bei vielen Problemen der Übung, ein möglichst kleines solches \( U \) zu finden, sondern für einen gegebenen Knoten ein solches Set zu finden. Im Gegensatz zu den genannten Problemen oben muss dieses nicht existieren (Independent Set: beliebiges Singleton, Dominating Set: alle Knoten). In Abbildung~\ref{fig:ss} ist ein Stable Set gezeichnet.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[>=latex']
+		\node (a) at (-.8, .8) {$a$};
+		\node (b) at (.8, .8) {$b$};
+		\node (c) at (0, 0) {$c$};
+		\node (d) at (1.6, 0) {$d$};
+		\node (e) at (-.8, -.8) {$e$};
+		\node (f) at (.8, -.8) {$f$};
+
+		\draw[->] (a) -- (b);
+		\draw[->] (c) -- (a);
+		\draw[->] (c) -- (b);
+		\draw[->] (c) -- (e);
+		\draw[->] (d) -- (b);
+		\draw[->] (d) -- (f);
+		\draw[->] (e) -- (f);
+		\draw[->] (f) -- (c);
+	\end{tikzpicture}
+	\caption{Stable Set \( U = \{ c, d \} \).}
+	\label{fig:ss}
+\end{figure}\\
+Wir zeigen, dass das Problem \textsc{In-Stable} \textsf{NP}-vollständig ist.\\
+Zugehörigkeit zu \textsf{NP} ist einfach einzusehen. Die Eingabe sei \( (G = (V, E), v) \). Als Zeugen wählen wir die das Stable Set \( U \). Als Teilmenge der Knoten hat \( U \) ({z.B.} binär codiert) auch nur polynomielle Länge. Der Verifizierer arbeitet wie folgt:
+\begin{enumerate}
+	\item Prüfe, ob \( v \in U \).
+	\item Prüfe, ob \( U \) ein Stable Set ist, d.h. im Detail:
+		\begin{itemize}
+			\item Prüfe ob für alle Knoten \( u, u^\prime \in U \), die Kanten \( (u, u^\prime) \) und \( (u^\prime, u) \) nicht existieren.
+			\item Prüfe ob für alle Knoten \( u \notin U \) ein Knoten \( u^\prime \in U \) existiert mit Kante \( (u^\prime, u) \in E \).
+		\end{itemize}
+\end{enumerate}
+Schritt 1 kann offensichtlich in linearer Zeit durchgeführt werden. Für beide Teilschritte aus Schritt 2 prüfen wir für je \( \mathcal{O}(n^2) \) viele Knotenpaare die maximal \( \mathcal{O}(n^2) \) vielen Kanten. Also hat der Verifizierer eine polynomielle Laufzeit. \qedb\\[2em]
+
+Für den Beweis der \textsf{NP}-Härte zeigen wir eine polynomielle Reduktion von \textsc{Satisfiability} auf \textsc{In-Stable}. Sei dazu \( \varphi := \bigwedge_{i=1}^m \bigvee_{j=1}^{k_i} \ell_{ij} \) eine aussagenlogische Formel in konjunktiver Normalform mit Literalen \( \ell_{ij} \in \lbrace x_1, \bar{x}_1, \ldots, x_n, \bar{x}_n \rbrace \), wobei \( \bar{x}_i \) dem Literal \( \neg x_i \) entspricht. \( \varphi \) hat \( m \) Klauseln und \( k_i \) gibt die Anzahl der Literale in der \( i \)-ten Klausel (im Folgenden \( c_i \)) an.
+Aus \( \varphi \) konstruieren wir nun eine Instanz für \textsc{In-Stable}, also einen Graphen \( G = (V, E) \) und eine ausgewählten Knoten \( v \in V \). Sei dafür
+\begin{align*}
+	V := \;& \lbrace c_{i1}, c_{i2}, c_{i3} \, \big\vert \, 1 \leq i \leq m \rbrace\\
+	& \cup \lbrace x_i, \bar{x}_i, x_i^\prime, \bar{x}_i^\prime : 1 \leq i \leq n \rbrace\\
+	& \cup \lbrace d_1, d_2, d_3, d_4 \rbrace,
+\end{align*}
+d.h. für jede Klausel aus \( \varphi \) gibt es drei Knoten \( c_{i1}, c_{i2}, c_{i3} \), für jede Variable aus \( \varphi \) vier Knoten \( x_i, \bar{x}_i, x_i^\prime, \bar{x}_i^\prime \) und zusätzlich noch vier weitere Knoten \( d_1, d_2, d_3, d_4 \), diese benötigen wir um die Existenz eines Stable Sets zu garantieren. Für \( d_1 \) soll am Ende gelten, dass \( d_1 \) zu einem Stable Set \( U \) gehört, genau dann, wenn \( \varphi \) erfüllbar ist ({d.h.} \( v = d_1 \) für die \textsc{In-Stable}-Instanz).
+Die Kantenrelation \( E \) konstruieren wir wie folgt: Für jedes Klausel-Tripel bildet \( E \) einen  gerichteten Kreis der Länge 3. Die Quadrupel für jede Variable \( x_i \) bilden einen gerichteten Kreis der Länge 4 bezüglich \( E \), ebenso die \( d_i \). Für jedes Literal \( \ell_{ij} \in \lbrace x_k, \bar{x}_k : 1 \leq k \leq n \rbrace \) -- als Knoten aufgefasst -- gelte außerdem, dass \( (l_{ij}, c_{ik}) \in E, k \in \lbrace 1, 2, 3 \rbrace \). Zuletzt fügen wir die Kanten \( (d_2, c_{ik}) \) für jede Klausel \( c_i \) und ihre drei (\( k = 1,2,3 \)) Knoten .\\
+Formal fassen wir dies zusammen:
+\begin{align*}
+	E := \;& \left\lbrace (c_{i1}, c_{i2}), (c_{i2}, c_{i3}), (c_{i3}, c_{i1}) \, \big\vert \, 1 \leq i \leq m \right\rbrace\\
+	& \cup \left\lbrace (x_i, \bar{x}_i), (\bar{x}_i, x_i^\prime), (x_i^\prime, \bar{x}_i^\prime), (\bar{x}_i^\prime, x_i) \, \big\vert \, 1 \leq i \leq n \right\rbrace\\
+	& \cup \left\lbrace (d_1, d_2), (d_2, d_3), (d_3, d_4), (d_4, d_1) \right\rbrace\\
+	& \cup \bigcup_{j=1}^m \bigcup_{r=1}^{k_j} \left\lbrace (\ell_{jr}, c_{j1}), (\ell_{jr}, c_{j2}), (\ell_{jr}, c_{j3}) \right\rbrace\\
+	& \cup \left\lbrace (d_2, c_{ij}) \, \big\vert \, 1 \leq i \leq m, j \in \lbrace 1, 2, 3 \rbrace \right\rbrace.
+\end{align*}
+In Abbildung \ref{fig:ps} ist für ein moderates \( \varphi \) der entsprechend resultierende Graph einmal dargestellt.
+Aus der Konstruktion von \( V \) und \( E \) können wir einige Schlussfolgerungen ziehen:
+\begin{enumerate}
+	\item Die Menge \( \lbrace x_i, x_i^\prime \,\vert\, 1 \leq i \leq n \rbrace \cup \lbrace d_2, d_4 \rbrace \) ist für jedes \( \varphi \) ein Stable Set.
+	\item Jedes Stable Set enthält entweder \( d_1, d_3 \) oder \( d_2, d_4 \), aufgrund der internen Stabilität aber niemals beide Paare.
+	\item Jedes Stable Set enthält für jedes \( i \in \lbrace 1, \ldots, n \rbrace \) entweder \( x_i, x_i^\prime \) oder \( \bar{x}_i, \bar{x}_i^\prime \), jedoch ebenfalls wegen der internen Stabilität niemals beide Paare.
+	\item Zwei Knoten \( c_{ij}, c_{ik} \) mit \( j \neq k \), die aus den Klauseln von \( \varphi \) generiert wurden, können nicht zusammen in einem Stable Set liegen. Daraus folgt aber, dass es für jede Klausel einen Knoten geben muss, die zwei Knoten der zugehörigen Klausel dominieren. Da jedoch jeder Knoten, der eine Kanten zu einem Knoten \( c_{ij} \) der Klausel \( c_i \) hat, zu allen Knoten von \( c_i \) eine Kanten haben muss, folgt, dass kein Knoten, der aus einer Klausel generiert wurde, in einem Stable Set liegen kann.
+\end{enumerate}
+Nun schließen wir die Reduktion: Ein Stable Set muss entweder \( d_2 \) enthalten oder eine Teilmenge der Knoten, die aus den Literalen generiert werden, wobei für jede Klausel \( c_i \) ihre zugehörigen Knoten \( c_{ij}, j \in \lbrace 1, 2, 3 \rbrace \) von einem Knoten \( x_k \) oder \( \bar{x}_k \) eine eingehende Kante haben müssen. Die korrespondierenden Literale sind nach der Konstruktion natürlich in der Klausel.\\
+Wegen (3) gilt allerdings, dass nicht beide Knoten \( x_k, \bar{x}_k \) im Stable Set enthalten sind, also liefert das Stable Set eine erfüllende Belegung für \( \varphi \).  Mit (2) folgt, dass \( d_1 \) genau dann zu einem Stable Set gehört, wenn \( \varphi \) erfüllbar ist.\\
+\( V \) und \( E \) können in polynomieller Zeit berechnet werden, da wir für jede Klausel und jede Variable nur konstanten Aufwand haben und damit ist die \textsf{NP}-Vollständigkeit gezeigt.\qed
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[>=latex']
+		% vertices
+		% decisions
+		\node (d1) at (-1, -1) {$d_1$};
+		\node (d2) at (0, 0) {$d_2$};
+		\node (d3) at (-1, 1) {$d_3$};
+		\node (d4) at (-2, 0) {$d_4$};
+		% clauses
+		\node (c11) at (1.5, 3.75) {$c_{11}$};
+		\node (c12) at (1.5, 2.25) {$c_{12}$};
+		\node (c13) at (1.5, .75) {$c_{13}$};
+		\node (c21) at (1.5, -.75) {$c_{21}$};
+		\node (c22) at (1.5, -2.25) {$c_{22}$};
+		\node (c23) at (1.5, -3.75) {$c_{23}$};
+		% variables
+		\node (x1) at (3.25, 4.5) {$x_1$};
+		\node (x1b) at (4.25, 3.75) {$\bar{x}_1$};
+		\node (x1p) at (5.25, 4.5) {$x_1^\prime$};
+		\node (x1bp) at (4.25, 5.25) {$\bar{x}_1^\prime$};
+		\node (x2) at (3.25, 2.25) {$x_2$};
+		\node (x2b) at (4.25, 1.5) {$\bar{x}_2$};
+		\node (x2p) at (5.25, 2.25) {$x_2^\prime$};
+		\node (x2bp) at (4.25, 3) {$\bar{x}_2^\prime$};
+		\node (x3) at (3.25, -.75) {$x_3$};
+		\node (x3b) at (3.25, .75) {$\bar{x}_3$};
+		\node (x3p) at (5.25, .75) {$x_3^\prime$};
+		\node (x3bp) at (5.25, -.75) {$\bar{x}_3^\prime$};
+		\node (x4) at (4.25, -2.25) {$x_4$};
+		\node (x4b) at (3.25, -3) {$\bar{x}_4$};
+		\node (x4p) at (4.25, -3.75) {$x_4^\prime$};
+		\node (x4bp) at (5.25, -3) {$\bar{x}_4^\prime$};
+
+		% edges
+		% decision circle
+		\draw[->] (d1) to (d2);
+		\draw[->] (d2) to (d3);
+		\draw[->] (d3) to (d4);
+		\draw[->] (d4) to (d1);
+		% (d2, c_ij)
+		\draw[->] (d2) to (c11);
+		\draw[->] (d2) to (c12);
+		\draw[->] (d2) to (c13);
+		\draw[->] (d2) to (c21);
+		\draw[->] (d2) to (c22);
+		\draw[->] (d2) to (c23);
+		% clause circles
+		\draw[->] (c11) to (c12);
+		\draw[->] (c12) to (c13);
+		\draw[->] (c13) .. controls(.5, 2.75) .. (c11);
+		\draw[->] (c21) to (c22);
+		\draw[->] (c22) to (c23);
+		\draw[->] (c23) .. controls(.5, -2.75) .. (c21);
+		% disjunctions
+		\draw[->] (x1) to (x1b);
+		\draw[->] (x1b) to (x1p);
+		\draw[->] (x1p) to (x1bp);
+		\draw[->] (x1bp) to (x1);
+		\draw[->] (x2) to (x2b);
+		\draw[->] (x2b) to (x2p);
+		\draw[->] (x2p) to (x2bp);
+		\draw[->] (x2bp) to (x2);
+		\draw[->] (x3) to (x3b);
+		\draw[->] (x3b) to (x3p);
+		\draw[->] (x3p) to (x3bp);
+		\draw[->] (x3bp) to (x3);
+		\draw[->] (x4) to (x4b);
+		\draw[->] (x4b) to (x4p);
+		\draw[->] (x4p) to (x4bp);
+		\draw[->] (x4bp) to (x4);
+		\draw[->] (x1) to (c11);
+		\draw[->] (x1) to (c12);
+		\draw[->] (x1) to (c13);
+		\draw[->] (x2) to (c11);
+		\draw[->] (x2) to (c12);
+		\draw[->] (x2) to (c13);
+		\draw[->] (x3b) to (c11);
+		\draw[->] (x3b) to (c12);
+		\draw[->] (x3b) to (c13);
+		\draw[->] (x3) to (c21);
+		\draw[->] (x3) to (c22);
+		\draw[->] (x3) to (c23);
+		\draw[->] (x4b) to (c21);
+		\draw[->] (x4b) to (c22);
+		\draw[->] (x4b) to (c23);
+	\end{tikzpicture}
+	\caption{Graph aus der Konstruktion für die aussagenlogische Formel \( \varphi = (x_1 \vee x_2 \vee \neg x_3) \wedge (x_3 \vee \neg x_4) \).}
+	\label{fig:ps}
+\end{figure}
+
+% eof
+\end{document}
