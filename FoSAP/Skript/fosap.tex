@@ -1,0 +1,498 @@
+\documentclass[11pt, a4paper]{article}
+
+% packages
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage[german]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{mathrsfs}
+\usepackage{mathdots}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage[justification=centering]{caption}
+\usepackage{subcaption}
+\usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
+
+% meta
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+\parindent = 0pt
+
+% define environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}[definition]{Beispiel}
+\newtheorem*{example*}{Beispiel}
+\newtheorem*{remark*}{Bemerkung}
+
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Satz}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Korollar}
+
+\numberwithin{equation}{section}
+
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\def\Rho{\mathrm{P}}
+
+\newenvironment{problem}[1]{\begin{tabular}{|p{.96\textwidth}|} \hline \textsc{#1}\\}{\\ \hline \end{tabular}}
+\newcommand{\comp}[1]{\overline{#1}}
+\newcommand{\qedw}{\hfill\(\square\)}
+\newcommand{\qedb}{\hfill\(\blacksquare\)}
+
+
+\lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
+
+% Here we go...
+\begin{document}
+
+% title page
+\pagestyle{empty}
+\begin{center}
+    Rheinisch-Westf\"alische Technische Hochschule Aachen\\[10em]
+
+    \begin{LARGE}
+    		Skript zur Vorlesung\\[1.5em]
+		\textbf{Formale Systeme, Automaten, Prozesse}
+    \end{LARGE}
+	\vfill
+    \begin{Large}
+    		Letzte Änderung:\\
+    		10. April 2017\\[2em]
+		Autor:\\
+		Niklas Rieken\\
+	\end{Large}
+\end{center}
+
+
+\newpage
+% acknowledgements
+\vspace*{\fill}
+\section*{Hinweise}
+Dieses Skript entstand aus der Vorlesung Formale Systeme, Automaten, Prozesse an der RWTH Aachen von Prof. Dr. Wolfgang Thomas und Prof. Dr. Martin Grohe in den Sommersemestern 2015 und 2016.
+\vspace*{\fill}
+
+
+\newpage
+% table of contents
+\tableofcontents
+
+
+\newpage
+\pagestyle{headings}
+\section{Mathematisches Vorwissen}\label{sec:pre}
+In diesem ersten Kapitel fixieren wir einige mathematischen Notationen und geben elementare Sätze aus der diskreten Mathematik, die im weiteren verlauf der Vorlesung benötigt werden. In der Regel sollten sämtliche Begriffe und Notationen aus dem ersten Semester bereits bekannt sein. Deshalb ist dieses Kapitel eher nur für Sommersemesteranfänger bestimmt.
+
+
+\subsection{Mengen}\label{sec:pre_sets}
+Der Begriff Menge geht auf Georg Cantor aus dem 19. Jahrhundert zurück und wurde (verglichen mit späteren Definitionen in diesem Skript) informell beschrieben.
+\begin{quote}
+	Unter einer ``Menge`` verstehen wir jede Zusammenfassung \( M \) von bestimmten wohlunterschiedenen Objekten \( m \) unserer Anschauung oder unseres Denkens (welche die ``Elemente`` von \( M \) genannt werden) zu einem Ganzen.
+\end{quote}
+
+Wir definieren eine Menge wie folgt
+\begin{definition}
+	Eine \textit{Menge} \( M \) ist etwas, zu dem jedes beliebige Objekt \( x \) entweder \textit{Element} der Menge ist (\( x \in M \)), oder nicht (\( x \notin M \)).
+\end{definition}
+Mengen selbst können auch wieder als Objekte aufgefasst werden, also Elemente anderer Mengen sein. Wir vermeiden jedoch Aussagen über ``Mengen, die sich selbst enthalten``, da so schnell Widersprüche entstehen können (vgl. Russel'sche Antinomie). Wir schließen uns der weit verbreiteten \textit{Zermelo-Fraenkel-Mengenlehre} an, dazu geben wir jedoch keine Details (diese findet man zum Beispiel in der Logik 2-Vorlesung im Wahlpflichtbereich). Wir schauen uns nur an, wie wir Mengen im allgemeinen betrachten können. Folgende Definition sind dabei elementar.
+\begin{definition}\label{def:subsets}
+	Seien \( M, N \) zwei Mengen. \( N \) ist eine \textit{Teilmenge} von \( M \) (\( N \subseteq M \)) bzw. \( M \) eine \textit{Obermenge} von \( N \) (\( M \supseteq N \)), wenn für alle \( x \in N \) gilt, dass auch \( x \in M \).\\
+	Wir sagen \( N \) ist eine \textit{echte Teilmenge} von \( M \) (\( N \subset M \)) bzw. \( M \) eine \textit{echte Obermenge} von \( N \) (\( M \supset N \)), wenn es zusätzlich ein \( y \in M \) gibt mit \( y \notin N \).\\
+	\( M \) und \( N \) sind \textit{gleich} (\( M = N \)), wenn sowohl \( M \subseteq N \) als auch \( N \subseteq M \) gilt.
+\end{definition}
+Wir kommen nun zum Mächtigkeitsbegriff der Mengenlehre, der für die Anzahl der Elemente einer Menge beschreibt.
+\begin{definition}
+	Sei \( M \) eine Menge. \( M \) heißt \textit{endlich}, wenn \( M \) nur endlich viele Elemente besitzt, dann beschreibt \( \left| M \right| \) die Anzahl der Elemente von \( M \). Andernfalls heißt \( M \) \textit{unendlich} und wir schreiben \( \left| M \right| = \infty \). Man nennt \( \left| M \right| \) die \textit{Mächtigkeit} von \( M \).
+\end{definition}
+Um eine konkrete Menge zu zu benennen gibt es im Wesentlichen vier verschiedene Möglichkeiten:
+\begin{enumerate}
+	\item \textit{Aufzählen.} Die Elemente der Menge werden aufgelistet und in Mengenklammern (\( \{, \} \)) eingeschlossen. Reihenfolge und Wiederholungen spielen keine Rolle.
+		\[
+			\{ 3, 4.5, \pi, \diamondsuit \} = \{ \pi, 4.5, \diamondsuit, \diamondsuit, 3 \} \subseteq \{ \diamondsuit, \pi, 4.5, 3, \clubsuit \}. 
+		\]
+	\item \textit{Beschreiben.} Mengen können durch Worte beschrieben werden.
+		\[
+			\text{Menge der natürlichen Zahlen} = \{ 0, 1, 2, 3, \ldots \} =: \mathbb{N}.
+		\]
+		Aber Achtung: Natürliche Sprache neigt zu Uneindeutigkeit!
+	\item \textit{Aussondern.} Sei \( M \) eine Menge, dann ist
+		\[
+			\{ x \in M \,\vert\, A(x) \}
+		\]
+		die Menge aller Elemente aus \( M \), die die Aussage \( A \) erfüllen. Zum Beispiel:
+		\[
+			\mathbb{P} := \{ n \in \mathbb{N} \,\vert\, n \text{ hat genau zwei Teiler} \}
+		\]
+		als Menge aller Primzahlen.
+	\item \textit{Abbilden.} Sei \( M \) eine Menge und \( f \) ein Ausdruck, der für jedes \( x \in M \) definiert ist. Dann ist
+		\[
+			\{ f(x) : x \in M \}
+		\]
+		die Menge aller Ausdrücke \( f(x) \), wobei jedes \( x \in M \) in \( f \) eingesetzt wird. Zum Beispiel:
+		\[
+			\{ n^2 : n \in \mathbb{N} \}
+		\]
+		als Menge aller Quadtratzahlen.
+\end{enumerate}
+Wir können Abbilden und Aussondern auch kombinieren, zum Beispiel mit:
+\[
+	\{ n^2 : n \in \mathbb{N} \,\vert\, n \text{ ungerade} \}
+\]
+als Menge aller Quadratzahlen von ungeraden natürlichen Zahlen. Man würde hier jedoch abkürzend schreiben:
+\[
+	\{ n^2 : n \in \mathbb{N} \text{ ungerade} \}
+\]
+oder auch
+\[
+	\{ n^2 : n \in 2\mathbb{N}+1 \}.
+\]
+
+Eine wichtige Menge haben wir bisher außen vor gelassen: die \textit{leere Menge}. Wir schreiben \( \emptyset := \{ \} \). Gelegentlich verwenden wir außerdem folgende Notation, wenn wir nur eine endliche geordnete Menge benötigen: \( [\ell] := \{ 0, 1, \ldots, \ell-1 \} \). Ein-elementige Mengen (z.B. \( [1] = \{ 0 \} \)) nennt man auch \textit{Singleton}.
+
+
+\subsection{Operationen auf Mengen}\label{sec:pre_setops}
+Im folgendem betrachten wir Mengen immer als Teilmenge eines \textit{Universums} (oder auch Grundemenge) \( \mathcal{U} \). In der Analysis ist das typischerweise die Menge der reellen Zahlen \( \mathbb{R} \) (solange man die komplexen Zahlen eben weglässt), die betrachteten Teilmengen sind oftmals Intervalle in denen zum Beispiel Funktionen auf Stetigkeit hin untersucht werden. Vorweg: Wir betrachten später im Allgemeinen das Universum \( \Sigma^\ast \) und Sprachen als Teilmenge von eben diesem. Genaueres folgt im nächsten Kapitel.\\
+Um die Operatoren auf den Mengen zu veranschaulichen gibt es die sogenannten \textit{Venn-Diagramme}, bei denen Kreise oder Ellipsen die Mengen visualisieren. In Abbildung~\ref{fig:venn_subset} finden wir zum Beispiel für die Inklusion (\( \subseteq \)) ein entsprechendes Diagramm.
+\begin{figure}
+	\centering
+	\input{figs/venn_subset}
+	\caption{Venn-Diagramm für \( A \subseteq B \).}
+	\label{fig:venn_subset}
+\end{figure}
+Wir definieren nun einige Operationen auf Mengen ähnlich wie Addition und Multiplikation usw. auf Zahlen. Zusätzlich zur formalen Definition befindet sich in Abbildung~\ref{fig:venn} auch ein passendes Venn-Diagramm. Die jeweils eingefärbte Fläche kennzeichnet die resultierende Menge. \( \mathcal{U} \) sei ein beliebiges aber festes Universum.
+\begin{definition}\label{def:setops}
+	Seien \( A, B \) Mengen. 
+	\begin{enumerate}[label=(\alph*)]
+		\item Die \textit{Vereinigung} von \( A \) und \( B \) ist definiert als 
+			\[ 
+				A \cup B := \{ a \in \mathcal{U} \,\vert\, a \in A \text{ oder } a \in B \}.
+			\]
+			Für endliche und unendliche Vereinigungen (z.B. gegeben durch eine Indexmenge \( I = \{ 0, 1, \ldots \} \)) schreiben wir abkürzend
+			\[
+				\bigcup_{i \in I} A_i = A_0 \cup A_1 \cup \ldots
+			\]
+		\item Der \textit{Schnitt} von \( A \) und \( B \) ist definiert als
+			\[
+				A \cap B := \{ a \in A \,\vert\, a \in B \}.
+			\]
+			Für endlichen und unendlichen Schnitt (z.B. gegeben durch eine Indexmenge \( I = \{ 0, 1, \ldots \} \)) schreiben wir abkürzend
+			\[
+				\bigcap_{i \in I} A_i = A_0 \cap A_1 \cap \ldots
+			\]
+		\item Das \textit{Komplement} von \( A \) is definiert als
+			\[
+				\comp{A} := \{ a \in \mathcal{U} \,\vert\, a \notin A \}.
+			\]
+		\item Die \textit{Differenz} (auch: relatives Komplement) von \( A \) und \( B \) ist definiert als
+			\[
+				A \setminus B := A \cap \comp{B}.
+			\]
+		\item Das \textit{kartesische Produkt} zwischen \( A \) und \( B \) ist definiert als
+			\[
+				A \times B := \{(a, b) : a \in A, b \in B \}.
+			\]
+			Für ein endliches Produkt einer Menge \( A \) auf sich selbst schreiben wir abkürzend
+			\[
+				A^k := A \times A^{k-1}, \quad\quad A^1 := A, \quad\quad A^0 := \{ \bullet \},
+			\]
+			wobei \( \bullet \) ein beliebiges Platzhaltersymbol ist, d.h. \( A^0 \) ist für jedes \( A \) ein Singleton.\\
+			Die Elemente eines kartesischen Produkts \( (x_1, \ldots, x_k) \) heißen \( k\)-\textit{Tupel}. Für \( k = 2, 3, 4, \ldots \) kann man auch \textit{Paar, Tripel, Quadrupel, \ldots} sagen.
+		\item Die \textit{Potenzmenge} von \( A \) ist definiert als
+			\[
+				2^A := \{ M \subseteq \mathcal{U} \,\vert\, M \subseteq A \}.
+			\]
+	\end{enumerate}
+\end{definition}
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/venn_union}
+		\caption{\( A \cup B \)}
+		\label{fig:venn_union}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/venn_intersection}
+		\caption{\( A \cap B \)}
+		\label{fig:venn_intersection}
+	\end{subfigure}\\
+	\ \\
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/venn_complement}
+		\caption{\( \comp{A} \)}
+		\label{fig:venn_complement}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/venn_setminus}
+		\caption{\( A \setminus B \)}
+		\label{fig:venn_setminus}
+	\end{subfigure}
+	\caption{Venn-Diagramme für Mengen-Operationen.}
+	\label{fig:venn}
+\end{figure}
+
+
+\subsection{Relationen}\label{sec:pre_relations}
+Relationen drücken Beziehungen oder Zusammenhänge zwischen Elementen aus. Im Allgemeinen können dies Beziehungen zwischen beliebig vielen Elementen sein und wir werden verschieden stellige Relationen auch im Laufe der Vorlesung benutzen. In diesem Abschnitt legen wir aber ein besonderes Augenmerk auf 2-stellige Relationen.
+\begin{definition}
+	Es seien \( M_1, \ldots, M_k \) nicht-leere Mengen. Eine Teilmenge \( R \subseteq M_1 \times \ldots \times M_k \) heißt \textit{Relation} zwischen \( M_1, \ldots, M_k \) (oder auf \( M \), falls \( M = M_1 = \ldots = M_k \)).
+\end{definition}
+Für 2-stellige Relationen verwenden wir oft Symbole wie \( \sim, \prec \) und schreiben dann statt \( (a, b) \in\, \sim \) intuitiver \( a \sim b \).
+\begin{definition}
+	Sei \( \sim \,\subseteq M \times M \) eine 2-stellige Relation. \( \sim \) heißt
+	\begin{itemize}
+		\item \textit{reflexiv}, falls \( x \sim x \) für alle \( x \in M \),
+		\item \textit{symmetrisch}, falls für alle \( x, y \in M \) mit \( x \sim y \) auch \( y \sim x \) gilt,
+		\item \textit{antisymmetrisch}, falls für alle \( x, y \in M \) mit \( x \sim y \) und \( y \sim x \) gilt, dass \( x = y \),
+		\item \textit{transitiv}, falls für alle \( x, y, z \in M \) mit \( x \sim y \) und \( y \sim z \) gilt, dass \( x \sim z \).
+	\end{itemize}
+\end{definition}
+Wir klassifizieren außerdem 2-stellige Relationen, falls sie bestimmte Eigenschaften haben.
+\begin{definition}
+	Sei \( \sim \,\subseteq M \times M \) eine 2-stellige Relation. \( \sim \) heißt
+	\begin{itemize}
+		\item \textit{Äquivalenzrelation}, falls sie reflexiv, symmetrisch und transitiv ist,
+		\item \textit{(partielle) Ordnung}, falls sie reflexiv, antisymmetrisch und transitiv ist,
+		\item \textit{Totalordnung}, falls sie partielle Ordnung ist und für alle \( x, y \in M \) entweder \( x \sim y \) oder \( y \sim x \) gilt. 
+	\end{itemize}	 
+\end{definition}
+\begin{example*}
+	\
+	\begin{enumerate}
+		\item Die Relation \( \leq \) ist auf \( \mathbb{N} \) eine Totalordnung.
+		\item Die Relation \( \{(a, b) \subseteq \mathbb{R}^2 \,\vert\, a^2 = b^2 \} \) ist eine Äquivalenzrelation auf \( \mathbb{R} \).
+	\end{enumerate}
+\end{example*}
+
+\begin{definition}
+	Sei \( \sim \) eine Äquivalenzrelation auf einer Menge \( M \). Für \( x \in M \) heißt
+	\[
+		[x] := [x]_\sim := \{ y \in M \,\vert\, x \sim y \}
+	\]
+	die \textit{Äquivalenzklasse} von \( x \). Die Menge aller Äquivalenzklassen von \( \sim \) wird notiert mit \( M /_\sim := \{ [x]_\sim : x \in M \} \).
+\end{definition}
+
+
+
+\subsection{Gesetze für Mengen}\label{sec:pre_setlaws}
+In diesem Abschnitt sammeln wir ein paar Gesetzmäßigkeiten, die für Mengen gelten. Manche davon sind offensichtlich, wir werden aber auch zu ein paar Aussagen die Beweise geben, manche bleiben als Übung.
+\begin{remark*}
+	Für die Inklusion gilt offensichtlich für jede Menge \( M \)
+	\[
+		\emptyset \subseteq M \subseteq M \subseteq \mathcal{U}.
+	\]
+	Insbesondere ist die Relation \( \subseteq \) reflexiv. Sie ist außerdem transitiv und per Definition der Gleichheit von Mengen antisymmetrisch, also eine partielle Ordnung.\par
+	Schnitt und Vereinigung sind per Definition offenbar \textit{assoziativ} (d.h. \( A \cup (B \cup C) = (A \cup B) \cup C \) und \( A \cap (B \cap C) = (A \cap B) \cap C \)) und \textit{kommutativ} (d.h. \( A \cup B = B \cup A \) und \( A \cap B = B \cap A \)). Außerdem sind diese beiden Operationen zueinander \textit{distributiv}, was wir im folgenden einmal zeigen wollen. 
+\end{remark*}
+Das Beweisschema für solche Aufgaben ist stets das selbe und sollte deshalb auch ruhig übernommen werden für Übungsaufgaben. Tricks sind selten notwendig, es ist meist
+\begin{center}
+	\textit{Definition anwenden -- triviale Umformung -- Definition anwenden -- Profit}.
+\end{center}
+\begin{remark*}
+	Für Mengen \( A, B, C \) gilt:
+	\begin{enumerate}
+		\item \( A \cup (B \cap C) = (A \cup B) \cap (A \cup C) \),
+		\item \( A \cap (B \cup C) = (A \cap B) \cup (A \cap C) \).
+	\end{enumerate}
+	\begin{proof}
+		Wir zeigen nur Aussage (i), die zweite Hälfte geht analog. Wir müssen zwei Richtungen beweisen.\\
+		``\( \subseteq \)``: Sei \( a \in A \cup (B \cap C) \). D.h. \( a \in A \) oder \( a \in B \cap C \).
+		\begin{itemize}
+			\item \( a \in A \). Dann ist \( a \) auch in \( A \cup B \) und \( A \cup C \) (da \( \cup \) die Mengen nicht verkleinert). Also ist \( a \) auch im Schnitt dieser beiden Mengen.
+			\item \( a \in B \cap C \). Dann ist \( a \in B \) und \( a \in C \). Also (da wie oben \( \cup \) die Menge nicht verkleinert) ist \( a \in A \cup B \) und \( a \in A \cup C \). Somit ist \( a \) auch wieder im Schnitt beider Mengen.
+		\end{itemize}
+		``\( \supseteq \)``: Sei \( a \in (A \cup B) \cap (A \cup C) \). Dann ist \( a \in A \cup B \) und \( a \in A \cup C \) (\( \ast \)). Wir unterscheiden zwei Fälle:
+		\begin{itemize}
+			\item \( a \in A \). Unabhängig von \( B, C \) ist dann \( a \in A \cup (B \cap C) \).
+			\item \( a \notin A \). Dann muss \( a \in B \) und \( a \in C \) gelten, sonst würde (\( \ast \)) nicht gelten. Somit ist \( a \in B \cap C \) und damit auch wieder \( a \in A \cup (B \cap C) \). 
+		\end{itemize}
+		Wir haben also \( A \cup (B \cap C) \subseteq (A \cup B) \cap (A \cup C) \) und \( A \cup (B \cap C) \supseteq (A \cup B) \cap (A \cup C) \) gezeigt. Somit muss Gleichheit zwischen diesen beiden Mengen vorliegen.
+	\end{proof}
+\end{remark*}
+Weiterhin nützlich sind noch folgende Bemerkungen.
+\begin{remark*}[DeMorgan'sche Gesetze]
+	Für Mengen \( A, B \) gilt:
+	\begin{itemize}
+		\item \( \comp{(A \cup B)} = \comp{A} \cap \comp{B} \),
+		\item \( \comp{(A \cap B)} = \comp{A} \cup \comp{B} \).
+	\end{itemize}
+\end{remark*}
+\begin{remark*}[Absorptionsgesetz]
+	Für Mengen \( A, B \) gilt:
+	\begin{itemize}
+		\item \( A \cup (A \cap B) = A \),
+		\item \( A \cap (A \cup B) = A \).
+	\end{itemize}
+\end{remark*}
+Die Beweise hierfür bleiben als Übung.
+
+
+\subsection{Abbildungen}\label{sec:pre_mappings}
+\begin{definition}
+	Seien \( M, N \) Mengen. Eine \textit{Abbildung} \( f \) von \( M \) nach \( N \) ist eine Vorschrift (z.B. eine Formel), die jedem \( x \in M \) genau ein \( f(x) \in N \) zuordnet. Wir schreiben dazu
+	\[
+		f: M \to N, \quad x \mapsto f(x).
+	\]
+	\( M \) heißt der \textit{Definitionsbereich} (auch Domäne) von \( f \), \( N \) heißt der \textit{Wertebereich} von \( f \). \( f(x) \) ist das \textit{Bild} von \( x \) unter \( f \) und \( x \) ist ein \textit{Urbild} von \( f(x) \) unter \( f \). Die Menge aller Abbildungen von \( M \) nach \( N \) wird mit \( N^M \) bezeichnet. 
+\end{definition}
+
+\begin{definition}
+	Eine Abbildung \( f: M \to N \) heißt
+	\begin{itemize}
+		\item \textit{surjektiv}, falls für alle \( y \in N \) ein \( x \in M \) mit \( f(x) = y \) existiert,
+		\item \textit{injektiv}, falls für alle \( x, x^\prime \in M \) mit \( x \neq x^\prime \) gilt, dass \( f(x) \neq f(x^\prime) \),
+		\item \textit{bijektiv}, falls \( f \) surjektiv und injektiv ist.
+	\end{itemize}
+\end{definition}
+\begin{example*}
+	Die Addition zweier natürlicher Zahlen kann als Abbildung aufgefasst werden:
+	\[
+		+: \mathbb{N}^2 \to \mathbb{N}, \quad (m, n) \mapsto m+n.
+	\]
+	\( + \) ist surjektiv (jedes \( y \in \mathbb{N} \) wird z.B. durch \( (y, 0) \in \mathbb{N}^2 \) getroffen), aber nicht injektiv (\( 1 \in \mathbb{N} \) wird sowohl von \( (1, 0) \) als auch \( (0, 1) \) getroffen).
+\end{example*}
+Für Abbildungen \( f: [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).
+
+
+\subsection{Vollständige Induktion}\label{sec:pre_induction}
+
+
+
+\newpage
+\section{Alphabete, Wörter, Sprachen}\label{sec:awl}
+Das erste Kapitel hat uns mit den nötigen mathematischen Grundlagen versorgt, die wir als Modellierungswerkzeuge in der theoretischen Informatik verwenden wollen. Wir definieren dazu später abstrakte Rechenmodelle, sogenannte Automaten, um das Verhalten von konkreten Rechenmodellen (z.B. Computern) formal zu erfassen. Zunächst sehen wir uns an, wie wir ganz allgemein diese konkreten Rechenmodelle funktionieren und wie sich diese Funktionsweisen möglichst knapp und allgemein (d.h. abstrakt, ``vereinfacht auf das wesentliche``) darstellen lassen. Nach diesem Kapitel haben wir das Hauptthema der Vorlesung, die \textit{abstrakte Automatentheorie}, vorbereitet.
+
+\subsection{Grundlegende Definitionen}\label{sec:awl_def}
+Wir fassen Aktionen eines Computers (oder eines Getränkeautomaten, \ldots) in unserer Abstrakion als \textit{Symbole} (Buchstaben) auf, im Rahmen dieser Vorlesung sind das immer nur endlich viele, d.h. das \textit{Alphabet} ist endlich. Aktionsfolgen (z.B. vom Einwurf einer Münze bis zur Ausgabe des Getränkes) entsprechen somit einem \textit{Wort}. Die Menge aller gültigen Aktionsfolgen (solche, die für das betrachtete System ``sinnvoll`` sind) bezeichnen wir dann als \textit{Sprache des Automaten}.
+\begin{definition}
+	Ein \textit{Alphabet} ist eine nicht-leere endliche Menge, deren Elemente als \textit{Symbole} bezeichnet sind.
+\end{definition}
+Alphabete werden durch griechische Großbuchstaben \( \Sigma, \Gamma \) oder Variationen wie \( \Sigma_1, \Gamma^\ast \) bezeichnet. Symbole werden durch kleine lateinische Buchstaben \( a, b, c, \ldots \) oder arabische Ziffern bezeichnet.
+\begin{example}
+	\
+	\begin{enumerate}
+		\item Das \textit{Boole'sche Alphabet} \( \{ 0, 1 \} \).
+		\item Das \textit{Morsealphabet} \( \{ \cdot, -, \,\,\, \} \).
+		\item Das \textit{ASCII-Alphabet} für zum Beispiel Textdateien.
+	\end{enumerate}
+\end{example}
+
+\begin{definition}
+	Ein \textit{Wort} über einem Alphabet \( \Sigma \) ist eine Abbildung
+	\[
+		w: [n] \to \Sigma.
+	\]
+	Für \( n = 0 \) ist \( w : \emptyset \to \Sigma \) das \textit{leere Wort}, was wir als \( \varepsilon \) bezeichnen.\\
+	Die \textit{Länge} des Wortes \( w \) ist bezeichnet mit \( \left| w \right| = n \).\\
+	\( \left| w \right|_a := \left| \{ i \in [n] \,\vert\, w(i) = a \} \right| \) ist die \textit{Häufigkeit des Symbols} \( a \) im Wort \( w \).
+\end{definition}
+Wie in Abschnitt~\ref{sec:pre_mappings} lässt sich \( w \) auch als Tupel \( (a_0, \ldots, a_{n-1}) \) schreiben. Wir gehen hier sogar noch einen Schritt weiter und benutzen \( a_0 a_1 \ldots a_{n-1} \) als Abkürzung für die langen Schreibweisen. Für Wörter verwenden wir in der Regel \( u, v, w \) und Varianten als Bezeichner. In der Literatur sind auch kleine griechische Buchstaben \( \alpha, \beta, \ldots \) gebräuchlich.
+\begin{definition}
+	Sei \( \Sigma \) ein Alphabet. Dann ist \( \Sigma^n := \Sigma^{[n]} \) die \textit{Menge aller Wörter mit Länge} \( n \) über \( \Sigma \).
+	Die \textit{Menge aller Wörter} ist definiert als
+	\[
+		\Sigma^\ast := \bigcup_{n \in \mathbb{N}} \Sigma^n
+	\]
+	und \( \Sigma^+ := \Sigma^\ast \setminus \{ \varepsilon \} \).
+\end{definition}
+Wie in Abschnitt~\ref{sec:pre_setops} angekündigt wird für ein fixiertes \( \Sigma \) die Menge \( \Sigma^\ast \) unser Universum sein.
+\begin{definition}
+	Eine \textit{(formale) Sprache} über einem Alphabet \( \Sigma \) ist eine Teilmenge von \( \Sigma^\ast \).
+\end{definition}
+Sprachen bezeichnen wir in der Regel mit \( L, K, \ldots \) und Varianten.
+\begin{example}
+	\
+	\begin{itemize}
+		\item Die leere Sprache \( \emptyset \).
+		\item Die Sprache, die nur das leere Wort enthält \( \{ \varepsilon \} \).
+		\item Die Sprache aller Binärdarstellungen von Primzahlen \( \{ bin(n) : n \in \mathbb{P} \} \).
+		\item Die Menge aller grammatikalisch korrekten deutschen Sätze.
+	\end{itemize}
+\end{example}
+
+
+\subsection{Operationen und Relationen auf Wörtern und Sprachen}
+Durch diese vorgegangen Definitionen haben wir das Fundament für die theoretische Informatik bereits definiert. Da dies nur mithilfe von Funktionen und Mengen  passiert ist lassen sich Beweismethoden und Ergebnisse aus der Mathematik einfach übertragen. Wir definieren nun noch ein paar Operationen auf Wörtern und erweitern diese Definitionen auf Sprachen.
+\begin{definition}
+	Seien \( u, v \in \Sigma^\ast \) mit \( m = \left| u \right|, n = \left| v \right| \). Die \textit{Konkatenation} (Verkettung) ist definiert als
+	\begin{align*}
+		(u \cdot v)&: [m{+}n] \to \Sigma \text{ mit}\\
+		(u \cdot v)(i) &= \left\lbrace \begin{array}{ll}u(i), & i < m\\ v(i-m), & i \geq m. \end{array} \right.
+	\end{align*}
+	Außerdem ist \( u^0 := \varepsilon \) und \( u^n := u \cdot u^{n-1} \).
+\end{definition}
+Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhalten wir noch die Definitionen.
+\begin{definition}
+	Seien \( L, K \subseteq \Sigma^\ast \) Sprachen.
+	\begin{enumerate}
+		\item \textit{Konkatenation.} \( L \cdot K := \{ uv : u \in L, v \in K \} \) und \( L^0 := \{ \varepsilon \}, L^n := L \cdot L^{n-1} \).
+		\item \textit{Inklusion.} Wie in Definition~\ref{def:subsets}.
+		\item \textit{Vereinigung, Schnitt, Komplement, Differenz.} Wie in Definiton~\ref{def:setops}.
+		\item \textit{Kleene'scher Abschluss.}
+			\[
+				L^\ast := \bigcup_{n \in \mathbb{N}} L^n.
+			\]
+	\end{enumerate}
+\end{definition}
+\begin{definition}
+	Seien \( u, v \) Wörter. Dann ist \( u \)
+	\begin{itemize}
+		\item \textit{Präfix} von \( v \) (geschrieben: \( u \sqsubseteq v \)), falls es ein Wort \( w \) gibt mit \( v = uw \),
+		\item \textit{Infix} von \( v \), falls es Wörter \( w, w^\prime \) gibt mit \( v = wuw^\prime \),
+		\item \textit{Suffix} von \( v \), falls es ein Wort \( w \) gibt mit \( v = wu \).
+	\end{itemize}
+\end{definition}
+\begin{example}
+	Sei \( v = aaba \).
+	\begin{itemize}
+		\item Die Präfixe von \( v \) sind \( \varepsilon, a, aa, aab, aaba \).
+		\item Die Infixe von \( v \) sind \( \varepsilon, a, ba, aba, aaba \).
+		\item Die Suffixe von \( v \) sind alle Präfixe und Suffixe, sowie \( ab, b \).
+	\end{itemize}
+\end{example}
+
+
+\subsection{Gesetze für Wörter und Sprachen}
+In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung von Operationen auf Wörtern und Sprachen gelten, herausarbeiten. Einige Eigenschaften übertragen sich sofort aus denen für Mengen aus Abschnitt~\ref{sec:pre_setlaws}. Bei anderen ist etwas mehr zu zeigen und bei wieder anderen gibt es vielleicht auch zunächst unintuitive Unterschiede.
+\begin{remark*}
+	Für das leere Wort \( \varepsilon \) gilt:
+	\begin{enumerate}
+		\item Es ist für jedes Wort sowohl Präfix, Infix als auch Suffix.
+		\item Es ist das \textit{neutrale Element} der Konkatenation, d.h. für alle \( w \in \Sigma^\ast \) gilt \( \varepsilon w = w = w \varepsilon \).
+		\item Daran anknüpfend gilt für jede Sprache \( L \), dass \(  \{ \varepsilon \} L = L = L  \{ \varepsilon \} \).
+		\item Für jede Menge \( A \) (inklusive dem Fall \( A = \emptyset \)) ist \( A^0 = \{ \varepsilon \} \).
+		\item \( \varepsilon \) ist eindeutig, d.h. es gibt kein zweites Wort mit diesen Eigenschaften.
+		\item Weil es häufig durcheinander gebracht wird: \( \{ \varepsilon \} \neq \emptyset \).
+	\end{enumerate}
+\end{remark*}
+
+\begin{remark*}
+	Für Vereinigung, Schnitt, Differenz, \ldots von Sprachen gelten die selben Regeln (Assoziativ-, Kommutativ-, Distributivgesetze, deMorgan'sche Regeln, Absorption, \ldots) wie für Mengen.
+\end{remark*}
+
+\begin{remark*}
+	Für jede Sprache \( L \) gilt, dass \( \emptyset L = L \emptyset = \emptyset \).
+	\begin{proof}
+		Wir zeigen nur die rechte Gleichung.\\
+		``\( \supseteq \)``: Klar, da die leere Menge Teilmenge jeder Menge ist.\\
+		``\( \subseteq \)``: Angenommen es existiert ein \( w \in L \emptyset \). Dann lässt sich \( w \) zerlegen in \( w = uv \) mit \( u \in L, v \in \emptyset \). Da ein solches \( v \) nicht existieren kann (leere Menge), kann auch die gesamte Zerlegung und somit auch \( w \) nicht existieren. Also ist \( L \emptyset \) leer.
+	\end{proof}
+\end{remark*}
+
+
+\newpage
+\bibliography{sources}\addcontentsline{toc}{section}{References}
+\bibliographystyle{alpha}
+
+% eof
+\end{document}
