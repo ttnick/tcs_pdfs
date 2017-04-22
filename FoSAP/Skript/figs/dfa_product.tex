@@ -1,0 +1,48 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
+	\node[initial, initial text=, state, accepting]	(q0)	at (0, 0)		{$q_0$};
+	\node[state]										(q1) at (2.5, 0)		{$q_1$};
+	\node[state]										(q2) at (5, 0)		{$q_2$};
+	\node (A) at (-1.5, 0) {$\mathcal{A}$};
+	
+	\path	(q0) edge[bend left] node {$a, b$} (q1)
+			(q1) edge[bend left] node {$a, b$} (q2)
+			(q2) edge[bend left] node {$a, b$} (q0);
+	
+	\begin{scope}[yshift=-0.15cm]
+		\node[initial above, initial text=, state]		(p0)	 at (-2, -2.5)	{$p_0$};
+		\node[state, accepting]							(p1) at (-2, -5)		{$p_1$};
+		\node (B) at (-2, -1) {$\mathcal{B}$};
+	
+		\path	(p0) edge[bend left] node {$a$} (p1)
+				(p0) edge[loop left] node {$b$} (p0)
+				(p1) edge[loop left] node {$a$} (p1)
+				(p1) edge[bend left] node {$b$} (p0);
+	\end{scope}
+		
+	\draw[-] (-1, 1) -- (-1, -6);
+	\draw[-] (-3.5, -1.5) -- (6, -1.5);
+
+	\begin{scope}[state/.style={draw, rectangle, rounded corners}, yshift=-0.15cm]
+		\node[initial above, initial text=, state, accepting]	(p0q0)	at (0, -2.5)		{$(p_0, q_0)$};
+		\node[state]												(p0q1)	at (2.5, -2.5)		{$(p_0, q_1)$};
+		\node[state]												(p0q2)	at (5, -2.5)		{$(p_0, q_2)$};
+		\node[state, accepting]									(p1q0)	at (0, -5)		{$(p_1, q_0)$};
+		\node[state, accepting]									(p1q1)	at (2.5, -5)		{$(p_1, q_1)$};
+		\node[state, accepting]									(p1q2)	at (5, -5)		{$(p_1, q_2)$};
+		
+		\path	(p0q0) edge[bend right=15] node[left] {$a$} (p1q1)
+				(p0q0) edge node {$b$} (p0q1)
+				(p0q1) edge[bend left=15] node[above] {$a$} (p1q2)
+				(p0q1) edge node {$b$} (p0q2)
+				%(p0q2) edge node {$a$} (p1q0)
+				(p0q2) edge[bend right=22] node[above] {$b$} (p0q0)
+				(p1q0) edge node {$a$} (p1q1)
+				(p1q0) edge node[right] {$b$} (p0q1)
+				(p1q1) edge node {$a$} (p1q2)
+				(p1q1) edge[bend left=15] node[left] {$b$} (p0q2)
+				(p1q2) edge[bend left] node {$a$} (p1q0)
+				(p1q2) edge node[above] {$b$} (p0q0);
+				
+				\draw (p0q2) .. controls (8.7, -7) and (0, -7) .. node {$a$} (p1q0);
+	\end{scope}	
+\end{tikzpicture}

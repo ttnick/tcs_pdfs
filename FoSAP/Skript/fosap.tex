@@ -76,7 +76,7 @@
 % acknowledgements
 \vspace*{\fill}
 \section*{Hinweise}
-Dieses Skript entstand aus der Vorlesung Formale Systeme, Automaten, Prozesse an der RWTH Aachen von Prof. Dr. Wolfgang Thomas und Prof. Dr. Martin Grohe in den Sommersemestern 2015 und 2016.
+Dieses Skript entstand aus der Vorlesung Formale Systeme, Automaten, Prozesse an der RWTH Aachen von Prof. Dr. Wolfgang Thomas und Prof. Dr. Martin Grohe vom Lehrstuhl Informatik~7 in den Sommersemestern 2015 und 2016. Ein paar Notationen und Definitionen sind außerdem adaptiert aus dem Skript zu den Diskreten Strukturen und Lineare Algebra I für Informatiker von Dr. Timo Hanke und Prof. Dr. Gerhard Hiß vom Lehrstuhl~D für Mathematik.
 \vspace*{\fill}
 
 
@@ -364,7 +364,11 @@ Die Beweise hierfür bleiben als Übung.
 Für Abbildungen \( f: [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).
 
 
-\subsection{Vollständige Induktion}\label{sec:pre_induction}
+\subsection{Strukturen}\label{sec:pre_structures}
+
+\subsection{Graphen}\label{sec:pre_graphs}
+
+\subsection{Beweismethoden}\label{sec:pre_proofs}
 
 
 
@@ -421,7 +425,7 @@ Sprachen bezeichnen wir in der Regel mit \( L, K, \ldots \) und Varianten.
 \end{example}
 
 
-\subsection{Operationen und Relationen auf Wörtern und Sprachen}
+\subsection{Operationen und Relationen auf Wörtern und Sprachen}\label{sec:awl_wordops}
 Durch diese vorgegangen Definitionen haben wir das Fundament für die theoretische Informatik bereits definiert. Da dies nur mithilfe von Funktionen und Mengen  passiert ist lassen sich Beweismethoden und Ergebnisse aus der Mathematik einfach übertragen. Wir definieren nun noch ein paar Operationen auf Wörtern und erweitern diese Definitionen auf Sprachen.
 \begin{definition}
 	Seien \( u, v \in \Sigma^\ast \) mit \( m = \left| u \right|, n = \left| v \right| \). Die \textit{Konkatenation} (Verkettung) ist definiert als
@@ -438,7 +442,7 @@ Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhal
 		\item \textit{Konkatenation.} \( L \cdot K := \{ uv : u \in L, v \in K \} \) und \( L^0 := \{ \varepsilon \}, L^n := L \cdot L^{n-1} \).
 		\item \textit{Inklusion.} Wie in Definition~\ref{def:subsets}.
 		\item \textit{Vereinigung, Schnitt, Komplement, Differenz.} Wie in Definiton~\ref{def:setops}.
-		\item \textit{Kleene'scher Abschluss.}
+		\item \textit{Kleene'scher Abschluss.} (auch Iteration, Kleene-Stern)
 			\[
 				L^\ast := \bigcup_{n \in \mathbb{N}} L^n.
 			\]
@@ -462,7 +466,7 @@ Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhal
 \end{example}
 
 
-\subsection{Gesetze für Wörter und Sprachen}
+\subsection{Gesetze für Wörter und Sprachen}\label{sec:awl_wordlaws}
 In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung von Operationen auf Wörtern und Sprachen gelten, herausarbeiten. Einige Eigenschaften übertragen sich sofort aus denen für Mengen aus Abschnitt~\ref{sec:pre_setlaws}. Bei anderen ist etwas mehr zu zeigen und bei wieder anderen gibt es vielleicht auch zunächst unintuitive Unterschiede.
 \begin{remark*}
 	Für das leere Wort \( \varepsilon \) gilt:
@@ -477,7 +481,7 @@ In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung
 \end{remark*}
 
 \begin{remark*}
-	Für Vereinigung, Schnitt, Differenz, \ldots von Sprachen gelten die selben Regeln (Assoziativ-, Kommutativ-, Distributivgesetze, deMorgan'sche Regeln, Absorption, \ldots) wie für Mengen.
+	Für Vereinigung, Schnitt, Differenz, \ldots von Sprachen gelten die selben Regeln (Assoziativ-, Kommutativ-, Distributivgesetze, deMorgan, Absorption, \ldots) wie für Mengen.
 \end{remark*}
 
 \begin{remark*}
@@ -487,6 +491,240 @@ In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung
 	\end{proof}
 \end{remark*}
 
+
+
+\newpage
+\section{Endliche Automaten und Reguläre Sprachen}\label{sec:regular}
+Wir haben formale Sprachen eingeführt als Modellierung für Prozessabläufe auf z.B. Computern. Diese Ansicht werden wir zunächst aber beiseite legen und erst in Kapitel~\ref{sec:process} wieder aufgreifen. In der Zwischenzeit untersuchen wir Sprachen auf verschiedene Eigenschaften und klassifizieren unter anderem nach der sogenannten \textit{Chomsky-Hierarchie}. Wir prüfen, wie sich Sprachen von formalen Systemen (Automaten, abstrakte Rechenmodelle) erkennen lassen. Diese Systeme wirken manchmal etwas künstlich, sind aber sehr sinnvoll, da sie sich mit den uns zu Verfügungen Werkzeugen aus der Mathematik gut handhaben lassen. Die daraus entstehenden Resultate haben außerdem auch einen nicht zu vernachlässigenden ästhetischen Wert für die theoretische Informatik. Zugegeben, der Praxisbezug offenbart sich bei einigen Sätzen nicht sofort und ist vielleicht auch gar nicht überalll vorhanden. Dennoch sollte der Wert dieser Ergebnisse auch nicht unterschätzt werden, denn wir liefern hier auch die Grundlagen zur Untersuchung, was sich prinzipiell mit Computern überhaupt berechnen lässt und die Erkenntnis, dass es Probleme in der Informatik gibt, die von einem Computer mehr Funktionalität beansprucht als andere Probleme (und vielleicht sogar mehr als ein Computer prinzipiell haben kann), sollte Motivation genug sein, sich mit theoretischer Informatik auseinanderzusetzen.
+
+\subsection{Deterministische Endliche Automaten}\label{sec:regular_dfa}
+Wir beginnen mit der Art Automaten, die ``die einfachste`` Klasse formaler Sprachen erkennen kann.
+\begin{definition}
+	Ein \textit{deterministischer endlicher Automat (DFA} (von engl.: deterministic finite automaton) ist ein 5-Tupel
+	\[
+		(Q, \Sigma, \delta, q_0, F),
+	\]
+	mit
+	\begin{itemize}
+		\item \( Q \) eine nicht-leere, endliche Menge von \textit{Zuständen},
+		\item \( \Sigma \) ein nicht-leeres, endliches \textit{Eingabealphabet},
+		\item \( \delta: Q \times \Sigma \to Q \) die \textit{Transitionsfunktion},
+		\item \( q_0 \in Q \) der \textit{Startzustand},
+		\item \(F \subseteq Q \) die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
+	\end{itemize}
+\end{definition}
+DFAs lassen sich auch problemlos als Strukturen wie in Abschnitt~\ref{sec:pre_structures} auffassen. Aus Gründen der Lesbarkeit verzichten wir jedoch darauf. Wir bezeichnen DFAs stets mit \( \mathcal{A}, \mathcal{B}, \ldots \), Zustände mit \( p, q, r, s \) und Variationen.\\
+Es lassen sich auch durchaus noch einfacherere Rechenmodelle definieren (z.B. durch Restriktionen gegenüber der Größe der Zustandsmenge), dies ist jedoch vorerst nicht sinnvoll. Auf die bereits angesprochene Chomsky-Hierarchie werden wir noch genauer eingehen, aber auch dort sind die Sprachen, die durch DFAs erkannt werden können, als die einfachste Klasse bezeichnet.\\
+Möchte man einen DFA konkret angeben, so ist die Darstellung als Transitionsgraph sinnvoller, als die Angabe des 5-Tupels.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) ein DFA. Der \textit{Transitionsgraph} von \( \mathcal{A} \) ein beschrifteter Graph \( G_\mathcal{A} = ((Q, E), \lambda, q_0, F) \) mit
+	\[
+		E = \{ (p, q) \,\vert\, \text{es ex. } a \in \Sigma \text{ mit } \delta(p, a) = q \}
+	\]
+	und
+	\[
+		\lambda: E \to 2^\Sigma, \quad (p, q) \mapsto \{ a \,\vert\, \delta(p, a) = q \}.
+	\]
+\end{definition}
+Aus Gründen der Bequemlichkeit, lassen wir die Mengenklammern bei der Beschriftung der Transitionen weg. Der Startzustand \( q_0 \) bekommt einfach eine eingehende Kante ohne Beschriftung und ohne Startknoten. Die Endzustände werden zusätzlich eingekreist. Ein Beispieltransitionsgraph ist in Abbildung~\ref{fig:dfa_ex1}.
+\begin{figure}
+	\centering
+	\input{figs/dfa_ex1}
+	\caption{DFA für die Sprache aus Beispiel~\ref{exp:ex1}.}
+	\label{fig:dfa_ex1}
+\end{figure}
+Wir werden die Begriffe Automat und Transitionsgraph gelegentlich synonym verwenden, da sich sowohl im Graphen als auch in der ursprünglichen Automatenstruktur alle Informationen befinden. Wir greifen dann auf den Begriff zurück, der für das aktuelle Thema die bequemere Anschauung hat.\\
+Wir schauen uns nun das Verhalten eines DFA auf einem Wort an.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) ein DFA.
+	Ein \textit{Lauf} von \( \mathcal{A} \) auf einem Wort \( w = a_0 \ldots a_{n-1} \) für ein \( n \in \mathbb{N} \) ist eine endliche Folge
+	\[
+		(r_0, a_0, r_1, a_1, \ldots, a_{n-1}, r_n),
+	\]
+	wobei \( r_0, \ldots, r_n \in Q \) und \( a_0, \ldots, a_{n-1} \in \Sigma \), sodass
+	\begin{enumerate}
+		\item \( r_0 = q_0 \),
+		\item \( \delta(r_i, a_i) = r_{i+1} \) für \( i \in [n] \).
+	\end{enumerate}
+	Wir sagen ein Lauf ist \textit{akzeptierend}, wenn zusätzlich \( r_n \in F \) gilt.
+\end{definition}
+Wir bezeichnen Läufe in der Regel mit \( \varrho \) bzw. Variationen. Einen Lauf \( (r_0, a_0, r_1, a_1, \ldots, a_{n-1}, r_n) \) kürzen wir gelegentlich durch \( (r_0, r_1, \ldots, r_n) \) ab, wenn die Symbole nicht relevant für unsere Betrachtungen sind.
+\begin{remark*}
+	Zu jedem Wort \( w \in \Sigma^\ast \) existiert genau ein Lauf von \( \mathcal{A} \) auf \( w \).
+\end{remark*}
+\begin{definition}
+\
+	\begin{enumerate}
+		\item Ein DFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{akzeptiert} ein Wort \( w \in \Sigma^\ast \), wenn der Lauf von \( \mathcal{A} \) akzeptierend ist. Andernfalls \textit{verwirft} \( \mathcal{A} \) das Wort \( w \).
+		\item Die von einem DFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{erkannte Sprache} ist
+			\[
+				L(\mathcal{A}) := \{ w \in \Sigma^\ast \,\vert\, \mathcal{A} \text{ akzeptiert } w \}.
+			\]
+		\item Eine Sprache \( L \) heißt \textit{DFA-erkennbar}, wenn es einen DFA \( \mathcal{A} \) gibt, sodass \( L = L(\mathcal{A}) \).
+	\end{enumerate}
+\end{definition}
+\begin{example}\label{exp:ex1}
+	Betrachte erneut den Automaten \( \mathcal{A} \) in Abbildung~\ref{fig:dfa_ex1}.
+	\begin{itemize}
+		\item Sei \( w_1 = abaaba \). Der Lauf von \( \mathcal{A} \) auf \( w_1 \) ist
+			\[
+				\varrho_1 = (q_0, q_1, q_2, q_1, q_1, q_2, q_1).
+			\]
+			D.h. \( \mathcal{A} \) akzeptiert \( w_1 \).
+		\item Sei \( w_2 = baa \). Der Lauf von \( \mathcal{A} \) auf \( w_2 \) ist
+			\[
+				\varrho_2 = (q_0, q_3, q_3, q_3).
+			\]
+			D.h. \( \mathcal{A} \) verwirft \( w_2 \).
+		\item \( \mathcal{A} \) erkennt die Sprache 
+			\[
+				L = \{ w \in \{a, b\}^\ast \,\vert\, w \text{ beginnt und endet mit } a \}.
+			\]
+	\end{itemize}
+	Die letzte Aussage sagt etwas über das Verhalten des Automaten auf allen, d.h. unendlich vielen, Wörtern aus. Man kann also nicht für jedes Wort einzeln zeigen, dass sich der Automat korrekt verhält. Stattdessen beweisen wir die Aussage per Induktion.
+	\begin{proof}
+		Wir zeigen die folgende Aussage:
+		\begin{center}
+			\( \mathcal{A} \) akzeptiert das Wort \( w \) {g.d.w.} \( w \) beginnt und endet mit \( a \).				\end{center}
+		Beweis per vollständige Induktion über Wortlänge \( n \in \mathbb{N} \). Ist \( r = (r_0, \ldots, r_n) \) der Lauf auf dem Wort \( w = a_0 \ldots a_{n-1} \), so ist
+		\[
+			r_n = \left\lbrace 
+					\begin{array}{ll}
+						q_0, & w = \varepsilon\\
+						q_1, & a_0 = a_{n-1} = a\\
+						q_2, & a_0 = a \text{ und } a_{n-1} = b\\
+						q_3, & a_0 = b.
+					\end{array}
+				\right.
+		\]
+		Wir wollen also zeigen, dass ein Lauf von \( \mathcal{A} \) auf einem Wort dann und nur dann in \( q_1 \), dem einzigen akzeptierendem Zustand, endet, wenn \( w \) mit \( a \) beginnt und endet.\\
+		Induktionsverankerung: \( n = 0 \). Dann ist \( w = \varepsilon \) und der Lauf von \( \mathcal{A} \) auf \( w \) ist \( r = (q_0) \), also auch \( r_n = r_0 = q_0 \).\checkmark\\
+		Induktionshypothese (IH): Für \( w = a_0 \ldots a_{n-1} \) sei \( r = (r_0, \ldots, r_n) \) der Lauf auf \( \mathcal{A} \) mit \( r_n \) wie in der Behauptung.\\
+		Induktionsschritt: Betrachte nun das Wort \( w = a_0 \ldots a_n \).
+		\begin{itemize}
+			\item \( a_0 \ldots a_{n-1} = \varepsilon \). Dann ist nach IH \( r_n = q_0 \) und somit
+				\[
+					r_{n+1} = \delta(r_n, a_n) = \left\lbrace
+							\begin{array}{ll}
+								q_1, & a_n = a\\
+								q_3, & a_n = b.
+							\end{array}
+						\right.
+				\]
+			\item \( a_0 = a_{n-1} = a \). Dann ist nach IH \( r_n = q_1 \) und somit
+				\[
+					r_{n+1} = \delta(r_n, a_n) = \left\lbrace
+							\begin{array}{ll}
+								q_1, & a_n = a\\
+								q_2, & a_n = b.
+							\end{array}
+						\right.
+				\]
+			\item \( a_0 = a \) und \( a_{n-1} = b \). Dann ist nach IH \( r_n = q_2 \) und somit
+				\[
+					r_{n+1} = \delta(r_n, a_n) = \left\lbrace
+							\begin{array}{ll}
+								q_1, & a_n = a\\
+								q_2, & a_n = b.
+							\end{array}
+						\right.
+				\]
+			\item \( a_0 = b \). Dann ist nach IH \( r_n = q_3 \) und somit
+				\[
+					r_{n+1} = \delta(r_n, a_n) = q_3
+				\]
+				unabhängig von \( a_n \).
+		\end{itemize}
+		Insgesamt gilt also: 
+		\begin{align*}
+			% if you think this is ugly, I agree.
+			w \text{ beginnt und endet mit } a. &\text{ g.d.w. } \text{Ist } r = (r_0, \ldots, r_n) \text{ der Lauf von }\\ &\quad\quad\quad\,\, \mathcal{A} \text{ auf } w \text{ so gilt } r_n = q_1 \in F.\\
+			&\text{ g.d.w. } \mathcal{A} \text{ akzeptiert } w.\\
+			&\text{ g.d.w. } L(\mathcal{A}) = L.
+		\end{align*}
+	\end{proof}
+\end{example}
+So ausführlich wie hier werden wir später nicht mehr beweisen, dass ein gegebener Automat ``das richtige tut``, sollte dies nicht klar sein werden wir die Funktionsweise nur grob erläutern. Ausführliche Beweise sind im Wesentlichen dann gefordert, wenn man zum Beispiel zeien möchte, dass eine Sprache nicht DFA-erkennbar ist.
+
+
+\subsection{Abschlusseigenschaften DFA-erkennbarer Sprachen}\label{sec:regular_closure}
+Bei einer Einteilung aller möglichen Sprachen in Klassen will man in einer möglichst sinnvollen Weise vorgehen. Damit meint man u.a., dass die einzelnen Klassen in sich abgeschlossen sind bzgl. verschiedener Operationen oder auch andere Eigenschaften haben, die in einer wissenschaftlichen Weise ``schön`` sind. Die folgenden Abschnitte sind dazu da um zu zeigen, dass DFA-erkennbare Sprachen dies in vielerlei Hinsicht erfüllen. In diesem Abschnitt beginnen wir damit zu zeigen, dass DFA-erkennbare Sprachen unter den üblichen Mengenoperationen (Komplementbildung, Vereinigung und Schnitt) abgeschlossen sind. Im späteren Verlauf werden wir noch einige andere Operationen betrachten.\par
+Wir zeigen als erstes, dass die DFA-erkennbaren Sprachen unter Komplementbildung abgeschlossen sind.
+\begin{theorem}\label{thm:regular_complement}
+	Sei \( L \subseteq \Sigma^\ast \) eine DFA-erkennbare Sprache. Dann ist auch \( \comp{L} \) DFA-erkennbar.
+	\begin{proof}
+		Sei \( L \subseteq \Sigma^\ast \) eine beliebige DFA-erkennbare Sprache. D.h. es existiert ein DFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \), der \( L \) erkennt. Wir konstruieren aus \( \mathcal{A} \) den DFA
+		\[
+			\comp{\mathcal{A}} = (Q, \Sigma, \delta, q_0, Q \setminus F),
+		\]
+		welcher die Sprache \( \comp{L} \) erkennt. Die Konstruktion vertauscht also lediglich akzeptierende und nicht-akzeptierende Zustände. Wir müssen nun noch zeigen, dass diese Konstruktion korrekt ist, also formal, dass \( \comp{L(\mathcal{A})} = L(\comp{\mathcal{A}}) \) gilt. Dazu zeigen wir folgende Aussage, aus der offensichtlich die Behauptung folgt.
+		\begin{center}
+			Für alle \( w \in \Sigma^\ast \) gilt: \( \mathcal{A} \) akzeptiert \( w \) {g.d.w.} \( \comp{\mathcal{A}} \) verwirft \( w \).
+		\end{center}
+		Sei also \( w \in \Sigma^\ast \). Da \( \mathcal{A} \) und \( \comp{\mathcal{A}} \) den selben Startzustand \( q_0 \) und die selbe Transitionsfunktion \( \delta \) haben, haben beide Automaten den selben (eindeutigen) Lauf \( (r_0, \ldots, r_n) \) auf \( w \). \( \mathcal{A} \) akzeptiert \( w \) falls \( r_n \in F \). Dann gilt \( r_n \notin Q \setminus F \) und somit \( \comp{\mathcal{A}} \) verwirft \( w \). Die andere Richtung geht analog. Also gilt die Behauptung.
+	\end{proof}
+\end{theorem}
+Diese Abschlusseigenschaft war einfach zu beweisen, da wir nur eine kleine Änderung am ursprünglichen DFA machen mussten und dann wieder einfach über den eindeutigen Lauf argumentieren konnten. Die Idee hinter der Konstruktion ist auch sehr intuitiv, da wir genau die Wörter akzeptieren wollen, die vom ursprünglichen Automaten verworfen wurden, also deren Läufe in nicht-akzeptierenden Zuständen enden. Der Ansatz die Zustände einfach zu vertauschen drängt sich also geradezu auf.\par
+Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben also nun zwei DFA-erkennbare Sprachen (und damit die zugehörigen Automaten) und wollen nun prüfen ob ein Wort in wenigstens einer der beiden Sprachen liegt. Wir müssen nun also einen Automaten konstruieren, der zwei gegebene Automaten simuliert. Diese Simulation muss synchron bzw. parallel stattfinden, eine sequentielle (d.h. Hintereinander-) Ausführung beider Automaten ist nicht möglich (da DFAs bereits gelesene Symbole ``vergessen``, ein explizites ``Abspeichern`` ist nur möglich für konstant viele Symbole -- das reicht nicht für beliebig große Eingabelängen). Wir präsentieren für die parallele Ausführung nun die Produktkonstruktion im Rahmen des nächsten Satzes.
+\begin{theorem}\label{thm:regular_union}
+	Seien \( L_1, L_2 \subseteq \Sigma^\ast \) DFA-erkennbare Sprachen. Dann ist auch \( L_1 \cup L_2 \) DFA-erkennbar.
+	\begin{proof}
+		Seien \( \mathcal{A}_1 = (Q_1, \Sigma, \delta_1, q_0^1, F_1) \) und \( \mathcal{A}_1 = (Q_2, \Sigma, \delta_2, q_0^2, F_2) \) die DFAs für \( L_1, L_2 \). Wir betrachten den \textit{Produktautomaten}
+		\[
+			\mathcal{A} := (Q_1 \times Q_2, \Sigma, \delta, (q_0^1, q_0^2), F)
+		\]
+		mit \( \delta((p, q), a) = (\delta_1(p, a), \delta_2(q, a)) \) für alle \( p \in Q_1, q \in Q_2, a \in \Sigma \) und \( F = (F_1 \times Q_2) \cup (Q_1 \times F_2) \).\\
+		Wir zeigen nun, dass \( L(\mathcal{A}) = L(\mathcal{A}_1) \cup L(\mathcal{A}_2) \) ist.
+		Sei dazu \( w = a_0 \ldots a_{n-1} \) gegeben. Wir zeigen, dass \( \mathcal{A} \) akzeptiert \( w \) {g.d.w.} \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \) das Wort \( w \) akzeptiert.\\
+		``Wenn \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \) akzeptiert, dann akzeptiert \( \mathcal{A} \)``:
+		{O.B.d.A.} sei \( \mathcal{A}_1 \) der Automat, der \( w \) akzeptiert. Es gibt also einen Lauf \( (r_0, \ldots, r_n) \) mit \( r_n \in F_1 \) von \( \mathcal{A}_1 \) auf \( w \). Sei \( (p_0, \ldots, p_n) \) der Lauf auf \( \mathcal{A}_2 \) mit \( p_n \) beliebig. Dann ist der Lauf auf auf \( \mathcal{A} \)
+		\[
+			((r_0, p_0), \ldots, (r_n, p_n)),
+		\]
+		da in jedem Schritt 
+		\begin{align*}
+			\delta((r_i, p_i), a_i) &= (\delta_1(r_i, a_i), \delta_2(p_i, a_i)) \\
+			&= (r_{i+1}, p_{i+1}).
+		\end{align*}
+		Wegen \( r_n \in F_1 \) ist auch \( (r_n, p_n) \in F_1 \times Q_2 \subseteq F \). Also akzeptiert \( \mathcal{A} \).\\
+		``Wenn \( \mathcal{A} \) akzeptiert, dann akzeptiert \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \)``:
+		Wir zeigen die Kontraposition dieser Aussage. \( \mathcal{A}_1 \) und \( \mathcal{A}_2 \) verwerfen also beide. Die Läufe von \( \mathcal{A}_1, \mathcal{A}_2 \) sind also \( (r_0, \ldots, r_n) \) und \( (p_0, \ldots, p_n) \) mit \( r_n \notin F_1, p_n \notin F_2 \). Wie oben ist \( ((r_0, p_0), \ldots, (r_n, p_n)) \) der Lauf von \( \mathcal{A} \) und es gilt \( (r_n, p_n) \notin F \). Somit verwirft auch \( \mathcal{A} \) das Wort.
+	\end{proof}
+\end{theorem}
+Eine Beispielkonstruktion für einen Produktautomaten für die Vereinigung zweier DFA-erkennbarer Sprachen befindet sich in Abbildung~\ref{fig:dfa_product}.
+\begin{figure}
+	\centering
+	\input{figs/dfa_product}
+	\caption{Produktkonstruktion: Der Automat \( \mathcal{A} \) erkennt die Sprache \( \{ w \in \{a, b \}^\ast \,\vert\, \left| w \right|_a + \left| w \right|_b \text{ teilbar durch } 3 \} \), \( \mathcal{B} \) erkennt die Sprache \( \{ ua : u \in \{a, b\}^\ast \} \). Der Produktautomat erkennt die Vereinigung.}
+	\label{fig:dfa_product}
+\end{figure}
+Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_union} erhält man nun einfach alle übrigen Abschlusseigenschaften für die üblichen Mengenoperationen, aber auch mit der Produktkonstruktion lassen sich diese Eigenschaften zeigen.
+\begin{corollary}
+	Seien \( L_1, L_2 \) DFA-erkennbare Sprachen. Dann sind auch die Sprachen \( L_1 \cap L_2, L_1 \setminus L_2 \) DFA-erkannbar.
+	\begin{proof}
+		Wegen Satz~\ref{thm:regular_complement} sind auch \( \comp{L_1}, \comp{L_2} \) DFA-erkennbar und damit nach Satz~\ref{thm:regular_union} \( \comp{L_1} \cup \comp{L_2} \). Mit erneuter Anwendung von Satz~\ref{thm:regular_complement} ist auch \( \comp{\comp{L_1} \cup \comp{L_1}} \) DFA-erkennbar, was nach den DeMorgan'schen Gesetzen \( L_1 \cap L_2 \) entspricht. Alternativ kann man in der Produktkonstruktion auch \( F = F_1 \times F_2 \) setzen und erhält einen DFA für \( L_1 \cap L_2 \).\\
+		Für \( L_1 \setminus L_2 \) setzt man \( F = F_1 \times (Q_2 \setminus F_2) \) und erhält einen DFA für die Sprache.
+	\end{proof}
+\end{corollary}
+
+\subsection{Nichtdeterministische Endliche Automaten}\label{sec:regular_nfa}
+\subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
+\subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
+\subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
+\subsection{Nicht-reguläre Sprachen}\label{sec:regular_nonregular}
+\subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
+
+
+
+
+\newpage
+\section{Kellerautomaten und Kontextfreie Sprachen}\label{sec:contextfree}
+
+\newpage
+\section{Kontextsensitive Sprachen}\label{sec:contextsensitive}
+
+\newpage
+\section{Prozesskalküle und Petri-Netze}\label{sec:process}
 
 \newpage
 \bibliography{sources}\addcontentsline{toc}{section}{References}
