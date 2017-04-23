@@ -53,6 +53,7 @@
 \newcommand{\qedw}{\hfill\(\square\)}
 \newcommand{\qedb}{\hfill\(\blacksquare\)}
 \newcommand{\shuffle}{\mathrel{\shifttext{5pt}{$\equiv$}\shifttext{-5pt}{$=$}}}
+\newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
 
@@ -766,7 +767,11 @@ Im letzten Abschnitt haben wir gesehen, dass unter einigen Operationen abgeschlo
 		\item \(F \subseteq Q \) die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
 	\end{itemize}
 \end{definition}
-Wir bezeichnen NFAs genau wie DFAs mit \( \mathcal{A}, \mathcal{B} \) usw. Die Transitionsgraphen sehen ebenfalls genauso aus, nur, dass nun Zustände mehrere Kanten haben können, die gleich beschriftet sind. Außerdem ist es erlaubt, dass Transitionen komplett fehlen. Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
+Wir bezeichnen NFAs genau wie DFAs mit \( \mathcal{A}, \mathcal{B} \) usw. Die Transitionsgraphen sehen ebenfalls genauso aus, nur, dass nun Zustände mehrere Kanten haben können, die gleich beschriftet sind. Außerdem ist es erlaubt, dass Transitionen komplett fehlen. 
+\begin{remark*}
+	Auch wenn es widersprüchlich klingt, aber jeder DFA kann auch als ein NFA gesehen werden. Genauer gesagt ist ein DFA ein NFA bei dem die Transitionsrelation der Graph einer totalen Funktion \( Q \times \Sigma \to Q \) ist.
+\end{remark*}
+Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 \begin{definition}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA.
 	Ein \textit{Lauf} von \( \mathcal{A} \) auf einem Wort \( w = a_0 \ldots a_{n-1} \) für ein \( n \in \mathbb{N} \) ist eine endliche Folge
@@ -818,6 +823,44 @@ Wir bezeichnen NFAs genau wie DFAs mit \( \mathcal{A}, \mathcal{B} \) usw. Die T
 	\caption{Ein DFA und ein NFA für die Sprache aus Beispiel~\ref{exp:ex2}.}
 	\label{fig:nfa_ex1}
 \end{figure}
+Für NFAs ist das \textit{Wortproblem}, das Problem ob ein Automat ein gegebenes Wort akzeptiert, nicht ganz so offensichtlich zu lösen wie für DFAs. Bei DFAs müssen wir lediglich die eindeutige Transitionsfolge anwenden und prüfen ob der letzte Zustand ein akzeptierender ist. Für NFAs können wir natürlich alle möglichen Läufe ausprobieren und prüfen, ob ein akzeptierender dabei ist. Doch es gieht effizienter mit der Erreichbarkeitsrelation.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA und \( w = a_0 \ldots a_{n-1} \). Ein Zustand \( q \in Q \) heißt \textit{erreichbar} von \( p \) über \( w \) (geschrieben \( \mathcal{A}: p \reaches{w} q \)), wenn es einen Lauf \( (r_0, \ldots, r_n) \) gibt mit 
+	\begin{itemize}
+		\item \( r_0 = p, r_n = q \) und
+		\item \( (r_i, a_i, r_{i+1}) \in \Delta \) für alle \( i \in [n] \).
+	\end{itemize}
+\end{definition}
+Diese Notation können wir auch selbstverständlich auf DFAs anwenden. Wir lassen gelegentlich, dass \( \mathcal{A} \) weg, wenn der Automat aus dem Kontext klar ist.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA und \( w \in \Sigma^\ast \). Die \textit{Menge der in \( \mathcal{A} \) über \( w \) erreichbaren Zustände} ist definiert als
+	\[
+		E(\mathcal{A}, w) := \{ q \in Q \,\vert\, \mathcal{A}: q_0 \reaches{w} q \}.
+	\]
+\end{definition}
+Wir haben zwei Lemmata, die uns die Anwendung dieser Definition nahelegen.
+\begin{lemma}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F)\) ein NFA und \( w \in \Sigma^\ast \). \( w \in L(\mathcal{A}) \) {g.d.w.} \( E(\mathcal{A}, w) \cap F \neq \emptyset \).
+	\begin{proof}
+		``wenn, dann``: Sei \( w \in L(\mathcal{A}) \). Dann exitiert ein Lauf \( (r_0, \ldots, r_n) \) von \( \mathcal{A} \) auf \( w \) mit \( r_n =: q \in F \), also \( q_0 \reaches{w} q \). Somit ist \( q \in E(\mathcal{A}, w) \). Also ist \( \emptyset \neq \{q\} \subseteq E(\mathcal{A}, w) \cap F \).\\
+		``genau dann``: Es exitiert ein \( q \in E(\mathcal{A}, w) \cap F \), also \( q \in F \) und \( q \in E(\mathcal{A}, w) \). Also gibt es einen Lauf von \( \mathcal{A} \) auf \( w \), der in \( q_0 \) startet und in \( q \) endet. Dieser ist akzeptierend, also ist \( w \in L(\mathcal{A}) \).
+	\end{proof}
+\end{lemma}
+\begin{lemma}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA.
+	\begin{enumerate}
+		\item \( E(\mathcal{A}, \varepsilon) = \{q_0\} \),
+		\item Für alle \( u \in \Sigma^\ast \) und \( a \in \Sigma \) gilt
+			\[
+				E(\mathcal{A}, ua) = \bigcup_{p \in E(\mathcal{A}, u)} \{ q \in Q \,\vert\, (p, a, q) \in \Delta \}.
+			\]
+	\end{enumerate}
+	\begin{proof}
+		Induktionsverankerung: \( q \in E(\mathcal{A}, \varepsilon) \) {g.d.w.} \( q_0 \reaches{\varepsilon} q \) {g.d.w.} \( q = q_0 \). \checkmark\\
+		Induktionsschritt: \( q \in E(\mathcal{A}, ua) \), also \( q_0 \reaches{ua} q \). Damit gibt es ein \( p \in Q \), sodass \( q_0 \reaches{u} p \reaches{a} q \). Wir folgern, dass \( p \in E(\mathcal{A}, u) \) und \( (p, a, q) \in \Delta \) und somit \( q \in \bigcup_{p \in E(\mathcal{A}, u)} \{ r \in Q \,\vert\, (p, a, r) \in \Delta \} \). Rückrichtung analog.
+	\end{proof}
+\end{lemma}
+
 
 
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
