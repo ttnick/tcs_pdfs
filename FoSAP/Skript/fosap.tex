@@ -40,13 +40,19 @@
 \numberwithin{equation}{section}
 
 \renewcommand{\labelenumi}{(\roman{enumi})}
+\makeatletter
+\newcommand*{\shifttext}[2]{
+	\settowidth{\@tempdima}{#2}
+	\makebox[\@tempdima]{\hspace*{#1}#2}
+}
+\makeatother
 \def\Rho{\mathrm{P}}
 
 \newenvironment{problem}[1]{\begin{tabular}{|p{.96\textwidth}|} \hline \textsc{#1}\\}{\\ \hline \end{tabular}}
 \newcommand{\comp}[1]{\overline{#1}}
 \newcommand{\qedw}{\hfill\(\square\)}
 \newcommand{\qedb}{\hfill\(\blacksquare\)}
-
+\newcommand{\shuffle}{\mathrel{\shifttext{5pt}{$\equiv$}\shifttext{-5pt}{$=$}}}
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
 
@@ -706,8 +712,114 @@ Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_union} erhält
 		Für \( L_1 \setminus L_2 \) setzt man \( F = F_1 \times (Q_2 \setminus F_2) \) und erhält einen DFA für die Sprache.
 	\end{proof}
 \end{corollary}
+Die Produktkonstruktion ist eine sehr grundlegende Konstruktion, die in ähnlicher Form immer wieder Anwendungen findet. Wir können auch eigene Sprachoperatoren erfinden und DFA-erkennbare Sprachen daraufhin untersuchen ob sie abgeschlossen sind bzgl. dieser Operationen.
+\begin{example}
+	Seien \( L, K \subseteq \Sigma^\ast \). Wir definieren die Operation \textit{Perfect Shuffle} wie folgt:
+	\[
+		L \shuffle K := \{ a_0 b_0 \ldots a_{n-1} b_{n-1} : a_0 \ldots a_{n-1} \in L, b_0 \ldots b_{n-1} \in K \}.
+	\]
+\end{example}
+\begin{theorem}
+	Seien \( L_1, L_2 \subseteq \Sigma^\ast \) DFA-erkennbare Sprachen. Dann ist auch \( L_1 \shuffle L_2 \) DFA-erkennbar.
+	\begin{proof}
+		Seien \( \mathcal{A}_1 = (Q_1, \Sigma, \delta_1, q_0^1, F_1), \mathcal{A}_2 = (Q_2, \Sigma, \delta_2, q_0^2, F_2) \) die DFAs für \( L_1, L_2 \). Wir definieren wieder einen Produktautomaten
+		\[
+			\mathcal{A} = (Q_1 \times Q_2 \times [2], \Sigma, \delta, (q_0^1, q_0^2, 0), F)
+		\]
+		mit
+		\[
+			\delta((p, q, i), a) = \left\lbrace
+				\begin{array}{ll}
+					(\delta_1(p, a), q, 1), & i = 0\\
+					(p, \delta_2(q, a), 0), & i = 1
+				\end{array}
+			\right.
+		\]
+		und \( F = F_1 \times F_2 \times \{0\} \). Die Idee ist diesmal nur eine \textit{quasi-parallele} Simulation von \( \mathcal{A}_1 \) und \( \mathcal{A}_2 \). Die dritte Komponente des Zustands gibt an in welchem Automat \( \mathcal{A} \) den nächsten Schritt simulieren soll. Wir akzeptieren, wenn beide Simulationen in einem Endzustand sind und der zuletzt durchgeführte Simulationsschritt auf \( \mathcal{A}_2 \) war. Wir zeigen nun noch, dass die Konstruktion funktioniert.\\
+		``\( L(\mathcal{A}) \subseteq L_1 \shuffle L_2 \)``: Sei \( w = c_0 \ldots c_{n-1} \in L(\mathcal{A}) \). D.h. es existiert ein Lauf 
+		\[
+			\varrho = ((p_0, q_0, i_0), \ldots, (p_n, q_n, i_n))
+		\]
+		von \( \mathcal{A} \) auf \( w \) mit \( p_n \in F_1, q_n \in F_2 \) und \( i_j = j \mod 2 \) und \( i_0 = i_n = 0 \) (insbesondere ist \( \left| w \right| \) gerade), wobei abwechselnd in jedem Schritt \( j \) die \( 1 + i_j \)te Komponenten gleich bleibt (s. Definition von \( \delta \)). Aus den geraden Positionen in \( \varrho \) (die mit der dritten Komponente \( 0 \)) ergeben dann einen Lauf von \( \mathcal{A}_1 \) auf dem Wort \( c_0 c_2 \ldots c_{n-2} \). Umgekehrt sind die ungeraden Positionen induziert durch den Lauf von \( \mathcal{A}_2 \) auf \( c_1 c_3 \ldots c_{n-1} \). Wegen \( p_n \in F_1 \) und \( i_n = 0 \) ist \( p_{n-1} = p_n \in F_1 \) und somit akzeptiert \( \mathcal{A}_1 \) das Wort \( c_0 c_2 \ldots c_{n-2} \). Analog für \( \mathcal{A}_2 \). Also ist \( w \in L(\mathcal{A}_1) \shuffle L(\mathcal{A}_2) \).\\
+		``\( L(\mathcal{A}) \supseteq L_1 \shuffle L_2 \)``: Sei \( w = a_0 b_0 \ldots a_{n-1} b_{n-1} \in L_1 \shuffle L_2 \). Dann exitieren Läufe \( \varrho_1 = (p_0, \ldots, p_n), \varrho_2 = (q_0, \ldots, q_n) \) mit \( p_n \in F_1, q_n \in F_2 \) von \( \mathcal{A}_1, \mathcal{A}_2 \). Nach Definition von \( \delta \) ist der Lauf auf \( \mathcal{A} \) dann
+		\[
+			((p_0, q_0, 0), (p_1, q_0, 1), \ldots, (p_n, q_{n-1}, 1), (p_n, q_n, 0))
+		\]
+		und \( \mathcal{A} \) akzeptiert \( w \).
+	\end{proof}
+\end{theorem}
+
 
 \subsection{Nichtdeterministische Endliche Automaten}\label{sec:regular_nfa}
+Im letzten Abschnitt haben wir gesehen, dass unter einigen Operationen abgeschlossen sind. Die Mengenoperationen wirken dabei ohnehin von Vorteil für weitere Betrachtungen unter mathematischen Aspekten. Perfect Shuffle könnte man dagegen als eine Routine sehen, ob zum Beispiel ein Prozessor zwei Prozessen wirklich abwechselnd Berechnungszeit gibt. Wir würden gerne weitere Abschlusseigenschaften kennenlernen, besonders die Konkatenation unter der Kleene-Stern wären nun interessant. Eine simultane Ausführung zweier Automaten bringt hier jedoch nichts mehr, da beide Operationen eher von sequentieller Natur sind (Hintereinanderausführung, Wiederholung). DFAs sind für diese Aufgaben zunächst nicht sonderlich sinnvoll. Denkbar wäre ein Modell, dass nach Erreichen eines Endzustandes den nächsten Automaten (im Falle der Konkatenation) auf dem Rest des Wortes startet. Ein DFA weiß aber nicht ad hoc wie das Wort zerlegt ist, es kann also sein, dass nach Erreichen eines Endzustandes der erste Automat noch weiterlaufen soll und erst bei erneutem Besuch eines akzeptierenden Zustandes das zweite Wort losgeht. Zu diesem Zweck führen wir das Prinzip des Nichtdeterminismus ein. Ein Automat kann dann ``raten`` in welchen Zustand er wechseln soll (bzw. ob er ``den nächsten Automaten startet``). Dieses Konzept wirkt etwas unnatürlich, da es nicht von einem Computer simuliert werden kann (Zufall \( \neq \) Nichtdeterminismus!), in unserem Modell rät der Automat stets ``richtig``.
+\begin{definition}
+	Ein \textit{nicht-deterministischer endlicher Automat (NFA} (von engl.: non-deterministic finite automaton) ist ein 5-Tupel
+	\[
+		(Q, \Sigma, \Delta, q_0, F),
+	\]
+	mit
+	\begin{itemize}
+		\item \( Q \) eine nicht-leere, endliche Menge von \textit{Zuständen},
+		\item \( \Sigma \) ein nicht-leeres, endliches \textit{Eingabealphabet},
+		\item \( \Delta \subseteq Q \times \Sigma \times Q \) die \textit{Transitionsrelation},
+		\item \( q_0 \in Q \) der \textit{Startzustand},
+		\item \(F \subseteq Q \) die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
+	\end{itemize}
+\end{definition}
+Wir bezeichnen NFAs genau wie DFAs mit \( \mathcal{A}, \mathcal{B} \) usw. Die Transitionsgraphen sehen ebenfalls genauso aus, nur, dass nun Zustände mehrere Kanten haben können, die gleich beschriftet sind. Außerdem ist es erlaubt, dass Transitionen komplett fehlen. Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA.
+	Ein \textit{Lauf} von \( \mathcal{A} \) auf einem Wort \( w = a_0 \ldots a_{n-1} \) für ein \( n \in \mathbb{N} \) ist eine endliche Folge
+	\[
+		(r_0, a_0, r_1, a_1, \ldots, a_{n-1}, r_n),
+	\]
+	wobei \( r_0, \ldots, r_n \in Q \) und \( a_0, \ldots, a_{n-1} \in \Sigma \), sodass
+	\begin{enumerate}
+		\item \( r_0 = q_0 \),
+		\item Für alle \( i \in [n] \) gilt, dass \( (r_i, a_i, r_{i+1}) \in \Delta \).
+	\end{enumerate}
+	Wir sagen ein Lauf ist \textit{akzeptierend}, wenn zusätzlich \( r_n \in F \) gilt.
+\end{definition}
+\begin{remark*}
+	Für NFAs müssen Läufe nicht mehr eindeutig sein. Es kann zu einem Wort mehrere Läufe geben oder auch gar keine Läufe, wenn entsprechende Transitionen fehlen.
+\end{remark*}
+\begin{definition}
+\
+	\begin{enumerate}
+		\item Ein NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) \textit{akzeptiert} ein Wort \( w \in \Sigma^\ast \), wenn es mindestens einen akzeptierenden Lauf von \( \mathcal{A} \) gibt. Andernfalls \textit{verwirft} \( \mathcal{A} \) das Wort \( w \).
+		\item Die von einem NFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{erkannte Sprache} ist
+			\[
+				L(\mathcal{A}) := \{ w \in \Sigma^\ast \,\vert\, \mathcal{A} \text{ akzeptiert } w \}.
+			\]
+		\item Eine Sprache \( L \) heißt \textit{NFA-erkennbar}, wenn es einen NFA \( \mathcal{A} \) gibt, sodass \( L = L(\mathcal{A}) \).
+	\end{enumerate}
+\end{definition}
+\begin{example}\label{exp:ex2}
+	Wir betrachten die Sprache
+	\[
+		L = \{ w \in \{a, b\}^\ast \,\vert\, \text{das vorletzte Symbol in } w \text{ ist } a \}.
+	\]
+	In Abbildung~\ref{fig:nfa_ex1} befindet sich ein DFA und ein NFA für die Sprache. Wir sehen, dass der NFA weniger Zustände hat. Dies ist nicht überraschen, denn der DFA muss sich stets das zuletzt gelesene Symbol im Zustand merken, während der NFA dies nicht muss und einfach ``rät`` welches Symbol das vorletzte ist.
+\end{example}
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/nfa_ex1dfa}
+		\caption{DFA}
+		\label{fig:nfa_ex1dfa}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/nfa_ex1nfa}
+		\caption{NFA}
+		\label{fig:nfa_ex1nfa}
+	\end{subfigure}
+	\caption{Ein DFA und ein NFA für die Sprache aus Beispiel~\ref{exp:ex2}.}
+	\label{fig:nfa_ex1}
+\end{figure}
+
+
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
