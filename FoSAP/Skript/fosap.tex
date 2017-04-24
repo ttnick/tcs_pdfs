@@ -12,6 +12,7 @@
 \usepackage{mathrsfs}
 \usepackage{mathdots}
 \usepackage{listings}
+\usepackage[linesnumbered, ruled, ngerman]{algorithm2e}
 \usepackage{enumitem}
 \usepackage{wrapfig}
 \usepackage{float}
@@ -507,7 +508,7 @@ Wir haben formale Sprachen eingeführt als Modellierung für Prozessabläufe auf
 \subsection{Deterministische Endliche Automaten}\label{sec:regular_dfa}
 Wir beginnen mit der Art Automaten, die ``die einfachste`` Klasse formaler Sprachen erkennen kann.
 \begin{definition}
-	Ein \textit{deterministischer endlicher Automat (DFA} (von engl.: deterministic finite automaton) ist ein 5-Tupel
+	Ein \textit{deterministischer endlicher Automat (DFA)} (von engl.: deterministic finite automaton) ist ein 5-Tupel
 	\[
 		(Q, \Sigma, \delta, q_0, F),
 	\]
@@ -754,7 +755,7 @@ Die Produktkonstruktion ist eine sehr grundlegende Konstruktion, die in ähnlich
 \subsection{Nichtdeterministische Endliche Automaten}\label{sec:regular_nfa}
 Im letzten Abschnitt haben wir gesehen, dass unter einigen Operationen abgeschlossen sind. Die Mengenoperationen wirken dabei ohnehin von Vorteil für weitere Betrachtungen unter mathematischen Aspekten. Perfect Shuffle könnte man dagegen als eine Routine sehen, ob zum Beispiel ein Prozessor zwei Prozessen wirklich abwechselnd Berechnungszeit gibt. Wir würden gerne weitere Abschlusseigenschaften kennenlernen, besonders die Konkatenation unter der Kleene-Stern wären nun interessant. Eine simultane Ausführung zweier Automaten bringt hier jedoch nichts mehr, da beide Operationen eher von sequentieller Natur sind (Hintereinanderausführung, Wiederholung). DFAs sind für diese Aufgaben zunächst nicht sonderlich sinnvoll. Denkbar wäre ein Modell, dass nach Erreichen eines Endzustandes den nächsten Automaten (im Falle der Konkatenation) auf dem Rest des Wortes startet. Ein DFA weiß aber nicht ad hoc wie das Wort zerlegt ist, es kann also sein, dass nach Erreichen eines Endzustandes der erste Automat noch weiterlaufen soll und erst bei erneutem Besuch eines akzeptierenden Zustandes das zweite Wort losgeht. Zu diesem Zweck führen wir das Prinzip des Nichtdeterminismus ein. Ein Automat kann dann ``raten`` in welchen Zustand er wechseln soll (bzw. ob er ``den nächsten Automaten startet``). Dieses Konzept wirkt etwas unnatürlich, da es nicht von einem Computer simuliert werden kann (Zufall \( \neq \) Nichtdeterminismus!), in unserem Modell rät der Automat stets ``richtig``.
 \begin{definition}
-	Ein \textit{nicht-deterministischer endlicher Automat (NFA} (von engl.: non-deterministic finite automaton) ist ein 5-Tupel
+	Ein \textit{nicht-deterministischer endlicher Automat (NFA)} (von engl.: non-deterministic finite automaton) ist ein 5-Tupel
 	\[
 		(Q, \Sigma, \Delta, q_0, F),
 	\]
@@ -839,14 +840,14 @@ Diese Notation können wir auch selbstverständlich auf DFAs anwenden. Wir lasse
 	\]
 \end{definition}
 Wir haben zwei Lemmata, die uns die Anwendung dieser Definition nahelegen.
-\begin{lemma}
+\begin{lemma}\label{lem:reach1}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F)\) ein NFA und \( w \in \Sigma^\ast \). \( w \in L(\mathcal{A}) \) {g.d.w.} \( E(\mathcal{A}, w) \cap F \neq \emptyset \).
 	\begin{proof}
 		``wenn, dann``: Sei \( w \in L(\mathcal{A}) \). Dann exitiert ein Lauf \( (r_0, \ldots, r_n) \) von \( \mathcal{A} \) auf \( w \) mit \( r_n =: q \in F \), also \( q_0 \reaches{w} q \). Somit ist \( q \in E(\mathcal{A}, w) \). Also ist \( \emptyset \neq \{q\} \subseteq E(\mathcal{A}, w) \cap F \).\\
 		``genau dann``: Es exitiert ein \( q \in E(\mathcal{A}, w) \cap F \), also \( q \in F \) und \( q \in E(\mathcal{A}, w) \). Also gibt es einen Lauf von \( \mathcal{A} \) auf \( w \), der in \( q_0 \) startet und in \( q \) endet. Dieser ist akzeptierend, also ist \( w \in L(\mathcal{A}) \).
 	\end{proof}
 \end{lemma}
-\begin{lemma}
+\begin{lemma}\label{lem:reach2}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA.
 	\begin{enumerate}
 		\item \( E(\mathcal{A}, \varepsilon) = \{q_0\} \),
@@ -860,7 +861,39 @@ Wir haben zwei Lemmata, die uns die Anwendung dieser Definition nahelegen.
 		Induktionsschritt: \( q \in E(\mathcal{A}, ua) \), also \( q_0 \reaches{ua} q \). Damit gibt es ein \( p \in Q \), sodass \( q_0 \reaches{u} p \reaches{a} q \). Wir folgern, dass \( p \in E(\mathcal{A}, u) \) und \( (p, a, q) \in \Delta \) und somit \( q \in \bigcup_{p \in E(\mathcal{A}, u)} \{ r \in Q \,\vert\, (p, a, r) \in \Delta \} \). Rückrichtung analog.
 	\end{proof}
 \end{lemma}
+Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:reach2}, erhalten wir für das Wortproblem für NFAs einen Algorithmus.
+\begin{algorithm}\label{alg:nfaacc}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\underline{NFA-Akzeptanz}{$(\mathcal{A}, w)$}\\
+	\Input{NFA $\mathcal{A}$, Wort $w$}
+	\Output{Ja {g.d.w.} $\mathcal{A}$ akzeptiert $w = a_0 \ldots a_{n-1}$.}	
+	$u := \varepsilon$\\
+	$E(\mathcal{A}, u) := \{ q_0 \}$\\	
+	\For{$i = 0, \ldots, n-1$}{
+		Bestimme $E(\mathcal{A}, ua_i)$ aus $E(\mathcal{A}, u)$ (Lemma~\ref{lem:reach2})\\
+		$u := ua_i$
+	}
+	Prüfe, ob $E(\mathcal{A}, w) \cap F \neq \emptyset$.
+	\caption{Wortproblem für NFAs}
+\end{algorithm}
+\begin{example}
+	Wir betrachten erneut den NFA in Abbildung~\ref{fig:nfa_ex1nfa} und die Erreichbarkeitsmengen für die Präfixe von \( w = abbabaa \).
+	\begin{align*}
+		E(\mathcal{A}, \varepsilon) &= \{ q_0 \},\\
+		E(\mathcal{A}, a) &= \{ q_0, q_1 \},\\
+		E(\mathcal{A}, ab) &= \{ q_0, q_2 \},\\
+		E(\mathcal{A}, abb) &= \{ q_0 \},\\
+		E(\mathcal{A}, abba) &= \{ q_0, q_1 \},\\
+		E(\mathcal{A}, abbab) &= \{ q_0, q_2 \},\\
+		E(\mathcal{A}, abbaba) &= \{ q_0, q_1 \},\\
+		E(\mathcal{A}, abbabaa) &= \{ q_0, q_1, q_2 \}.
+	\end{align*}
+	Wegen \( E(\mathcal{A}, w) \cap F \neq \emptyset \) wird \( w \) akzeptiert.
+\end{example}
 
+
+\subsection{Äquivalenz von NFAs und DFAs}\label{regular_equivalence}
 
 
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
