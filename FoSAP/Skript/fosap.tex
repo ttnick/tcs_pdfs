@@ -862,7 +862,7 @@ Wir haben zwei Lemmata, die uns die Anwendung dieser Definition nahelegen.
 	\end{proof}
 \end{lemma}
 Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:reach2}, erhalten wir für das Wortproblem für NFAs einen Algorithmus.
-\begin{algorithm}\label{alg:nfaacc}
+\begin{algorithm}
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\underline{NFA-Akzeptanz}{$(\mathcal{A}, w)$}\\
@@ -876,6 +876,7 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 	}
 	Prüfe, ob $E(\mathcal{A}, w) \cap F \neq \emptyset$.
 	\caption{Wortproblem für NFAs}
+	\label{alg:nfaacc}
 \end{algorithm}
 \begin{example}
 	Wir betrachten erneut den NFA in Abbildung~\ref{fig:nfa_ex1nfa} und die Erreichbarkeitsmengen für die Präfixe von \( w = abbabaa \).
@@ -894,7 +895,7 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 
 
 \subsection{Äquivalenz von NFAs und DFAs}\label{regular_equivalence}
-Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können as DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:ex2} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
+Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können als DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:ex2} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
 \begin{definition}
 	Seien \( \mathcal{A}, \mathcal{B} \) zwei endliche Automaten (deterministisch oder nicht-deterministisch). \( \mathcal{A} \) und \( \mathcal{B} \) heißen \textit{äquivalent}, wenn \( L(\mathcal{A}) = L(\mathcal{B}) \).
 \end{definition}
@@ -918,16 +919,73 @@ Diese Richtung war relativ einfach mit den eingangs genannten Bemerkungen. Man k
 			\mathcal{A}^\prime = (2^Q, \Sigma, \delta, \{q_0\}, \{ P \subseteq Q \mid P \cap F \neq \emptyset \})
 		\]
 		mit \( \delta(P, a) = \{ q \mid \text{es ex. } p \in P \text{ mit } (p, a, q) \in \Delta \} \).
-		Wir zeigen, dass beide Automaten äquivalent sind. Sei \( w \in L(\mathcal{A}) \). Betrachte nun die Erreichbarkeitsmenge von \( \mathcal{A} \) auf allen Präfixen von \( w \).\\
-		TODO
+		Wir zeigen, dass beide Automaten äquivalent sind durch die Behauptung, dass für alle \( w \in \Sigma^\ast \) und \( P \subseteq Q \) mit \( \mathcal{A}^\prime: \{q_0\} \reaches{w} P \) gilt, dass \( P = E(\mathcal{A}, w) \), d.h. der Zustand, den der Potenzmengenautomatauf dem Wort \( w \) erreicht, entspricht der Erreichbarkeitsmenge auf dem selben Wort für den NFA. Dies zeigen wir per Induktion über alle Wortlängen \( n \)\\
+		Induktionsverankerung: \( n = 0 \). Dann ist \( w = \varepsilon \) und es gilt \( P = \{q_0\} = E(\mathcal{A}, \varepsilon) \) nach Lemma~\ref{lem:reach2}.\\
+		Induktionsschritt: \( n \rightarrow {n+1} \). Dann ist \( w = ua \) für ein \( u \in \Sigma^n \) und \( a \in \Sigma \). Sei \( P^\prime \subseteq Q \), sodass \( \mathcal{A}^\prime: \{q_0\} \reaches{u} P^\prime \). Nach Induktionshypothese ist \( P^\prime = E(\mathcal{A}, u) \). Somit gilt
+		\begin{align*}
+			P &= \delta(P^\prime, a)\\
+			&= \{q \in Q \mid \text{es ex. } p \in P^\prime \text{ mit } (p, a, q) \in \Delta\}\\
+			&= \bigcup_{p \in P = E(\mathcal{A}, u)} \{q \in Q \mid (p, a, q) \in \Delta\}\\
+			&= E(\mathcal{A}, w)
+		\end{align*}
+		nach Definition von \( \delta \) und Lemma~\ref{lem:reach2}. Insgesamt gilt also, dass \( w \in L(\mathcal{A}) \) {g.d.w.} \( E(\mathcal{A}, w) \cap F \neq \emptyset \) (Lemma~\ref{lem:reach1}). Nach der oben gezeigten Behauptung gilt dies {g.d.w.} \( P \cap F \neq \emptyset \) und nach Definition des Konstruktion ist \( P \) genau dann akzeptierend im Potenzmengenautomaten. Somit akzeptiert \( \mathcal{A}^\prime \) das Wort \( w \).
 	\end{proof}
 \end{lemma}
+In der Potenzmengenkonstruktion haben wir als Zustandsmenge stets die Potenzmenge der Zustandsmenge des NFA genutzt. Offenbar ist es aber so, dass dann einige Zustände unerreichbar sind, diese können auch weggelassen werden.
+\begin{definition}\label{def:reduced_automaton}
+	Sei \( \mathcal{A} = (Q, \Sigma, \genfrac{}{}{-10pt}{0}{\delta}{\Delta}, q_0, F) \) ein DFA bzw. NFA.
+	\begin{enumerate}
+		\item Ein Zustand \( q \in Q \) ist \textit{erreichbar}, wenn es ein \( w \in \Sigma^\ast \) gibt, sodass \( \mathcal{A}: q_0 \reaches{w} q \).
+		\item Der \textit{reduzierte Automat} (auf die erreicharen Zustände) ist:
+			\[
+				\mathcal{A}^\prime = (Q^\prime, \Sigma, \genfrac{}{}{-10pt}{0}{\delta^\prime}{\Delta^\prime}, q_0, F^\prime)
+			\]
+			wobei
+			\begin{itemize}
+				\item \( Q^\prime := \{ q \in Q \mid q \text{ erreichbar} \} \),
+				\item \( \delta^\prime := \left. \delta \right|_{Q^\prime \times \Sigma} \) bzw. \( \Delta^\prime := \Delta \cap (Q^\prime \times \Sigma \times Q^\prime) \),
+				\item \( F^\prime := F \cap Q^\prime\).
+			\end{itemize}
+	\end{enumerate}
+\end{definition}
+Wir verwenden die Potenzmengenkonstruktion aus Lemma~\ref{lem:nfa2dfa} zur Determinisierung eines NFA. Wir können dabei schrittweise vom Anfangszustand die Zustände und Transitionen konstruieren um so direkt auf einen reduzierten Automaten gemäß Definition~\ref{def:reduced_automaton} zu kommen. Dies ist in Algorithmus~\ref{alg:nfa2dfa} beschrieben.
+\begin{algorithm}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\underline{Potenzmengenkonstruktion}{$(\mathcal{A})$}\\
+	\Input{NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$}
+	\Output{äquivalenter, reduzierter DFA $\mathcal{A}^\prime = (Q^\prime, \Sigma, \delta, q_0^\prime, F^\prime)$}	
+	$Q^\prime := \{q_0\}$\\
+	$q_0^\prime := \{q_0\}$
+	\uIf{$q_0 \in F$}{$F^\prime := \{ \{q_0\} \}$}\uElse{$F^\prime := \emptyset$}
+	Queue $P := Q^\prime$\\
+	\While{$P \neq \emptyset$}{
+		$q := $ pop$(P)$\\
+		\For{$a \in \Sigma$}{
+			TODO
+		}
+	}
+	\caption{NFA-Determinisierung}
+	\label{alg:nfa2dfa}
+\end{algorithm}
 \begin{example}
-	TODO
+	Wir betrachten den NFA in Abbildung~\ref{fig:powersetconstruction_nfa}. In Abbildung~\ref{fig:powersetconstruction_dfa} ist ein äquivalenter, reduzierter DFA, erhalten durch Potenzmengenkonstruktion.
 \end{example}
 \begin{figure}
 	\centering
-	TODO
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/powersetconstruction_nfa}
+		\caption{NFA}
+		\label{fig:powersetconstruction_nfa}
+	\end{subfigure}\\
+	\ \\
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/powersetconstruction_dfa}
+		\caption{Potenzmengenautomat}
+		\label{fig:powersetconstruction_dfa}
+	\end{subfigure}
 	\caption{Beispiel zur Potenzmengenkonstruktion.}
 	\label{fig:powersetconstruction}
 \end{figure}
