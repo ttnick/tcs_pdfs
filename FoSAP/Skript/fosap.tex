@@ -12,7 +12,7 @@
 \usepackage{mathrsfs}
 \usepackage{mathdots}
 \usepackage{listings}
-\usepackage[linesnumbered, ruled, ngerman]{algorithm2e}
+\usepackage[linesnumbered, ruled, vlined, ngerman]{algorithm2e}
 \usepackage{enumitem}
 \usepackage{wrapfig}
 \usepackage{float}
@@ -394,7 +394,7 @@ Wir fassen Aktionen eines Computers (oder eines Getränkeautomaten, \ldots) in u
 \begin{definition}
 	Ein \textit{Alphabet} ist eine nicht-leere endliche Menge, deren Elemente als \textit{Symbole} bezeichnet sind.
 \end{definition}
-Alphabete werden durch griechische Großbuchstaben \( \Sigma, \Gamma \) oder Variationen wie \( \Sigma_1, \Gamma^\ast \) bezeichnet. Symbole werden durch kleine lateinische Buchstaben \( a, b, c, \ldots \) oder arabische Ziffern bezeichnet.
+Alphabete werden durch griechische Großbuchstaben \( \Sigma, \Gamma \) oder Variationen wie \( \Sigma_1, \Gamma^\prime \) bezeichnet. Symbole werden durch kleine lateinische Buchstaben \( a, b, c, \ldots \) oder arabische Ziffern bezeichnet.
 \begin{example}
 	\
 	\begin{enumerate}
@@ -473,8 +473,8 @@ Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhal
 	Sei \( v = aaba \).
 	\begin{itemize}
 		\item Die Präfixe von \( v \) sind \( \varepsilon, a, aa, aab, aaba \).
-		\item Die Infixe von \( v \) sind \( \varepsilon, a, ba, aba, aaba \).
-		\item Die Suffixe von \( v \) sind alle Präfixe und Suffixe, sowie \( ab, b \).
+		\item Die Suffixe von \( v \) sind \( \varepsilon, a, ba, aba, aaba \).
+		\item Die Infixe von \( v \) sind alle Präfixe und Suffixe, sowie \( ab, b \).
 	\end{itemize}
 \end{example}
 
@@ -657,7 +657,7 @@ Wir bezeichnen Läufe in der Regel mit \( \varrho \) bzw. Variationen. Einen Lau
 		\end{align*}
 	\end{proof}
 \end{example}
-So ausführlich wie hier werden wir später nicht mehr beweisen, dass ein gegebener Automat ``das richtige tut``, sollte dies nicht klar sein werden wir die Funktionsweise nur grob erläutern. Ausführliche Beweise sind im Wesentlichen dann gefordert, wenn man zum Beispiel zeien möchte, dass eine Sprache nicht DFA-erkennbar ist.
+So ausführlich wie hier werden wir später nicht mehr beweisen, dass ein gegebener Automat ``das richtige tut``, sollte dies nicht klar sein werden wir die Funktionsweise nur grob erläutern. Ausführliche Beweise sind im Wesentlichen dann gefordert, wenn man zum Beispiel zeigen möchte, dass eine Sprache nicht DFA-erkennbar ist.
 
 
 \subsection{Abschlusseigenschaften DFA-erkennbarer Sprachen}\label{sec:regular_closure}
@@ -912,7 +912,7 @@ Eine Bemerkung aus dem vorigen Abschnitt greifen wir nochmal im folgendem Lemma 
 		\[
 			\mathcal{A}^\prime = (Q, \Sigma, \Delta, q_0, F),
 		\]
-		mit \( \Delta = \{ (p, a, q) \mid \delta(p, a) = q \). Wir zeigen, dass \( \mathcal{A}^\prime \) und \( \mathcal{A} \) äquivalent sind. Dazu sei \( w = a_0 \ldots a_{n-1} \in L(\mathcal{A}) \). Also ist der eindeutige Lauf \( \varrho = (r_0, \ldots, r_n) \) akzeptierend auf \( \mathcal{A} \). Der Lauf ist nach Konstruktion auch ein Lauf auf \( \mathcal{A}^\prime \), also akzeptiert auch \( \mathcal{A}^\prime \). Rückrichtung analog.
+		mit \( \Delta = \{ (p, a, q) \mid \delta(p, a) = q \} \). Wir zeigen, dass \( \mathcal{A}^\prime \) und \( \mathcal{A} \) äquivalent sind. Dazu sei \( w = a_0 \ldots a_{n-1} \in L(\mathcal{A}) \). Also ist der eindeutige Lauf \( \varrho = (r_0, \ldots, r_n) \) akzeptierend auf \( \mathcal{A} \). Der Lauf ist nach Konstruktion auch ein Lauf auf \( \mathcal{A}^\prime \), also akzeptiert auch \( \mathcal{A}^\prime \). Rückrichtung analog.
 	\end{proof}
 \end{lemma}
 Diese Richtung war relativ einfach mit den eingangs genannten Bemerkungen. Man könnte den Beweis auch aufwändig wieder über Induktion führen, dies ist aber nicht sinnvoll, da das Ergbenis recht klar ist.
@@ -924,13 +924,13 @@ Diese Richtung war relativ einfach mit den eingangs genannten Bemerkungen. Man k
 			\mathcal{A}^\prime = (2^Q, \Sigma, \delta, \{q_0\}, \{ P \subseteq Q \mid P \cap F \neq \emptyset \})
 		\]
 		mit \( \delta(P, a) = \{ q \mid \text{es ex. } p \in P \text{ mit } (p, a, q) \in \Delta \} \).
-		Wir zeigen, dass beide Automaten äquivalent sind durch die Behauptung, dass für alle \( w \in \Sigma^\ast \) und \( P \subseteq Q \) mit \( \mathcal{A}^\prime: \{q_0\} \reaches{w} P \) gilt, dass \( P = E(\mathcal{A}, w) \), d.h. der Zustand, den der Potenzmengenautomatauf dem Wort \( w \) erreicht, entspricht der Erreichbarkeitsmenge auf dem selben Wort für den NFA. Dies zeigen wir per Induktion über alle Wortlängen \( n \)\\
+		Wir zeigen, dass beide Automaten äquivalent sind durch die Behauptung, dass für alle \( w \in \Sigma^\ast \) und \( P \subseteq Q \) mit \( \mathcal{A}^\prime: \{q_0\} \reaches{w} P \) gilt, dass \( P = E(\mathcal{A}, w) \), d.h. der Zustand, den der Potenzmengenautomatauf dem Wort \( w \) erreicht, entspricht der Erreichbarkeitsmenge auf dem selben Wort für den NFA. Dies zeigen wir per Induktion über alle Wortlängen \( n \).\\
 		Induktionsverankerung: \( n = 0 \). Dann ist \( w = \varepsilon \) und es gilt \( P = \{q_0\} = E(\mathcal{A}, \varepsilon) \) nach Lemma~\ref{lem:reach2}.\\
 		Induktionsschritt: \( n \rightarrow {n+1} \). Dann ist \( w = ua \) für ein \( u \in \Sigma^n \) und \( a \in \Sigma \). Sei \( P^\prime \subseteq Q \), sodass \( \mathcal{A}^\prime: \{q_0\} \reaches{u} P^\prime \). Nach Induktionshypothese ist \( P^\prime = E(\mathcal{A}, u) \). Somit gilt
 		\begin{align*}
 			P &= \delta(P^\prime, a)\\
 			&= \{q \in Q \mid \text{es ex. } p \in P^\prime \text{ mit } (p, a, q) \in \Delta\}\\
-			&= \bigcup_{p \in P = E(\mathcal{A}, u)} \{q \in Q \mid (p, a, q) \in \Delta\}\\
+			&= \bigcup_{p \in P^\prime = E(\mathcal{A}, u)} \{q \in Q \mid (p, a, q) \in \Delta\}\\
 			&= E(\mathcal{A}, w)
 		\end{align*}
 		nach Definition von \( \delta \) und Lemma~\ref{lem:reach2}. Insgesamt gilt also, dass \( w \in L(\mathcal{A}) \) {g.d.w.} \( E(\mathcal{A}, w) \cap F \neq \emptyset \) (Lemma~\ref{lem:reach1}). Nach der oben gezeigten Behauptung gilt dies {g.d.w.} \( P \cap F \neq \emptyset \) und nach Definition des Konstruktion ist \( P \) genau dann akzeptierend im Potenzmengenautomaten. Somit akzeptiert \( \mathcal{A}^\prime \) das Wort \( w \).
@@ -938,12 +938,12 @@ Diese Richtung war relativ einfach mit den eingangs genannten Bemerkungen. Man k
 \end{lemma}
 In der Potenzmengenkonstruktion haben wir als Zustandsmenge stets die Potenzmenge der Zustandsmenge des NFA genutzt. Offenbar ist es aber so, dass dann einige Zustände unerreichbar sind, diese können auch weggelassen werden.
 \begin{definition}\label{def:reduced_automaton}
-	Sei \( \mathcal{A} = (Q, \Sigma, \genfrac{}{}{-10pt}{0}{\delta}{\Delta}, q_0, F) \) ein DFA bzw. NFA.
+	Sei \( \mathcal{A} = (Q, \Sigma, \frac{\delta}{\Delta}, q_0, F) \) ein DFA bzw. NFA.
 	\begin{enumerate}
 		\item Ein Zustand \( q \in Q \) ist \textit{erreichbar}, wenn es ein \( w \in \Sigma^\ast \) gibt, sodass \( \mathcal{A}: q_0 \reaches{w} q \).
 		\item Der \textit{reduzierte Automat} (auf die erreicharen Zustände) ist:
 			\[
-				\mathcal{A}^\prime = (Q^\prime, \Sigma, \genfrac{}{}{-10pt}{0}{\delta^\prime}{\Delta^\prime}, q_0, F^\prime)
+				\mathcal{A}^\prime = (Q^\prime, \Sigma, \frac{\delta^\prime}{\Delta^\prime}, q_0, F^\prime)
 			\]
 			wobei
 			\begin{itemize}
