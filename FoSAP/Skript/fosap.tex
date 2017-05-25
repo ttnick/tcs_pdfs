@@ -960,16 +960,25 @@ Wir verwenden die Potenzmengenkonstruktion aus Lemma~\ref{lem:nfa2dfa} zur Deter
 	\underline{Potenzmengenkonstruktion}{$(\mathcal{A})$}\\
 	\Input{NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$}
 	\Output{äquivalenter, reduzierter DFA $\mathcal{A}^\prime = (Q^\prime, \Sigma, \delta, q_0^\prime, F^\prime)$}	
-	$Q^\prime := \{q_0\}$\\
-	$q_0^\prime := \{q_0\}$
-	\uIf{$q_0 \in F$}{$F^\prime := \{ \{q_0\} \}$}\uElse{$F^\prime := \emptyset$}
+	$Q^\prime := \{\{q_0\}\}$\\
+	$q_0^\prime := \{q_0\}$\\
+	$F^\prime := \emptyset$\\
 	Queue $P := Q^\prime$\\
 	\While{$P \neq \emptyset$}{
-		$q := $ pop$(P)$\\
+		$S := P$.dequeue()\\
 		\For{$a \in \Sigma$}{
-			TODO
+			$R := \{\bigcup_{p \in S} \{ r \mid (p, a, r) \in \Delta \}$\\
+			$P$.enqueue($R$)\\
+			$Q^\prime := Q^\prime \cup R$\\
+			$\delta(S, a) = R$
 		}
 	}
+	\For{$P \in Q^\prime$}{
+		\uIf{$P \cap F \neq \emptyset$}{
+			$F^\prime := F^\prime \cup \{ P \}$
+		}
+	}
+	
 	\caption{NFA-Determinisierung}
 	\label{alg:nfa2dfa}
 \end{algorithm}
