@@ -7,6 +7,8 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{bm}
+\usepackage{stmaryrd}
 \usepackage{amsthm}
 \usepackage{tikz}
 \usepackage{mathrsfs}
@@ -1013,6 +1015,38 @@ In diesem Sinne ist es sinnvoll von nun an nur noch von FA-erkennbaren Sprachen 
 
 
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
+Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen lassen. Diese Art von Sprachen liefern uns eine eigene Klasse von Sprachen, die unter verschiedenen Operationen abgeschlossen ist. Auch wenn bisher noch nicht alles gezeigt wurde (Konkatenation, Kleene'sche Hülle) lässt sich mit einiger Berechtigung sagen, dass die Klasse der FA-erkennbaren Sprachen gute Eigenschaften hat. Wir untersuchen nun welche Sprache wir mit sogenannten \textit{regulären Ausdrücken} beschreiben können.
+\begin{definition}
+	Sei \( \Sigma \) ein endliches Alphabet. Ein \textit{regulärer Ausdruck} ist induktiv definiert mit:
+	\begin{itemize}
+		\item \( \bm{\emptyset} \) ist ein regulärer Ausdruck.
+		\item Für jedes \( a \in \Sigma \) ist \( \bm{a} \) ein regulärer Ausdruck.
+		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{+} r^\prime) \) ein regulärer Ausdruck.
+		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{\cdot} r^\prime) \) ein regulärer Ausdruck.
+		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( r \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
+	\end{itemize}
+	Die Menge aller regulären Ausdrücke über \( \Sigma \) bezeichnen mit \( \mathsf{REG}_\Sigma \).
+\end{definition}
+Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun definieren wir eine Sematik für diese Ausdrücke, d.h. wir ordnen jedem regulären Ausdruck eine Sprache zu.
+\begin{definition}
+	Sei \( \Sigma \) ein endliches Alphabet. Die \textit{Interpretation eines regulären Ausdrucks} ist die Abbildung
+	\[
+		\llbracket \cdot \rrbracket: \mathsf{REG}_\Sigma \to 2^{\Sigma^\ast}
+	\]
+	mit
+	\begin{itemize}
+		\item \( \llbracket \bm{\emptyset} \rrbracket = \emptyset \),
+		\item \( \llbracket \bm{a} \rrbracket = \{ a \} \) für jedes \( \bm{a} \in \mathsf{REG}_\Sigma \),
+		\item \( \llbracket (r \bm{+} r^\prime) \rrbracket = \llbracket r \rrbracket \cup \llbracket r^\prime \rrbracket \),
+		\item \( \llbracket (r \bm{\cdot} r^\prime) \rrbracket = \llbracket r \rrbracket \cdot \llbracket r^\prime \rrbracket \),
+		\item \( \llbracket r \overset{\bm{\ast}}{} \rrbracket = \llbracket r \rrbracket^\ast \).
+	\end{itemize}
+	Eine Sprache \( L \subseteq \Sigma^\ast \) heißt \textit{regulär}, wenn ein regulärer Ausdruck \( r \in \mathsf{REG}_\Sigma \) existiert mit \( \llbracket r \rrbracket = L \).
+\end{definition}
+Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( \bm{\emptyset} \overset{\bm{\ast}}{} \) und \( r \overset{\bm{+}}{} \) für \( r \bm{\cdot} r \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt und Klammern (\( (, ), \bm{\cdot} \)) weg, es sei denn die dienen der Lesbarkeit. Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.
+
+
+
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
 \subsection{Nicht-reguläre Sprachen}\label{sec:regular_nonregular}
