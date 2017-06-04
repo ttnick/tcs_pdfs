@@ -1016,7 +1016,7 @@ In diesem Sinne ist es sinnvoll von nun an nur noch von FA-erkennbaren Sprachen 
 
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
 Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen lassen. Diese Art von Sprachen liefern uns eine eigene Klasse von Sprachen, die unter verschiedenen Operationen abgeschlossen ist. Auch wenn bisher noch nicht alles gezeigt wurde (Konkatenation, Kleene'sche Hülle) lässt sich mit einiger Berechtigung sagen, dass die Klasse der FA-erkennbaren Sprachen gute Eigenschaften hat. Wir untersuchen nun welche Sprache wir mit sogenannten \textit{regulären Ausdrücken} beschreiben können.
-\begin{definition}
+\begin{definition}\label{def:regexsyntax}
 	Sei \( \Sigma \) ein endliches Alphabet. Ein \textit{regulärer Ausdruck} ist induktiv definiert mit:
 	\begin{itemize}
 		\item \( \bm{\emptyset} \) ist ein regulärer Ausdruck.
@@ -1025,26 +1025,58 @@ Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen 
 		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{\cdot} r^\prime) \) ein regulärer Ausdruck.
 		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( r \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
 	\end{itemize}
-	Die Menge aller regulären Ausdrücke über \( \Sigma \) bezeichnen mit \( \mathsf{REG}_\Sigma \).
+	Die Menge aller regulären Ausdrücke über \( \Sigma \) bezeichnen mit \( \mathsf{RE}_\Sigma \).
 \end{definition}
 Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun definieren wir eine Sematik für diese Ausdrücke, d.h. wir ordnen jedem regulären Ausdruck eine Sprache zu.
 \begin{definition}
 	Sei \( \Sigma \) ein endliches Alphabet. Die \textit{Interpretation eines regulären Ausdrucks} ist die Abbildung
 	\[
-		\llbracket \cdot \rrbracket: \mathsf{REG}_\Sigma \to 2^{\Sigma^\ast}
+		\llbracket \cdot \rrbracket: \mathsf{RE}_\Sigma \to 2^{\Sigma^\ast}
 	\]
 	mit
 	\begin{itemize}
 		\item \( \llbracket \bm{\emptyset} \rrbracket = \emptyset \),
-		\item \( \llbracket \bm{a} \rrbracket = \{ a \} \) für jedes \( \bm{a} \in \mathsf{REG}_\Sigma \),
+		\item \( \llbracket \bm{a} \rrbracket = \{ a \} \) für jedes \( \bm{a} \in \mathsf{RE}_\Sigma \),
 		\item \( \llbracket (r \bm{+} r^\prime) \rrbracket = \llbracket r \rrbracket \cup \llbracket r^\prime \rrbracket \),
 		\item \( \llbracket (r \bm{\cdot} r^\prime) \rrbracket = \llbracket r \rrbracket \cdot \llbracket r^\prime \rrbracket \),
 		\item \( \llbracket r \overset{\bm{\ast}}{} \rrbracket = \llbracket r \rrbracket^\ast \).
 	\end{itemize}
-	Eine Sprache \( L \subseteq \Sigma^\ast \) heißt \textit{regulär}, wenn ein regulärer Ausdruck \( r \in \mathsf{REG}_\Sigma \) existiert mit \( \llbracket r \rrbracket = L \).
+	Eine Sprache \( L \subseteq \Sigma^\ast \) heißt \textit{regulär}, wenn ein regulärer Ausdruck \( r \in \mathsf{RE}_\Sigma \) existiert mit \( \llbracket r \rrbracket = L \).
 \end{definition}
-Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( \bm{\emptyset} \overset{\bm{\ast}}{} \) und \( r \overset{\bm{+}}{} \) für \( r \bm{\cdot} r \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt und Klammern (\( (, ), \bm{\cdot} \)) weg, es sei denn die dienen der Lesbarkeit. Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.
-
+Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( \bm{\emptyset} \overset{\bm{\ast}}{} \) und \( r \overset{\bm{+}}{} \) für \( r \bm{\cdot} r \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt (\( \bm{\cdot} \)) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass \( \overset{\bm{\ast}}{} \) stärker bindet als \( \bm{\cdot} \), was wiederum stärker bindet als \( \bm{+} \). Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.\par
+Reguläre Ausdrücke kennt manauch für Computerprogramme wie \texttt{grep}, \texttt{awk} oder \texttt{sed}. Diese sind syntaktisch etwas anders aufgebaut, jedoch lässt sich jeder POSIX-Ausdruck (das sind die regulären Ausdrücke für oben genannte Programme) auch als regulärer Ausdruck wie in Definition~\ref{def:regexsyntax} umschreiben.
+\begin{example}
+	Die POSIX-Syntax für reguläre Ausdrücke geht wie folgt.
+	\begin{itemize}
+		\item \( r \)\verb$|$\( r^\prime \) für \( r \bm{+} r^\prime \),
+		\item Für \( (\bm{a + b +} \ldots \bm{+ z}) \) geht auch \verb$[a-z]$\\
+			(analog: \verb$[A-Z]$,  \verb$[0-9]$, \verb$[a-z0-9,\.:;\?!]$ usw.),
+		\item \verb$.$ für ein beliebiges Zeichen,
+		\item \( r \)\verb$?$ für \( r \bm{+ \varepsilon} \),
+		\item \( r \)\verb$+$ und \( r \)\verb$*$ für \( r\overset{\bm{+}}{}, r\overset{\bm{\ast}}{} \),
+		\item \( r \)\verb${m,n}$ für \( r^m \bm{+} r^{m+1} \bm{+} \ldots \bm{+} r^n \).
+	\end{itemize}
+	Wir können zum Beispiel die Sprache aller E-Mail-Adressen als Ausdruck
+	\[
+		\verb$[a-zA-Z0-9\.-]+@[a-zA-Z0-9\.-]+\.(de|com|net)$
+	\]
+	darstellen.
+\end{example}
+Für unsere Analyse von regulären Sprachen benutzen wir nur reguläre Ausdrücke der Form wie in Definition~\ref{def:regexsyntax} vorgestellt. Dadurch lassen sich viele Beweise über den minimalistischen induktiven Aufbau der Ausdrücke führen.
+\begin{example}
+	Wir betrachten das Alphabet \( \Sigma = \{a, b\} \).
+	\begin{itemize}
+		\item \( L(\bm{((a+b)(a+b))} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid \left| w \right| \text{ gerade} \} \).
+		\item \( L(\bm{(a+b)(a+b)(a+b)} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid \left| w \right| \geq 2 \} \).
+		\item \( L(\bm{a} \overset{\bm{\ast}}{} \bm{+ b} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid \left| w \right|_a = 0 \text{ oder } \left| w \right|_b = 0 \} \).
+	\end{itemize}
+\end{example}
+Aus Gründen der Einfachheit werden wir von nun an bei der Notation von regulären Ausdrücken auf eine Unterscheidung zu Alphabetsymbolen, Kleene-Stern usw. verzichten, d.h. wir verwenden \( \emptyset, \varepsilon, a, +, \cdot, ^\ast \) statt \( \bm{\emptyset}, \bm{\varepsilon}, \bm{a}, \bm{+}, \bm{\cdot}, \overset{\bm{\ast}}{} \). Außerdem verwenden wir Shortcuts, z.B. \( \sum_{a\in\Sigma} a = \Sigma^\ast \). Formal ist aber wichtig weiterhin eine Unterscheidung zwischen Sprachen und regulären Ausdrücken zu haben.
+\begin{definition}
+	Zwei reguläre Ausdrücke \( r, e \in \mathsf{RE}_\Sigma \) heißen \textit{äquivalent} (geschrieben \( r \equiv e \)), wenn \( \llbracket r \rrbracket = \llbracket e \rrbracket \).\\
+	Ein regulärer Ausdruck \( r \in \mathsf{RE}_\Sigma \) und ein endlicher Automat \( \mathcal{A} \) (DFA, NFA) heißen \textit{äquivalent}, wenn  \( \llbracket r \rrbracket = L(\mathcal{A}) \).
+	
+\end{definition}
 
 
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
