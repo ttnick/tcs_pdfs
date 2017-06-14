@@ -1075,9 +1075,74 @@ Aus Gründen der Einfachheit werden wir von nun an bei der Notation von regulär
 \begin{definition}
 	Zwei reguläre Ausdrücke \( r, e \in \mathsf{RE}_\Sigma \) heißen \textit{äquivalent} (geschrieben \( r \equiv e \)), wenn \( \llbracket r \rrbracket = \llbracket e \rrbracket \).\\
 	Ein regulärer Ausdruck \( r \in \mathsf{RE}_\Sigma \) und ein endlicher Automat \( \mathcal{A} \) (DFA, NFA) heißen \textit{äquivalent}, wenn  \( \llbracket r \rrbracket = L(\mathcal{A}) \).
-	
 \end{definition}
-
+\begin{example}
+	Die regulären Ausdrücke \( (a + b)^\ast \) und \( (a^\ast b^\ast)^\ast \) sind äquivalent.
+\end{example}
+Wir kommen nun zu einem der wichtigsten Ergebnisse der Automatentheorie und dieser Vorlesung.
+\begin{theorem}[Äquivalenzsatz von Kleene]\label{thm:kleene_equivalence}
+	Eine Sprache ist genau dann regulär, wenn sie FA-erkennbar ist.
+\end{theorem}
+Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen auf zwei Lemmata.
+\begin{lemma}
+	Jede reguläre Sprache ist FA-erkennbar.
+	\begin{proof}
+		Wir stellen im Rahmen dieses Beweises eine Variante der sogenannten Thompson-Konstruktion vor, die einen regulären Ausdruck in einen äquivalenten \( \varepsilon \)-NFA umwandelt. Die Konstruktion nutzt den induktiven Aufbau von regulären Ausdrücken aus.\\
+		Basisfälle:
+		\begin{figure}[h]
+			\centering
+			\begin{subfigure}[b]{.25\textwidth}
+				\centering
+				\input{figs/thompson_empty}
+				\caption{\( r = \emptyset \)}
+				\label{fig:thompson_empty}
+			\end{subfigure}~
+			\begin{subfigure}[b]{.25\textwidth}
+				\centering
+				\input{figs/thompson_eps}
+				\caption{\( r = \varepsilon \)}
+				\label{fig:thompson_eps}
+			\end{subfigure}~
+			\begin{subfigure}[b]{.4\textwidth}
+				\centering
+				\input{figs/thompson_symbol}
+				\caption{\( r = a \)}
+				\label{fig:thompson_symbol}
+			\end{subfigure}
+			\caption{Basisfälle der Thompson-Konstruktion}
+			\label{fig:thompson_basic}
+		\end{figure}\\
+		Rekursive Fälle:
+		\begin{figure}[h]
+			\centering
+			\begin{subfigure}[b]{.9\textwidth}
+				\centering
+				\input{figs/thompson_cat}
+				\caption{\( r = e \cdot e^\prime \)}
+				\label{fig:thompson_cat}
+			\end{subfigure}\\
+			\begin{subfigure}[b]{.9\textwidth}
+				\centering
+				\input{figs/thompson_plus}
+				\caption{\( r = e + e^\prime \)}
+				\label{fig:thompson_plus}
+			\end{subfigure}\\
+			\begin{subfigure}[b]{.9\textwidth}
+				\centering
+				\input{figs/thompson_star}
+				\caption{\( r = e^\ast \)}
+				\label{fig:thompson_star}
+			\end{subfigure}
+			\caption{Rekursive Fälle der Thompson-Konstruktion}
+			\label{fig:thompson_recursive}
+		\end{figure}\\
+		Die Konstruktion funktioniert.
+	\end{proof}
+\end{lemma}
+Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar.
+\begin{corollary}
+	Seien \( L, K \subseteq \Sigma^\ast \) FA-erkennbare Sprachen. Dann sind auch \( L \cdot K \) und \( L^\ast \) FA-erkennbar.
+\end{corollary}
 
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}

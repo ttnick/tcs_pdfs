@@ -1,0 +1,16 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
+	\node at (1.7, .7) {$\mathcal{A}_e$};
+	\draw[black, rounded corners] (1.5, .5) rectangle (4.5, -.5);
+	\node[initial, initial text=, state] (1) at (2, 0) {$q_0$};
+	\node[state] (2) at (4, 0) {$q_f$};
+	\node (d1) at (3, 0) {$\cdots$};
+	
+	\node at (5.7, .7) {$\mathcal{A}_{e^\prime}$};
+	\draw[black, rounded corners] (5.5, .5) rectangle (8.5, -.5);
+	\node[state] (3) at (6, 0) {$q_0^\prime$};
+	\node[state, accepting] (4) at (8, 0) {$q_f^\prime$};
+	\node (d2) at (7, 0) {$\cdots$};
+	
+	\path (2) edge node {$\varepsilon$} (3);
+
+\end{tikzpicture}

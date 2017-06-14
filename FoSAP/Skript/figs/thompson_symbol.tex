@@ -1,0 +1,6 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
+	\node[state, initial, initial text=] (0) at (0, 0) {$p$};
+	\node[state, accepting] (1) at (2, 0) {$q$};
+
+	\path (0) edge node {$a$} (1);
+\end{tikzpicture}
