@@ -836,7 +836,7 @@ Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 	\label{fig:nfa_ex1}
 \end{figure}
 Für NFAs ist das \textit{Wortproblem}, das Problem ob ein Automat ein gegebenes Wort akzeptiert, nicht ganz so offensichtlich zu lösen wie für DFAs. Bei DFAs müssen wir lediglich die eindeutige Transitionsfolge anwenden und prüfen ob der letzte Zustand ein akzeptierender ist. Für NFAs können wir natürlich alle möglichen Läufe ausprobieren und prüfen, ob ein akzeptierender dabei ist. Doch es gieht effizienter mit der Erreichbarkeitsrelation.
-\begin{definition}
+\begin{definition}\label{def:reachability}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA und \( w = a_0 \ldots a_{n-1} \). Ein Zustand \( q \in Q \) heißt \textit{erreichbar} von \( p \) über \( w \) (geschrieben \( \mathcal{A}: p \reaches{w} q \)), wenn es einen Lauf \( (r_0, \ldots, r_n) \) gibt mit 
 	\begin{itemize}
 		\item \( r_0 = p, r_n = q \) und
@@ -1075,22 +1075,68 @@ Für \(\varepsilon\)-NFAs zeigen wir wie im vorigen Abschnitt, dass auch sie die
 		Dies ist sofort klar, da jeder NFA als ein \(\varepsilon\)-NFA betrachtet werden kann, der keine \(\varepsilon\)-Transitionen besitzt.
 	\end{proof}
 \end{lemma}
+Bevor wir den anderen Teil der Äquivalenz zeigen fehlt uns eine Definition.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein \(\varepsilon\)-NFA. Der \textit{\(\varepsilon\)-Abschluss} (auch \(\varepsilon\)-Hülle) eines Zustands \( p \in Q \) ist
+	\[
+		\comp{\varepsilon}(p) \coloneqq \{ q \in Q \mid \text{es ex. } p_1, \ldots, p_k \text{ mit } (p, \varepsilon, p_1), (p_i, \varepsilon, p_{i+1}), (p_k, \varepsilon, q) \in \Delta \}.
+	\]
+	Für Mengen \( P \subseteq Q \) ist der \textit{\(\varepsilon\)-Abschluss} dann erweitert durch
+	\[
+		\comp{\varepsilon}(P) \coloneqq \bigcup_{p \in P} \comp{\varepsilon}(p).
+	\]
+\end{definition}
+Auf diese Weise lässt sich die Erreichbarkeitsrelation, die wir schon aus Definition~\ref{def:reachability} kennen erweitern.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA und \( w = a_0 \ldots a_{n-1} \). Ein Zustand \( q \in Q \) heißt \textit{erreichbar} von \( p \) über \( w \) (geschrieben \( \mathcal{A}: p \reaches{w} q \)), wenn es ein \( m \geq n \), Indizes \( 0 \leq i_0 < \ldots < i_{n-1} \leq m \) und Zustände \( r_0, \ldots, r_m \in Q \) gibt, sodass
+	\begin{itemize}
+		\item \( r_0 = p, r_m = q \),
+		\item \( (r_{i_j}, a_j, r_{i_j+1}) \in \Delta \) für alle \( j \in [n] \) und
+		\item \( (r_i, \varepsilon, r_{i+1}) \in \Delta \) für alle \( i \in [m] \setminus \{i_1, \ldots, i_{n-1}\} \).
+	\end{itemize}
+\end{definition}
+Man beachte, dass \( p \reaches{\varepsilon} q \) nicht \( p = q \) bedeutet wie bei NFAs.
 \begin{lemma}\label{lem:epsnfa2nfa}
 	Zu jedem \(\varepsilon\)-NFA existiert ein äquivalenter NFA.
 	\begin{proof}
-		Nicht ganz so klar.
+		Wir betrachten einen \(\varepsilon\)-NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) und überführen ihn in einen äquivalenten NFA \( \mathcal{A}^\prime = (Q, \Sigma, \Delta^\prime, q_0, F^\prime) \). Dabei ist
+		\[
+			\Delta^\prime \coloneqq \{(p, a, q) \in Q \times \Sigma \times Q \mid \mathcal{A}: p \reaches{a} q\}
+		\]
+		und \( F^\prime \coloneqq \{q \in Q \mid q \in \comp{\varepsilon}(F)\} \).
+		%TODO Korrektheit
 	\end{proof}
 \end{lemma}
+\begin{example}
+	Wir betrachten den \(\varepsilon\)-NFA in Abbildung~\ref{fig:epsnfa_ex2_eps}. In Abbildung~\ref{fig:epsnfa_ex2_noeps} sehen wir den NFA den wir nach Lemma~\ref{lem:epsnfa2nfa} erhalten, wobei die neu eingefügten Transitionen rot markiert sind. Beachte auch, dass sich die Menge der akzeptierenden Zustände geändert hat, da sonst das leere Wort nicht mehr akzeptiert werden würde.
+\end{example}
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/epsnfa_ex2_eps}
+		\caption{mit \(\varepsilon\)-Transitionen}
+		\label{fig:epsnfa_ex2_eps}
+	\end{subfigure}~
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/epsnfa_ex2_noeps}
+		\caption{ohne \(\varepsilon\)-Transitionen}
+		\label{fig:epsnfa_ex2_noeps}
+	\end{subfigure}
+	\caption{Eliminieren von \(\varepsilon\)-Transitionen}
+	\label{fig:epsnfa_ex2}
+\end{figure}
 \begin{remark*}
 	Beachte, dass ein Zusammenziehen der Zustände, die durch \(\varepsilon\)-Transitionen verbunden sind nicht funktioniert, da das im Allgemeinen die erkannte Sprache verändert. Ein solches Vorgehen würde zum Beispiel dazu führen, dass der entstehende Automat zu Beispiel~\ref{fig:epsnfa_ex1} nur noch einen Zustand besitzt mit einem durch \( a, b, c \) beschrifteten Loop. Die erkannte Sprache wäre dann \( \{a, b, c\}^\ast \).
 \end{remark*}
-Wir werden also auch weiterhin von FA-erkennbaren Sprachen sprechen, solange sie von einem DFA, NFA oder \(\varepsilon\)-NFA erkannt werden, da alle drei Modelle gleich mächtig sind.
 \begin{corollary}
 	Zu jedem \(\varepsilon\)-NFA existiert ein äquivalenter DFA.
 	\begin{proof}
 		Lemma~\ref{lem:epsnfa2nfa} liefert zunächst einen NFA, der mit Lemma~\ref{lem:nfa2dfa} in einen DFA umgewandelt werden kann.
 	\end{proof}
 \end{corollary}
+Wir werden also auch weiterhin von FA-erkennbaren Sprachen sprechen, solange sie von einem DFA, NFA oder \(\varepsilon\)-NFA erkannt werden, da alle drei Modelle gleich mächtig sind. In mancher Fachliteratur wird wegen ihrer Äqui\-va\-lenz auch zwischen NFAs und \(\varepsilon\)-NFAs gar nicht unterschieden -- wir werden im Folgenden die Unterscheidung dennoch weiterhin machen.
 
 
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
@@ -1168,7 +1214,7 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 	\begin{proof}
 		Wir stellen im Rahmen dieses Beweises eine Variante der sogenannten Thompson-Konstruktion vor, die einen regulären Ausdruck in einen äquivalenten \( \varepsilon \)-NFA umwandelt. Die Konstruktion nutzt den induktiven Aufbau von regulären Ausdrücken aus.\\
 		Basisfälle:
-		\begin{figure}[ht]
+		\begin{figure}[h]
 			\centering
 			\begin{subfigure}[b]{.25\textwidth}
 				\centering
@@ -1192,7 +1238,7 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 			\label{fig:thompson_basic}
 		\end{figure}\\
 		Rekursive Fälle:
-		\begin{figure}[ht]
+		\begin{figure}[h]
 			\centering
 			\begin{subfigure}[b]{.9\textwidth}
 				\centering
@@ -1214,8 +1260,8 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 			\end{subfigure}
 			\caption{Rekursive Fälle der Thompson-Konstruktion}
 			\label{fig:thompson_recursive}
-		\end{figure}\\
-		Die Konstruktion funktioniert.
+		\end{figure}
+		%TODO Korrektheit
 	\end{proof}
 \end{lemma}
 Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar.
@@ -1227,6 +1273,8 @@ Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
 \subsection{Nicht-reguläre Sprachen}\label{sec:regular_nonregular}
 \subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
+\subsection{Minimierung von DFAs}\label{sec:regular_minimization}
+\subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
 
 
 
