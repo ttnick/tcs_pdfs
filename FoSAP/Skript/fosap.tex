@@ -13,6 +13,7 @@
 \usepackage{tikz}
 \usepackage{mathrsfs}
 \usepackage{mathdots}
+\usepackage{mathtools}
 \usepackage{listings}
 \usepackage[linesnumbered, ruled, vlined, ngerman]{algorithm2e}
 \usepackage{enumitem}
@@ -134,7 +135,7 @@ Um eine konkrete Menge zu zu benennen gibt es im Wesentlichen vier verschiedene 
 		\]
 	\item \textit{Beschreiben.} Mengen können durch Worte beschrieben werden.
 		\[
-			\text{Menge der natürlichen Zahlen} = \{ 0, 1, 2, 3, \ldots \} =: \mathbb{N}.
+			\text{Menge der natürlichen Zahlen} = \{ 0, 1, 2, 3, \ldots \} \eqqcolon \mathbb{N}.
 		\]
 		Aber Achtung: Natürliche Sprache neigt zu Uneindeutigkeit!
 	\item \textit{Aussondern.} Sei \( M \) eine Menge, dann ist
@@ -143,7 +144,7 @@ Um eine konkrete Menge zu zu benennen gibt es im Wesentlichen vier verschiedene 
 		\]
 		die Menge aller Elemente aus \( M \), die die Aussage \( A \) erfüllen. Zum Beispiel:
 		\[
-			\mathbb{P} := \{ n \in \mathbb{N} \mid n \text{ hat genau zwei Teiler} \}
+			\mathbb{P} \coloneqq \{ n \in \mathbb{N} \mid n \text{ hat genau zwei Teiler} \}
 		\]
 		als Menge aller Primzahlen.
 	\item \textit{Abbilden.} Sei \( M \) eine Menge und \( f \) ein Ausdruck, der für jedes \( x \in M \) definiert ist. Dann ist
@@ -169,7 +170,7 @@ oder auch
 	\{ n^2 : n \in 2\mathbb{N}+1 \}.
 \]
 
-Eine wichtige Menge haben wir bisher außen vor gelassen: die \textit{leere Menge}. Wir schreiben \( \emptyset := \{ \} \). Gelegentlich verwenden wir außerdem folgende Notation, wenn wir nur eine endliche geordnete Menge benötigen: \( [\ell] := \{ 0, 1, \ldots, \ell-1 \} \). Ein-elementige Mengen (z.B. \( [1] = \{ 0 \} \)) nennt man auch \textit{Singleton}.
+Eine wichtige Menge haben wir bisher außen vor gelassen: die \textit{leere Menge}. Wir schreiben \( \emptyset \coloneqq \{ \} \). Gelegentlich verwenden wir außerdem folgende Notation, wenn wir nur eine endliche geordnete Menge benötigen: \( [\ell] \coloneqq \{ 0, 1, \ldots, \ell-1 \} \). Ein-elementige Mengen (z.B. \( [1] = \{ 0 \} \)) nennt man auch \textit{Singleton}.
 
 
 \subsection{Operationen auf Mengen}\label{sec:pre_setops}
@@ -187,7 +188,7 @@ Wir definieren nun einige Operationen auf Mengen ähnlich wie Addition und Multi
 	\begin{enumerate}[label=(\alph*)]
 		\item Die \textit{Vereinigung} von \( A \) und \( B \) ist definiert als 
 			\[ 
-				A \cup B := \{ a \in \mathcal{U} \mid a \in A \text{ oder } a \in B \}.
+				A \cup B \coloneqq \{ a \in \mathcal{U} \mid a \in A \text{ oder } a \in B \}.
 			\]
 			Für endliche und unendliche Vereinigungen (z.B. gegeben durch eine Indexmenge \( I = \{ 0, 1, \ldots \} \)) schreiben wir abkürzend
 			\[
@@ -195,7 +196,7 @@ Wir definieren nun einige Operationen auf Mengen ähnlich wie Addition und Multi
 			\]
 		\item Der \textit{Schnitt} von \( A \) und \( B \) ist definiert als
 			\[
-				A \cap B := \{ a \in A \mid a \in B \}.
+				A \cap B \coloneqq \{ a \in A \mid a \in B \}.
 			\]
 			Für endlichen und unendlichen Schnitt (z.B. gegeben durch eine Indexmenge \( I = \{ 0, 1, \ldots \} \)) schreiben wir abkürzend
 			\[
@@ -203,25 +204,25 @@ Wir definieren nun einige Operationen auf Mengen ähnlich wie Addition und Multi
 			\]
 		\item Das \textit{Komplement} von \( A \) is definiert als
 			\[
-				\comp{A} := \{ a \in \mathcal{U} \mid a \notin A \}.
+				\comp{A} \coloneqq \{ a \in \mathcal{U} \mid a \notin A \}.
 			\]
 		\item Die \textit{Differenz} (auch: relatives Komplement) von \( A \) und \( B \) ist definiert als
 			\[
-				A \setminus B := A \cap \comp{B}.
+				A \setminus B \coloneqq A \cap \comp{B}.
 			\]
 		\item Das \textit{kartesische Produkt} zwischen \( A \) und \( B \) ist definiert als
 			\[
-				A \times B := \{(a, b) : a \in A, b \in B \}.
+				A \times B \coloneqq \{(a, b) : a \in A, b \in B \}.
 			\]
 			Für ein endliches Produkt einer Menge \( A \) auf sich selbst schreiben wir abkürzend
 			\[
-				A^k := A \times A^{k-1}, \quad\quad A^1 := A, \quad\quad A^0 := \{ \bullet \},
+				A^k \coloneqq A \times A^{k-1}, \quad\quad A^1 \coloneqq A, \quad\quad A^0 \coloneqq \{ \bullet \},
 			\]
 			wobei \( \bullet \) ein beliebiges Platzhaltersymbol ist, d.h. \( A^0 \) ist für jedes \( A \) ein Singleton.\\
 			Die Elemente eines kartesischen Produkts \( (x_1, \ldots, x_k) \) heißen \( k\)-\textit{Tupel}. Für \( k = 2, 3, 4, \ldots \) kann man auch \textit{Paar, Tripel, Quadrupel, \ldots} sagen.
 		\item Die \textit{Potenzmenge} von \( A \) ist definiert als
 			\[
-				2^A := \{ M \subseteq \mathcal{U} \mid M \subseteq A \}.
+				2^A \coloneqq \{ M \subseteq \mathcal{U} \mid M \subseteq A \}.
 			\]
 	\end{enumerate}
 \end{definition}
@@ -292,9 +293,9 @@ Wir klassifizieren außerdem 2-stellige Relationen, falls sie bestimmte Eigensch
 \begin{definition}
 	Sei \( \sim \) eine Äquivalenzrelation auf einer Menge \( M \). Für \( x \in M \) heißt
 	\[
-		[x] := [x]_\sim := \{ y \in M \mid x \sim y \}
+		[x] \coloneqq [x]_\sim \coloneqq \{ y \in M \mid x \sim y \}
 	\]
-	die \textit{Äquivalenzklasse} von \( x \). Die Menge aller Äquivalenzklassen von \( \sim \) wird notiert mit \( M /_\sim := \{ [x]_\sim : x \in M \} \).
+	die \textit{Äquivalenzklasse} von \( x \). Die Menge aller Äquivalenzklassen von \( \sim \) wird notiert mit \( M /_\sim \coloneqq \{ [x]_\sim : x \in M \} \).
 \end{definition}
 
 
@@ -356,13 +357,13 @@ Die Beweise hierfür bleiben als Übung.
 \begin{definition}
 	Seien \( M, N \) Mengen. Eine \textit{Abbildung} \( f \) von \( M \) nach \( N \) ist eine Vorschrift (z.B. eine Formel), die jedem \( x \in M \) genau ein \( f(x) \in N \) zuordnet. Wir schreiben dazu
 	\[
-		f: M \to N, \quad x \mapsto f(x).
+		f\colon M \to N, \quad x \mapsto f(x).
 	\]
 	\( M \) heißt der \textit{Definitionsbereich} (auch Domäne) von \( f \), \( N \) heißt der \textit{Wertebereich} von \( f \). \( f(x) \) ist das \textit{Bild} von \( x \) unter \( f \) und \( x \) ist ein \textit{Urbild} von \( f(x) \) unter \( f \). Die Menge aller Abbildungen von \( M \) nach \( N \) wird mit \( N^M \) bezeichnet. 
 \end{definition}
 
 \begin{definition}
-	Eine Abbildung \( f: M \to N \) heißt
+	Eine Abbildung \( f\colon M \to N \) heißt
 	\begin{itemize}
 		\item \textit{surjektiv}, falls für alle \( y \in N \) ein \( x \in M \) mit \( f(x) = y \) existiert,
 		\item \textit{injektiv}, falls für alle \( x, x^\prime \in M \) mit \( x \neq x^\prime \) gilt, dass \( f(x) \neq f(x^\prime) \),
@@ -372,11 +373,11 @@ Die Beweise hierfür bleiben als Übung.
 \begin{example*}
 	Die Addition zweier natürlicher Zahlen kann als Abbildung aufgefasst werden:
 	\[
-		+: \mathbb{N}^2 \to \mathbb{N}, \quad (m, n) \mapsto m+n.
+		+\colon \mathbb{N}^2 \to \mathbb{N}, \quad (m, n) \mapsto m+n.
 	\]
 	\( + \) ist surjektiv (jedes \( y \in \mathbb{N} \) wird z.B. durch \( (y, 0) \in \mathbb{N}^2 \) getroffen), aber nicht injektiv (\( 1 \in \mathbb{N} \) wird sowohl von \( (1, 0) \) als auch \( (0, 1) \) getroffen).
 \end{example*}
-Für Abbildungen \( f: [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).
+Für Abbildungen \( f\colon [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).
 
 
 \subsection{Strukturen}\label{sec:pre_structures}
@@ -409,20 +410,20 @@ Alphabete werden durch griechische Großbuchstaben \( \Sigma, \Gamma \) oder Var
 \begin{definition}
 	Ein \textit{Wort} über einem Alphabet \( \Sigma \) ist eine Abbildung
 	\[
-		w: [n] \to \Sigma.
+		w\colon [n] \to \Sigma.
 	\]
-	Für \( n = 0 \) ist \( w : \emptyset \to \Sigma \) das \textit{leere Wort}, was wir als \( \varepsilon \) bezeichnen.\\
+	Für \( n = 0 \) ist \( w\colon \emptyset \to \Sigma \) das \textit{leere Wort}, was wir als \( \varepsilon \) bezeichnen.\\
 	Die \textit{Länge} des Wortes \( w \) ist bezeichnet mit \( \left| w \right| = n \).\\
-	\( \left| w \right|_a := \left| \{ i \in [n] \mid w(i) = a \} \right| \) ist die \textit{Häufigkeit des Symbols} \( a \) im Wort \( w \).
+	\( \left| w \right|_a \coloneqq \left| \{ i \in [n] \mid w(i) = a \} \right| \) ist die \textit{Häufigkeit des Symbols} \( a \) im Wort \( w \).
 \end{definition}
 Wie in Abschnitt~\ref{sec:pre_mappings} lässt sich \( w \) auch als Tupel \( (a_0, \ldots, a_{n-1}) \) schreiben. Wir gehen hier sogar noch einen Schritt weiter und benutzen \( a_0 a_1 \ldots a_{n-1} \) als Abkürzung für die langen Schreibweisen. Für Wörter verwenden wir in der Regel \( u, v, w \) und Varianten als Bezeichner. In der Literatur sind auch kleine griechische Buchstaben \( \alpha, \beta, \ldots \) gebräuchlich.
 \begin{definition}
-	Sei \( \Sigma \) ein Alphabet. Dann ist \( \Sigma^n := \Sigma^{[n]} \) die \textit{Menge aller Wörter mit Länge} \( n \) über \( \Sigma \).
+	Sei \( \Sigma \) ein Alphabet. Dann ist \( \Sigma^n \coloneqq \Sigma^{[n]} \) die \textit{Menge aller Wörter mit Länge} \( n \) über \( \Sigma \).
 	Die \textit{Menge aller Wörter} ist definiert als
 	\[
-		\Sigma^\ast := \bigcup_{n \in \mathbb{N}} \Sigma^n
+		\Sigma^\ast \coloneqq \bigcup_{n \in \mathbb{N}} \Sigma^n
 	\]
-	und \( \Sigma^+ := \Sigma^\ast \setminus \{ \varepsilon \} \).
+	und \( \Sigma^+ \coloneqq \Sigma^\ast \setminus \{ \varepsilon \} \).
 \end{definition}
 Wie in Abschnitt~\ref{sec:pre_setops} angekündigt wird für ein fixiertes \( \Sigma \) die Menge \( \Sigma^\ast \) unser Universum sein.
 \begin{definition}
@@ -445,21 +446,21 @@ Durch diese vorgegangen Definitionen haben wir das Fundament für die theoretisc
 \begin{definition}
 	Seien \( u, v \in \Sigma^\ast \) mit \( m = \left| u \right|, n = \left| v \right| \). Die \textit{Konkatenation} (Verkettung) ist definiert als
 	\begin{align*}
-		(u \cdot v)&: [m{+}n] \to \Sigma \text{ mit}\\
+		(u \cdot v)&\colon [m{+}n] \to \Sigma \text{ mit}\\
 		(u \cdot v)(i) &= \left\lbrace \begin{array}{ll}u(i), & i < m\\ v(i-m), & i \geq m. \end{array} \right.
 	\end{align*}
-	Außerdem ist \( u^0 := \varepsilon \) und \( u^n := u \cdot u^{n-1} \).
+	Außerdem ist \( u^0 \coloneqq \varepsilon \) und \( u^n \coloneqq u \cdot u^{n-1} \).
 \end{definition}
 Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhalten wir noch die Definitionen.
 \begin{definition}
 	Seien \( L, K \subseteq \Sigma^\ast \) Sprachen.
 	\begin{enumerate}
-		\item \textit{Konkatenation.} \( L \cdot K := \{ uv : u \in L, v \in K \} \) und \( L^0 := \{ \varepsilon \}, L^n := L \cdot L^{n-1} \).
+		\item \textit{Konkatenation.} \( L \cdot K \coloneqq \{ uv : u \in L, v \in K \} \) und \( L^0 \coloneqq \{ \varepsilon \}, L^n \coloneqq L \cdot L^{n-1} \).
 		\item \textit{Inklusion.} Wie in Definition~\ref{def:subsets}.
 		\item \textit{Vereinigung, Schnitt, Komplement, Differenz.} Wie in Definiton~\ref{def:setops}.
 		\item \textit{Kleene'scher Abschluss.} (auch Iteration, Kleene-Stern)
 			\[
-				L^\ast := \bigcup_{n \in \mathbb{N}} L^n.
+				L^\ast \coloneqq \bigcup_{n \in \mathbb{N}} L^n.
 			\]
 	\end{enumerate}
 \end{definition}
@@ -523,7 +524,7 @@ Wir beginnen mit der Art Automaten, die ``die einfachste`` Klasse formaler Sprac
 	\begin{itemize}
 		\item \( Q \) eine nicht-leere, endliche Menge von \textit{Zuständen},
 		\item \( \Sigma \) ein nicht-leeres, endliches \textit{Eingabealphabet},
-		\item \( \delta: Q \times \Sigma \to Q \) die \textit{Transitionsfunktion},
+		\item \( \delta\colon Q \times \Sigma \to Q \) die \textit{Transitionsfunktion},
 		\item \( q_0 \in Q \) der \textit{Startzustand},
 		\item \(F \subseteq Q \) die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
 	\end{itemize}
@@ -538,7 +539,7 @@ Möchte man einen DFA konkret angeben, so ist die Darstellung als Transitionsgra
 	\]
 	und
 	\[
-		\lambda: E \to 2^\Sigma, \quad (p, q) \mapsto \{ a \mid \delta(p, a) = q \}.
+		\lambda\colon E \to 2^\Sigma, \quad (p, q) \mapsto \{ a \mid \delta(p, a) = q \}.
 	\]
 \end{definition}
 Aus Gründen der Bequemlichkeit, lassen wir die Mengenklammern bei der Beschriftung der Transitionen weg. Der Startzustand \( q_0 \) bekommt einfach eine eingehende Kante ohne Beschriftung und ohne Startknoten. Die Endzustände werden zusätzlich eingekreist. Ein Beispieltransitionsgraph ist in Abbildung~\ref{fig:dfa_ex1}.
@@ -573,7 +574,7 @@ Wir bezeichnen Läufe in der Regel mit \( \varrho \) bzw. Variationen. Einen Lau
 		\item Ein DFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{akzeptiert} ein Wort \( w \in \Sigma^\ast \), wenn der Lauf von \( \mathcal{A} \) akzeptierend ist. Andernfalls \textit{verwirft} \( \mathcal{A} \) das Wort \( w \).
 		\item Die von einem DFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{erkannte Sprache} ist
 			\[
-				L(\mathcal{A}) := \{ w \in \Sigma^\ast \mid \mathcal{A} \text{ akzeptiert } w \}.
+				L(\mathcal{A}) \coloneqq \{ w \in \Sigma^\ast \mid \mathcal{A} \text{ akzeptiert } w \}.
 			\]
 		\item Eine Sprache \( L \) heißt \textit{DFA-erkennbar}, wenn es einen DFA \( \mathcal{A} \) gibt, sodass \( L = L(\mathcal{A}) \).
 	\end{enumerate}
@@ -686,7 +687,7 @@ Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben 
 	\begin{proof}
 		Seien \( \mathcal{A}_1 = (Q_1, \Sigma, \delta_1, q_0^1, F_1) \) und \( \mathcal{A}_1 = (Q_2, \Sigma, \delta_2, q_0^2, F_2) \) die DFAs für \( L_1, L_2 \). Wir betrachten den \textit{Produktautomaten}
 		\[
-			\mathcal{A} := (Q_1 \times Q_2, \Sigma, \delta, (q_0^1, q_0^2), F)
+			\mathcal{A} \coloneqq (Q_1 \times Q_2, \Sigma, \delta, (q_0^1, q_0^2), F)
 		\]
 		mit \( \delta((p, q), a) = (\delta_1(p, a), \delta_2(q, a)) \) für alle \( p \in Q_1, q \in Q_2, a \in \Sigma \) und \( F = (F_1 \times Q_2) \cup (Q_1 \times F_2) \).\\
 		Wir zeigen nun, dass \( L(\mathcal{A}) = L(\mathcal{A}_1) \cup L(\mathcal{A}_2) \) ist.
@@ -725,7 +726,7 @@ Die Produktkonstruktion ist eine sehr grundlegende Konstruktion, die in ähnlich
 \begin{example}
 	Seien \( L, K \subseteq \Sigma^\ast \). Wir definieren die Operation \textit{Perfect Shuffle} wie folgt:
 	\[
-		L \shuffle K := \{ a_0 b_0 \ldots a_{n-1} b_{n-1} : a_0 \ldots a_{n-1} \in L, b_0 \ldots b_{n-1} \in K \}.
+		L \shuffle K \coloneqq \{ a_0 b_0 \ldots a_{n-1} b_{n-1} : a_0 \ldots a_{n-1} \in L, b_0 \ldots b_{n-1} \in K \}.
 	\]
 \end{example}
 \begin{theorem}
@@ -775,7 +776,10 @@ Im letzten Abschnitt haben wir gesehen, dass unter einigen Operationen abgeschlo
 		\item \(F \subseteq Q \) die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
 	\end{itemize}
 \end{definition}
-Wir bezeichnen NFAs genau wie DFAs mit \( \mathcal{A}, \mathcal{B} \) usw. Die Transitionsgraphen sehen ebenfalls genauso aus, nur, dass nun Zustände mehrere Kanten haben können, die gleich beschriftet sind. Außerdem ist es erlaubt, dass Transitionen komplett fehlen. 
+Wir bezeichnen NFAs genau wie DFAs mit \( \mathcal{A}, \mathcal{B} \) usw. Die Transitionsgraphen sehen ebenfalls genauso aus, nur, dass nun Zustände mehrere Kanten haben können, die gleich beschriftet sind. Außerdem ist es erlaubt, dass Transitionen komplett fehlen.
+\begin{remark*}
+	Eine äquivalente und ebenfalls verbreitete Definition benutzt statt einer Transitionsrelation wieder eine Transitionsfunktion \( \delta\colon Q \times \Sigma \to 2^Q \). 
+\end{remark*}
 \begin{remark*}
 	Auch wenn es widersprüchlich klingt, aber jeder DFA kann auch als ein NFA gesehen werden. Genauer gesagt ist ein DFA ein NFA bei dem die Transitionsrelation der Graph einer totalen Funktion \( Q \times \Sigma \to Q \) ist.
 \end{remark*}
@@ -802,7 +806,7 @@ Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 		\item Ein NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) \textit{akzeptiert} ein Wort \( w \in \Sigma^\ast \), wenn es mindestens einen akzeptierenden Lauf von \( \mathcal{A} \) gibt. Andernfalls \textit{verwirft} \( \mathcal{A} \) das Wort \( w \).
 		\item Die von einem NFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{erkannte Sprache} ist
 			\[
-				L(\mathcal{A}) := \{ w \in \Sigma^\ast \mid \mathcal{A} \text{ akzeptiert } w \}.
+				L(\mathcal{A}) \coloneqq \{ w \in \Sigma^\ast \mid \mathcal{A} \text{ akzeptiert } w \}.
 			\]
 		\item Eine Sprache \( L \) heißt \textit{NFA-erkennbar}, wenn es einen NFA \( \mathcal{A} \) gibt, sodass \( L = L(\mathcal{A}) \).
 	\end{enumerate}
@@ -843,14 +847,14 @@ Diese Notation können wir auch selbstverständlich auf DFAs anwenden. Wir lasse
 \begin{definition}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA und \( w \in \Sigma^\ast \). Die \textit{Menge der in \( \mathcal{A} \) über \( w \) erreichbaren Zustände} ist definiert als
 	\[
-		E(\mathcal{A}, w) := \{ q \in Q \mid \mathcal{A}: q_0 \reaches{w} q \}.
+		E(\mathcal{A}, w) \coloneqq \{ q \in Q \mid \mathcal{A}: q_0 \reaches{w} q \}.
 	\]
 \end{definition}
 Wir haben zwei Lemmata, die uns die Anwendung dieser Definition nahelegen.
 \begin{lemma}\label{lem:reach1}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F)\) ein NFA und \( w \in \Sigma^\ast \). \( w \in L(\mathcal{A}) \) {g.d.w.} \( E(\mathcal{A}, w) \cap F \neq \emptyset \).
 	\begin{proof}
-		``wenn, dann``: Sei \( w \in L(\mathcal{A}) \). Dann exitiert ein Lauf \( (r_0, \ldots, r_n) \) von \( \mathcal{A} \) auf \( w \) mit \( r_n =: q \in F \), also \( q_0 \reaches{w} q \). Somit ist \( q \in E(\mathcal{A}, w) \). Also ist \( \emptyset \neq \{q\} \subseteq E(\mathcal{A}, w) \cap F \).\\
+		``wenn, dann``: Sei \( w \in L(\mathcal{A}) \). Dann exitiert ein Lauf \( (r_0, \ldots, r_n) \) von \( \mathcal{A} \) auf \( w \) mit \( r_n \eqqcolon q \in F \), also \( q_0 \reaches{w} q \). Somit ist \( q \in E(\mathcal{A}, w) \). Also ist \( \emptyset \neq \{q\} \subseteq E(\mathcal{A}, w) \cap F \).\\
 		``genau dann``: Es exitiert ein \( q \in E(\mathcal{A}, w) \cap F \), also \( q \in F \) und \( q \in E(\mathcal{A}, w) \). Also gibt es einen Lauf von \( \mathcal{A} \) auf \( w \), der in \( q_0 \) startet und in \( q \) endet. Dieser ist akzeptierend, also ist \( w \in L(\mathcal{A}) \).
 	\end{proof}
 \end{lemma}
@@ -875,11 +879,11 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 	\underline{NFA-Akzeptanz}{$(\mathcal{A}, w)$}\\
 	\Input{NFA $\mathcal{A}$, Wort $w$}
 	\Output{Ja {g.d.w.} $\mathcal{A}$ akzeptiert $w = a_0 \ldots a_{n-1}$.}	
-	$u := \varepsilon$\\
-	$E(\mathcal{A}, u) := \{ q_0 \}$\\	
+	$u \coloneqq \varepsilon$\\
+	$E(\mathcal{A}, u) \coloneqq \{ q_0 \}$\\	
 	\For{$i = 0, \ldots, n-1$}{
 		Bestimme $E(\mathcal{A}, ua_i)$ aus $E(\mathcal{A}, u)$ (Lemma~\ref{lem:reach2})\\
-		$u := ua_i$
+		$u \coloneqq ua_i$
 	}
 	Prüfe, ob $E(\mathcal{A}, w) \cap F \neq \emptyset$.
 	\caption{Wortproblem für NFAs}
@@ -903,7 +907,7 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 
 \subsection{Äquivalenz von NFAs und DFAs}\label{regular_equivalence}
 Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können als DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:ex2} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
-\begin{definition}
+\begin{definition}\label{def:fa_equivalence}
 	Seien \( \mathcal{A}, \mathcal{B} \) zwei endliche Automaten (deterministisch oder nicht-deterministisch). \( \mathcal{A} \) und \( \mathcal{B} \) heißen \textit{äquivalent}, wenn \( L(\mathcal{A}) = L(\mathcal{B}) \).
 \end{definition}
 Eine Bemerkung aus dem vorigen Abschnitt greifen wir nochmal im folgendem Lemma auf.
@@ -949,9 +953,9 @@ In der Potenzmengenkonstruktion haben wir als Zustandsmenge stets die Potenzmeng
 			\]
 			wobei
 			\begin{itemize}
-				\item \( Q^\prime := \{ q \in Q \mid q \text{ erreichbar} \} \),
-				\item \( \delta^\prime := \left. \delta \right|_{Q^\prime \times \Sigma} \) bzw. \( \Delta^\prime := \Delta \cap (Q^\prime \times \Sigma \times Q^\prime) \),
-				\item \( F^\prime := F \cap Q^\prime\).
+				\item \( Q^\prime \coloneqq \{ q \in Q \mid q \text{ erreichbar} \} \),
+				\item \( \delta^\prime \coloneqq \left. \delta \right|_{Q^\prime \times \Sigma} \) bzw. \( \Delta^\prime \coloneqq \Delta \cap (Q^\prime \times \Sigma \times Q^\prime) \),
+				\item \( F^\prime \coloneqq F \cap Q^\prime\).
 			\end{itemize}
 	\end{enumerate}
 \end{definition}
@@ -962,22 +966,22 @@ Wir verwenden die Potenzmengenkonstruktion aus Lemma~\ref{lem:nfa2dfa} zur Deter
 	\underline{Potenzmengenkonstruktion}{$(\mathcal{A})$}\\
 	\Input{NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$}
 	\Output{äquivalenter, reduzierter DFA $\mathcal{A}^\prime = (Q^\prime, \Sigma, \delta, q_0^\prime, F^\prime)$}	
-	$Q^\prime := \{\{q_0\}\}$\\
-	$q_0^\prime := \{q_0\}$\\
-	$F^\prime := \emptyset$\\
-	Queue $P := Q^\prime$\\
+	$Q^\prime \coloneqq \{\{q_0\}\}$\\
+	$q_0^\prime \coloneqq \{q_0\}$\\
+	$F^\prime \coloneqq \emptyset$\\
+	Queue $P \coloneqq Q^\prime$\\
 	\While{$P \neq \emptyset$}{
-		$S := P$.dequeue()\\
+		$S \coloneqq P$.dequeue()\\
 		\For{$a \in \Sigma$}{
-			$R := \{\bigcup_{p \in S} \{ r \mid (p, a, r) \in \Delta \}$\\
+			$R \coloneqq \{\bigcup_{p \in S} \{ r \mid (p, a, r) \in \Delta \}$\\
 			$P$.enqueue($R$)\\
-			$Q^\prime := Q^\prime \cup R$\\
+			$Q^\prime \coloneqq Q^\prime \cup R$\\
 			$\delta(S, a) = R$
 		}
 	}
 	\For{$P \in Q^\prime$}{
 		\uIf{$P \cap F \neq \emptyset$}{
-			$F^\prime := F^\prime \cup \{ P \}$
+			$F^\prime \coloneqq F^\prime \cup \{ P \}$
 		}
 	}
 	
@@ -1014,6 +1018,81 @@ Wir verwenden die Potenzmengenkonstruktion aus Lemma~\ref{lem:nfa2dfa} zur Deter
 In diesem Sinne ist es sinnvoll von nun an nur noch von FA-erkennbaren Sprachen zu sprechen statt zwischen DFA- und NFA-erkennbaren Sprachen zu unterscheiden.
 
 
+\subsection[NFAs mit $\varepsilon$-Transitionen]{NFAs mit $\bm{\varepsilon}$-Transitionen}
+Mit Blick auf spätere Abschnitte erweitern wir das Modell der NFAs um die Möglickeit den Zustand zu wechseln ohne ein Symbol dabei zu lesen.
+\begin{definition}
+	Ein \textit{nicht-deterministischer endlicher Automat mit} \textit{\(\varepsilon\)-Transitionen (\(\varepsilon\)-NFA)} ist ein 5-Tupel
+	\[
+		(Q, \Sigma, \Delta, q_0, F),
+	\]
+	mit
+	\begin{itemize}
+		\item \( Q \) eine nicht-leere, endliche Menge von \textit{Zuständen},
+		\item \( \Sigma \) ein nicht-leeres, endliches \textit{Eingabealphabet},
+		\item \( \Delta \subseteq Q \times (\Sigma \cup \{\varepsilon\}) \times Q \) die \textit{Transitionsrelation},
+		\item \( q_0 \in Q \) der \textit{Startzustand},
+		\item \(F \subseteq Q \) die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
+	\end{itemize}
+\end{definition}
+Wir bezeichnen \(\varepsilon\)-NFAs wieder mit \( \mathcal{A}, \mathcal{B} \) usw. Transitionsgraphen lassen sich ebenfalls analog zeichnen wie für NFAs und DFAs, wobei \(\varepsilon\)-Transitionen durch Kanten gekennzeichnet werden, die mit \( \varepsilon \) beschriftet sind. Der Voll\-stän\-dig\-keit halber definieren wir auch wieder Läufe auf \(\varepsilon\)-NFAs und das Akzeptanzverhalten.
+\begin{definition}
+	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein \(\varepsilon\)-NFA.
+	Ein \textit{Lauf} von \( \mathcal{A} \) auf einem Wort \( w = a_0 \ldots a_{n-1} \) für ein \( n \in \mathbb{N} \) ist eine endliche Folge
+	\[
+		(r_0, \sigma_0, r_1, \sigma_1, \ldots, sigma_{m-1}, r_m),
+	\]
+	wobei \( r_0, \ldots, r_m \in Q \) und \( \sigma_0, \ldots, \sigma_{m-1} \in \Sigma \cup \{\varepsilon\} \), sodass
+	\begin{enumerate}
+		\item \( r_0 = q_0 \),
+		\item Für alle \( i \in [m] \) gilt, dass \( (r_i, \sigma_i, r_{i+1}) \in \Delta \).
+	\end{enumerate}
+	Wir sagen ein Lauf ist \textit{akzeptierend}, wenn zusätzlich \( r_n \in F \) gilt.
+\end{definition}
+\begin{definition}
+\
+	\begin{enumerate}
+		\item Ein \(\varepsilon\)-NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) \textit{akzeptiert} ein Wort \( w \in \Sigma^\ast \), wenn es mindestens einen akzeptierenden Lauf von \( \mathcal{A} \) gibt. Andernfalls \textit{verwirft} \( \mathcal{A} \) das Wort \( w \).
+		\item Die von einem \(\varepsilon\)-NFA \( \mathcal{A} = (Q, \Sigma, \delta, q_0, F) \) \textit{erkannte Sprache} ist
+			\[
+				L(\mathcal{A}) \coloneqq \{ w \in \Sigma^\ast \mid \mathcal{A} \text{ akzeptiert } w \}.
+			\]
+		\item Eine Sprache \( L \) heißt \textit{\(\varepsilon\)-NFA-erkennbar}, wenn es einen \(\varepsilon\)-NFA \( \mathcal{A} \) gibt, sodass \( L = L(\mathcal{A}) \).
+	\end{enumerate}
+\end{definition}
+\begin{example}\label{exp:ex3}
+	Wir betrachten die Sprache \( L = \{ a^n b^m : n, m \in \mathbb{N} \} \cup \{ a^n c^m : n, m \in \mathbb{N} \} \). Der \(\varepsilon\)-NFA in Abbildung~\ref{fig:epsnfa_ex1} erkennt die Sprache \( L \) mit drei Zuständen.
+\end{example}
+\begin{figure}
+	\centering
+	\input{figs/epsnfa_ex1}
+	\caption{\(\varepsilon\)-NFA, der die Sprache aus Beispiel~\ref{exp:ex3} erkennt.}
+	\label{fig:epsnfa_ex1}
+\end{figure}
+Für \(\varepsilon\)-NFAs zeigen wir wie im vorigen Abschnitt, dass auch sie die Klasse der FA-erkennbaren Sprachen nicht vergrößern. Der Äquivalenzbegriff aus Definition~\ref{def:fa_equivalence} überträgt sich natürlich auf \(\varepsilon\)-NFAs.
+\begin{lemma}
+	Zu jedem NFA existiert ein äquivalenter \(\varepsilon\)-NFA.
+	\begin{proof}
+		Dies ist sofort klar, da jeder NFA als ein \(\varepsilon\)-NFA betrachtet werden kann, der keine \(\varepsilon\)-Transitionen besitzt.
+	\end{proof}
+\end{lemma}
+\begin{lemma}\label{lem:epsnfa2nfa}
+	Zu jedem \(\varepsilon\)-NFA existiert ein äquivalenter NFA.
+	\begin{proof}
+		Nicht ganz so klar.
+	\end{proof}
+\end{lemma}
+\begin{remark*}
+	Beachte, dass ein Zusammenziehen der Zustände, die durch \(\varepsilon\)-Transitionen verbunden sind nicht funktioniert, da das im Allgemeinen die erkannte Sprache verändert. Ein solches Vorgehen würde zum Beispiel dazu führen, dass der entstehende Automat zu Beispiel~\ref{fig:epsnfa_ex1} nur noch einen Zustand besitzt mit einem durch \( a, b, c \) beschrifteten Loop. Die erkannte Sprache wäre dann \( \{a, b, c\}^\ast \).
+\end{remark*}
+Wir werden also auch weiterhin von FA-erkennbaren Sprachen sprechen, solange sie von einem DFA, NFA oder \(\varepsilon\)-NFA erkannt werden, da alle drei Modelle gleich mächtig sind.
+\begin{corollary}
+	Zu jedem \(\varepsilon\)-NFA existiert ein äquivalenter DFA.
+	\begin{proof}
+		Lemma~\ref{lem:epsnfa2nfa} liefert zunächst einen NFA, der mit Lemma~\ref{lem:nfa2dfa} in einen DFA umgewandelt werden kann.
+	\end{proof}
+\end{corollary}
+
+
 \subsection{Reguläre Ausdrücke}\label{sec:regular_regexp}
 Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen lassen. Diese Art von Sprachen liefern uns eine eigene Klasse von Sprachen, die unter verschiedenen Operationen abgeschlossen ist. Auch wenn bisher noch nicht alles gezeigt wurde (Konkatenation, Kleene'sche Hülle) lässt sich mit einiger Berechtigung sagen, dass die Klasse der FA-erkennbaren Sprachen gute Eigenschaften hat. Wir untersuchen nun welche Sprache wir mit sogenannten \textit{regulären Ausdrücken} beschreiben können.
 \begin{definition}\label{def:regexsyntax}
@@ -1025,13 +1104,13 @@ Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen 
 		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{\cdot} r^\prime) \) ein regulärer Ausdruck.
 		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( r \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
 	\end{itemize}
-	Die Menge aller regulären Ausdrücke über \( \Sigma \) bezeichnen mit \( \mathsf{RE}_\Sigma \).
+	Die \textit{Menge aller regulären Ausdrücke} über \( \Sigma \) bezeichnen mit \( \mathsf{RE}_\Sigma \).
 \end{definition}
 Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun definieren wir eine Sematik für diese Ausdrücke, d.h. wir ordnen jedem regulären Ausdruck eine Sprache zu.
 \begin{definition}
 	Sei \( \Sigma \) ein endliches Alphabet. Die \textit{Interpretation eines regulären Ausdrucks} ist die Abbildung
 	\[
-		\llbracket \cdot \rrbracket: \mathsf{RE}_\Sigma \to 2^{\Sigma^\ast}
+		\llbracket \cdot \rrbracket \colon \mathsf{RE}_\Sigma \to 2^{\Sigma^\ast}
 	\]
 	mit
 	\begin{itemize}
@@ -1044,7 +1123,7 @@ Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun defin
 	Eine Sprache \( L \subseteq \Sigma^\ast \) heißt \textit{regulär}, wenn ein regulärer Ausdruck \( r \in \mathsf{RE}_\Sigma \) existiert mit \( \llbracket r \rrbracket = L \).
 \end{definition}
 Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( \bm{\emptyset} \overset{\bm{\ast}}{} \) und \( r \overset{\bm{+}}{} \) für \( r \bm{\cdot} r \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt (\( \bm{\cdot} \)) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass \( \overset{\bm{\ast}}{} \) stärker bindet als \( \bm{\cdot} \), was wiederum stärker bindet als \( \bm{+} \). Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.\par
-Reguläre Ausdrücke kennt manauch für Computerprogramme wie \texttt{grep}, \texttt{awk} oder \texttt{sed}. Diese sind syntaktisch etwas anders aufgebaut, jedoch lässt sich jeder POSIX-Ausdruck (das sind die regulären Ausdrücke für oben genannte Programme) auch als regulärer Ausdruck wie in Definition~\ref{def:regexsyntax} umschreiben.
+Reguläre Ausdrücke kennt man auch für Computerprogramme wie \texttt{grep}, \texttt{awk} oder \texttt{sed}. Diese sind syntaktisch etwas anders aufgebaut, jedoch lässt sich jeder POSIX-Ausdruck (das sind die regulären Ausdrücke für oben genannte Programme) auch als regulärer Ausdruck wie in Definition~\ref{def:regexsyntax} umschreiben.
 \begin{example}
 	Die POSIX-Syntax für reguläre Ausdrücke geht wie folgt.
 	\begin{itemize}
@@ -1089,7 +1168,7 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 	\begin{proof}
 		Wir stellen im Rahmen dieses Beweises eine Variante der sogenannten Thompson-Konstruktion vor, die einen regulären Ausdruck in einen äquivalenten \( \varepsilon \)-NFA umwandelt. Die Konstruktion nutzt den induktiven Aufbau von regulären Ausdrücken aus.\\
 		Basisfälle:
-		\begin{figure}[h]
+		\begin{figure}[ht]
 			\centering
 			\begin{subfigure}[b]{.25\textwidth}
 				\centering
@@ -1113,7 +1192,7 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 			\label{fig:thompson_basic}
 		\end{figure}\\
 		Rekursive Fälle:
-		\begin{figure}[h]
+		\begin{figure}[ht]
 			\centering
 			\begin{subfigure}[b]{.9\textwidth}
 				\centering
