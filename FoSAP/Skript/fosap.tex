@@ -1076,7 +1076,7 @@ Für \(\varepsilon\)-NFAs zeigen wir wie im vorigen Abschnitt, dass auch sie die
 	\end{proof}
 \end{lemma}
 Bevor wir den anderen Teil der Äquivalenz zeigen fehlt uns eine Definition.
-\begin{definition}
+\begin{definition}\label{def:eps_closure}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein \(\varepsilon\)-NFA. Der \textit{\(\varepsilon\)-Abschluss} (auch \(\varepsilon\)-Hülle) eines Zustands \( p \in Q \) ist
 	\[
 		\comp{\varepsilon}(p) \coloneqq \{ q \in Q \mid \text{es ex. } p_1, \ldots, p_k \text{ mit } (p, \varepsilon, p_1), (p_i, \varepsilon, p_{i+1}), (p_k, \varepsilon, q) \in \Delta \}.
@@ -1087,7 +1087,7 @@ Bevor wir den anderen Teil der Äquivalenz zeigen fehlt uns eine Definition.
 	\]
 \end{definition}
 Auf diese Weise lässt sich die Erreichbarkeitsrelation, die wir schon aus Definition~\ref{def:reachability} kennen erweitern.
-\begin{definition}
+\begin{definition}\label{def:reachability2}
 	Sei \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA und \( w = a_0 \ldots a_{n-1} \). Ein Zustand \( q \in Q \) heißt \textit{erreichbar} von \( p \) über \( w \) (geschrieben \( \mathcal{A}: p \reaches{w} q \)), wenn es ein \( m \geq n \), Indizes \( 0 \leq i_0 < \ldots < i_{n-1} \leq m \) und Zustände \( r_0, \ldots, r_m \in Q \) gibt, sodass
 	\begin{itemize}
 		\item \( r_0 = p, r_m = q \),
@@ -1104,7 +1104,7 @@ Man beachte, dass \( p \reaches{\varepsilon} q \) nicht \( p = q \) bedeutet wie
 			\Delta^\prime \coloneqq \{(p, a, q) \in Q \times \Sigma \times Q \mid \mathcal{A}: p \reaches{a} q\}
 		\]
 		und \( F^\prime \coloneqq \{q \in Q \mid q \in \comp{\varepsilon}(F)\} \).
-		%TODO Korrektheit
+		Die Korrektheit ist einfach einzusehen. Sei \( w = a_0 \ldots a_{n-1} \in L(\mathcal{A}) \). Dann gibt es ein \( q \in F \) mit \( q_0 \reaches{w} q \). Also gibt es Zustände \( r_0 = q_0, \ldots, r_m = q \) wie in Definition~\ref{def:reachability2}. Nach Konstruktion von \( \Delta^\prime \) gibt es somit Zustände \( r_{i_0} = q_0, \ldots, r_{i_n} = q \), sodass \( r_{i_j} \reaches{a_j} r_{i_{j+1}} \) für alle \( j \in [n] \). Damit ist \( w \in L(\mathcal{A}^\prime) \). Rückrichtung analog.
 	\end{proof}
 \end{lemma}
 \begin{example}
