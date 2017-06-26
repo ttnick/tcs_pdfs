@@ -1213,8 +1213,14 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 	Jede reguläre Sprache ist FA-erkennbar.
 	\begin{proof}
 		Wir stellen im Rahmen dieses Beweises eine Variante der sogenannten Thompson-Konstruktion vor, die einen regulären Ausdruck in einen äquivalenten \( \varepsilon \)-NFA umwandelt. Die Konstruktion nutzt den induktiven Aufbau von regulären Ausdrücken aus.\\
-		Basisfälle:
-		\begin{figure}[h]
+		Basisfälle (s. Abbildung~\ref{fig:thompson_basic}): 
+		Wir geben drei \(\varepsilon\)-NFAs für die drei Basisfälle für reguläre Ausdrücke: 
+		\begin{align*}
+			\mathcal{A}_\emptyset &= (\{q_0\}, \Sigma, \emptyset, q_0, \emptyset),\\
+			\mathcal{A}_\varepsilon &= (\{q_0\}, \Sigma, \emptyset, q_0, \{q_0\}),\\
+			\mathcal{A}_a &= (\{q_0, q_1\}, \Sigma, \{(q_0, a, q_1)\}, q_0, \{q_1\}).
+		\end{align*}
+		\begin{figure}
 			\centering
 			\begin{subfigure}[b]{.25\textwidth}
 				\centering
@@ -1237,20 +1243,27 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 			\caption{Basisfälle der Thompson-Konstruktion}
 			\label{fig:thompson_basic}
 		\end{figure}\\
-		Rekursive Fälle:
-		\begin{figure}[h]
+		Rekursive Fälle (s. Abbildung~\ref{fig:thompson_recursive}):
+		Seien für \( e, e^\prime \in \mathsf{RE}_\Sigma \) die \(\varepsilon\)-NFAs \( \mathcal{A}_e = (Q, \Sigma, \Delta, q_0, F) \) und \( \mathcal{A}_{e^\prime} = (Q^\prime, \Sigma, \Delta^\prime, q_0^\prime, F^\prime) \) gegeben mit \( q_{-1} \notin Q \cup Q^\prime \) und \( Q \cap Q^\prime = \emptyset \). Dann erhalten wir \(\varepsilon\)-NFAs für die Ausdrücke \( e+e^\prime, e \cdot e^\prime\) und \( e^\ast \):
+		\begin{align*}
+			\mathcal{A}_{e+e^\prime} &= (Q \cup Q^\prime \cup \{q_{-1}\}, \Sigma, \Delta \cup \Delta^\prime \cup \{(q_{-1}, \varepsilon, q_0), (q_{-1}, \varepsilon, q_0^\prime)\}, q_{-1}, F \cup F^\prime),\\
+			\mathcal{A}_{e \cdot e^\prime} &= (Q \cup Q^\prime, \Sigma, \Delta \cup \Delta^\prime \cup \{(q, \varepsilon, q_0^\prime) \mid q \in F \}, q_0, F^\prime),\\
+			\mathcal{A}_{e^\ast} &= (Q \cup \{q_{-1}\}, \Sigma, \Delta \cup \{(q_{-1}, \varepsilon, q_0)\} \cup \{(q, \varepsilon, q_{-1}) \mid q \in F \}, q_{-1}, \{q_{-1}\}).
+		\end{align*}
+		
+		\begin{figure}
 			\centering
-			\begin{subfigure}[b]{.9\textwidth}
-				\centering
-				\input{figs/thompson_cat}
-				\caption{\( r = e \cdot e^\prime \)}
-				\label{fig:thompson_cat}
-			\end{subfigure}\\
 			\begin{subfigure}[b]{.9\textwidth}
 				\centering
 				\input{figs/thompson_plus}
 				\caption{\( r = e + e^\prime \)}
 				\label{fig:thompson_plus}
+			\end{subfigure}\\
+			\begin{subfigure}[b]{.9\textwidth}
+				\centering
+				\input{figs/thompson_cat}
+				\caption{\( r = e \cdot e^\prime \)}
+				\label{fig:thompson_cat}
 			\end{subfigure}\\
 			\begin{subfigure}[b]{.9\textwidth}
 				\centering
@@ -1261,7 +1274,12 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 			\caption{Rekursive Fälle der Thompson-Konstruktion}
 			\label{fig:thompson_recursive}
 		\end{figure}
-		%TODO Korrektheit
+		Wir zeigen nun noch die Korrektheit der Konstruktion. Dies geschieht per Induktion über den Aufbau des regulären Ausdrucks.\\
+		Induktionsverankerung: \( e \in \{\emptyset, \varepsilon, a\} \). Der Automat \( \mathcal{A}_e \) wie in Abbildung~\ref{fig:thompson_basic} erkennt offensichtlich \( \llbracket e \rrbracket \).\checkmark\\
+		Induktionshypothese: Für die regulären Ausdrücke \( e, e^\prime \in \mathsf{RE}_\Sigma \) erkennen die Automaten \( \mathcal{A}_e = (Q, \Sigma, \Delta, q_0, F) \) und \( \mathcal{A}_{e^\prime} = (Q^\prime, \Sigma, \Delta^\prime, q_0^\prime, F^\prime) \) die Sprachen \( \llbracket e \rrbracket \) bzw. \( \llbracket e^\prime \rrbracket \).\\
+		Induktionsschritt: Wir zeigen nur den Fall für \( e + e^\prime \), die anderen beiden gehen analog.
+		Sei \( w \in \llbracket e + e^\prime \rrbracket = \llbracket e \rrbracket \cup \llbracket e^\prime \rrbracket \). OBdA sei \( w \in \llbracket e \rrbracket \). Demnach existiert ein Lauf \( (r_0, \ldots, r_n) \) mit \( r_n \in F \). Dann ist \( (q_{-1}, r_0, \ldots, r_n) \) akzeptierender Lauf auf \( \mathcal{A}_{e+e^\prime} \) und damit \( w \in L(\mathcal{A}_{e+e^\prime}) \).\\
+		Sei umgekehrt \( w \in L(\mathcal{A}_{e+e^\prime}) \). Das heißt es gibt einen Lauf \( (q_{-1}, r_0, \ldots, r_n) \) mit \( r_n \in F \cup F^\prime \). Da \( q_{-1} \) nur zwei \(\varepsilon\)-Transitionen hat muss \( (r_0, \ldots, r_n) \) ebenfalls ein akzeptierender Lauf sein mit Startzustand \( r_0 \). Nach Konstruktion ist \( r_0 \) Startzustand von oBdA \( \mathcal{A}_e \) und da \( Q \cap Q^\prime = \emptyset \) muss \( r_n \in F \) sein. Damit ist \( w \in \llbracket e \rrbracket \subseteq \llbracket e+e^\prime \rrbracket \).
 	\end{proof}
 \end{lemma}
 Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar.
