@@ -1,0 +1,12 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
+	\node[state, initial, initial text=] (1) at (0, 0) {$q_1$};
+	\node[state] (2) at (2, 1) {$q_2$};
+	\node[state, accepting] (3) at (4, 1) {$q_3$};
+	\node[state] (4) at (2, -1) {$q_4$};
+	\node[state, accepting] (5) at (4, -1) {$q_5$};
+	
+	\path (1) edge node {$\varepsilon$} (2)
+		(1) edge node[below left] {$\varepsilon$} (4)
+		(2) edge node {$a$} (3)
+		(4) edge node {$b$} (5);
+\end{tikzpicture}

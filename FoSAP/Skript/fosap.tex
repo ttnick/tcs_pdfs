@@ -19,6 +19,7 @@
 \usepackage{enumitem}
 \usepackage{wrapfig}
 \usepackage{float}
+\usepackage{array}
 \usepackage[justification=centering]{caption}
 \usepackage{subcaption}
 \usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
@@ -1209,7 +1210,7 @@ Wir kommen nun zu einem der wichtigsten Ergebnisse der Automatentheorie und dies
 	Eine Sprache ist genau dann regulär, wenn sie FA-erkennbar ist.
 \end{theorem}
 Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen auf zwei Lemmata.
-\begin{lemma}
+\begin{lemma}\label{lem:regex2nfa}
 	Jede reguläre Sprache ist FA-erkennbar.
 	\begin{proof}
 		Wir stellen im Rahmen dieses Beweises eine Variante der sogenannten Thompson-Konstruktion vor, die einen regulären Ausdruck in einen äquivalenten \( \varepsilon \)-NFA umwandelt. Die Konstruktion nutzt den induktiven Aufbau von regulären Ausdrücken aus.\\
@@ -1282,10 +1283,81 @@ Aus Gründen der Übersichtlichkeit werden wir den Beweis des Satzes aufteilen a
 		Sei umgekehrt \( w \in L(\mathcal{A}_{e+e^\prime}) \). Das heißt es gibt einen Lauf \( (q_{-1}, r_0, \ldots, r_n) \) mit \( r_n \in F \cup F^\prime \). Da \( q_{-1} \) nur zwei \(\varepsilon\)-Transitionen hat muss \( (r_0, \ldots, r_n) \) ebenfalls ein akzeptierender Lauf sein mit Startzustand \( r_0 \). Nach Konstruktion ist \( r_0 \) Startzustand von oBdA \( \mathcal{A}_e \) und da \( Q \cap Q^\prime = \emptyset \) muss \( r_n \in F \) sein. Damit ist \( w \in \llbracket e \rrbracket \subseteq \llbracket e+e^\prime \rrbracket \).
 	\end{proof}
 \end{lemma}
+\begin{remark*}
+	Wir sehen, dass die Thompson-Konstruktion einige \(\varepsilon\)-Tran\-si\-tio\-nen verwendet und auch gelegentlich den Zustandsraum unnötig vergrößert. Abseits von einigen Optimierungen dazu gibt es auch Verfahren, die ganz ohne \(\varepsilon\)-Transitionen auskommt (s. Glushkov-Konstruktion). In dieser Vorlesung wird diese aber nicht betrachten.
+\end{remark*}
+\begin{remark*}
+	Der ursprüngliche Beweis von Lemma~\ref{lem:regex2nfa} von Stephen {C.} Kleene ging übrigens von einem regulären Ausdruck zu einem DFA, das Konzept ''Nichtdeterminismus`` wurde erst später eingeführt. Man kann sich vorstellen, dass der Beweis um einiges schwieriger war als diese recht anschauliche Konstruktion, u.a. waren auch algebraische Konzepte und Halbgruppentheorie involviert.
+\end{remark*}
 Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar.
 \begin{corollary}
 	Seien \( L, K \subseteq \Sigma^\ast \) FA-erkennbare Sprachen. Dann sind auch \( L \cdot K \) und \( L^\ast \) FA-erkennbar.
 \end{corollary}
+\begin{example}
+	Wir betrachten den regulären Ausdruck \( r = (a+b)^\ast c \) und bauen nun einen \(\varepsilon\)-NFA für \( r \). Die Automaten für die atomaren Teilausdrücke \( a, b, c \) sind klar. In Abbildung~\ref{fig:thompson_example} gehen wir Schritt für Schritt die Konstruktion durch. Man sieht wie der Automat aus dem vorigen Schritt in den Automaten aus dem aktuellen Schritt eingebettet ist.
+\end{example}
+\begin{figure}
+	\centering
+	\begin{subfigure}{.99\textwidth}
+		\centering
+		\input{figs/thompson_example_1}
+		\caption{Automat für \( (a+b) \).}
+		\label{fig:thompson_example_1}
+	\end{subfigure}\\
+	\begin{subfigure}{.99\textwidth}
+		\centering
+		\input{figs/thompson_example_2}
+		\caption{Automat für \( (a+b)^\ast \).}
+		\label{fig:thompson_example_2}
+	\end{subfigure}\\
+	\begin{subfigure}{.99\textwidth}
+		\centering
+		\input{figs/thompson_example_3}
+		\caption{Automat für \( (a+b)^\ast c \).}
+		\label{fig:thompson_example_3}
+	\end{subfigure}
+	\caption{Thompson-Konstruktion für \( r = (a+b)^\ast c \).}
+	\label{fig:thompson_example}
+\end{figure}
+
+Wir fahren nun fort mit dem zweiten Teil von Satz~\ref{thm:kleene_equivalence}. Wir schauen uns hier ein Verfahren an, was aus jedem endlichen Automaten einen regulären Ausdruck macht. Auch dazu gibt es verschiedene Varianten, u.a. auch grafische, die grundlegende Idee hinter diesen Verfahren ist jedoch meist die selbe.
+\begin{lemma}\label{lem:nfa2regex}
+	Jede FA-erkennbare Sprache ist regulär.
+	\begin{proof}
+		Wir gehen von einem NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) aus und erzeugen einen äquivalenten regulären Ausdruck \( r_\mathcal{A} \in \mathsf{RE}_\Sigma \). Die Idee des Verfahrens ist recht einfach. Wir suchen einen regulären Ausdruck der alle Wörter beschreibt mit denen man vom Startzustand \( q_0 \) zu einem der akzeptierenden Zustände \( q \in F \) kommt (\(\ast\)). Wir benutzen nun folgende Notation: Für \( P \subseteq Q \) und \( p, q \in Q \) ist \( r_P(p, q) \) der reguläre Ausdruck, der alle Wörter beschreibt mit den man von \( p \) nach \( q \) kommt und dazwischen nur Zustände aus \( P \) benutzt. Anders gesagt ist \( r_P(p, q) \) der reguläre Ausdruck zum Automaten \( \mathcal{A} = (P, \Sigma, \Delta \cap ((P \cup \{p\}) \times \Sigma \times (P \cup \{q\})), p, \{q\}) \). Bzgl. (\(\ast\)) suchen wir also den regulären Ausdruck
+			\[
+				r_\mathcal{A} = \sum_{q \in F} r_Q(q_0, q).
+			\]
+		Das Verfahren lässt sich rekursiv beschreiben nun mit folgender Überlegung: Ein regulärer Ausdruck \( r_\emptyset(p, q) \) ist \( \sum_{(p, a, q) \in \Delta} a \), also alle Symbole \( a \in \Sigma \) mit denen eine direkte Transition von \( p \) nach \( q \) möglich ist (oder noch anschaulicher: Alle Symbole die im Transitionsgraphen auf der Kante von \( p \) nach \( q \) stehen). Sollte keine Transition existieren, dann ist der reguläre Ausdruck entsprechend \( \emptyset \) für \( p \neq q \) und \( \varepsilon \) für \( p = q \). Einmal formal aufgeschrieben:
+			\[
+				r_\emptyset(p, q) = \left\lbrace
+					\begin{array}{*3{>{\displaystyle}l}p{5cm}}
+						\ &\sum_{(p, a, q) \in \Delta} a, & p \neq q\\
+						\varepsilon + &\sum_{(p, a, q) \in \Delta} a, & p = q.
+					\end{array}
+				\right.
+			\]
+		Der Rekursionsschritt funktioniert nun folgendermaßen: Für ein \( P \neq \emptyset \) wählen wir einen Zustand  \( s \in P \) und entfernen diesen mit folgenderr Umformung
+\[
+	r_P(p, q) = r_{P^\prime}(p, q) + r_{P^\prime}(p, s) r_{P^\prime}(s, s)^\ast r_{P^\prime}(s, q),
+\]
+wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache Worte gefasst: Um von \( p \) nach \( q \) zu kommen über Zustände ausschließlich aus \( P \) können wir entweder (links vom +) von \( p \) nach \( q \) gehen ohne einen Zustand \( s \) zu besuchen oder (rechts vom +) von \( p \) nach \( s \) gehen, Pfade von \( s \) nach \( s \) benutzen und schließlich von \( s \) nach \( q \) gehen, wobei auch hier nur Zustände in \( P \setminus \{ s \} \) benutzt werden (s. Abbildung~\ref{fig:state_elimination}).
+		\begin{figure}[h]
+			\centering
+			\input{figs/state_elimination}
+			\caption{Rekursionsschritt um einen Zustand rauszuwerfen. Die blau getönte Fläche ist \( P^\prime \coloneqq P \setminus \{ s \} \). Die größere Fläche ist \( P \). Wichtig: Die Kanten in diesem Graphen sind keine Transitionen, sondern sind mit einem regulären Ausdruck beschriftet, der die Sprache zwischen den Knoten beschreibt mit Zuständen aus dem Index!}
+			\label{fig:state_elimination}
+		\end{figure}
+		%TODO Soundness, Completeness
+	\end{proof}
+\end{lemma}
+\begin{remark*}
+	Das Verfahren könnte einem auch aus Algorithmik-Vorlesungen bekannt vorkommen. Es handelt sich dabei um eine (zugegeben umständlich aufgeschriebene) Variante des Floyd-Warshall-Algorithmus mit dem sich auch kürzeste Wege in gerichteten Graphen finden lassen.
+\end{remark*}
+\begin{example}
+	Wir betrachten den NFA in Abbildung~\ref{fig:fw_example}.
+\end{example}
+
 
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
