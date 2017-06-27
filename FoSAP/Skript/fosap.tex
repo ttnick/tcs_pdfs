@@ -59,6 +59,7 @@
 \newcommand{\qedb}{\hfill\(\blacksquare\)}
 \newcommand{\shuffle}{\mathrel{\shifttext{5pt}{$\equiv$}\shifttext{-5pt}{$=$}}}
 \newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
+\newcommand{\reachess}[2]{\overset{#1}{\underset{#2}{\rightarrow}}}
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
 
@@ -716,7 +717,7 @@ Eine Beispielkonstruktion für einen Produktautomaten für die Vereinigung zweie
 	\label{fig:dfa_product}
 \end{figure}
 Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_union} erhält man nun einfach alle übrigen Abschlusseigenschaften für die üblichen Mengenoperationen, aber auch mit der Produktkonstruktion lassen sich diese Eigenschaften zeigen.
-\begin{corollary}
+\begin{corollary}\label{cor:regular_intersection}
 	Seien \( L_1, L_2 \) DFA-erkennbare Sprachen. Dann sind auch die Sprachen \( L_1 \cap L_2, L_1 \setminus L_2 \) DFA-erkannbar.
 	\begin{proof}
 		Wegen Satz~\ref{thm:regular_complement} sind auch \( \comp{L_1}, \comp{L_2} \) DFA-erkennbar und damit nach Satz~\ref{thm:regular_union} \( \comp{L_1} \cup \comp{L_2} \). Mit erneuter Anwendung von Satz~\ref{thm:regular_complement} ist auch \( \comp{\comp{L_1} \cup \comp{L_1}} \) DFA-erkennbar, was nach den DeMorgan'schen Gesetzen \( L_1 \cap L_2 \) entspricht. Alternativ kann man in der Produktkonstruktion auch \( F = F_1 \times F_2 \) setzen und erhält einen DFA für \( L_1 \cap L_2 \).\\
@@ -1294,7 +1295,7 @@ Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar
 	Seien \( L, K \subseteq \Sigma^\ast \) FA-erkennbare Sprachen. Dann sind auch \( L \cdot K \) und \( L^\ast \) FA-erkennbar.
 \end{corollary}
 \begin{example}
-	Wir betrachten den regulären Ausdruck \( r = (a+b)^\ast c \) und bauen nun einen \(\varepsilon\)-NFA für \( r \). Die Automaten für die atomaren Teilausdrücke \( a, b, c \) sind klar. In Abbildung~\ref{fig:thompson_example} gehen wir Schritt für Schritt die Konstruktion durch. Man sieht wie der Automat aus dem vorigen Schritt in den Automaten aus dem aktuellen Schritt eingebettet ist.
+	Wir betrachten den regulären Ausdruck \( r = (a+b)^\ast c \) und bauen nun einen \(\varepsilon\)-NFA für \( r \). Die Automaten für die atomaren Teilausdrücke \( a, b, c \) sind klar. In Abbildungen~\ref{fig:thompson_example_1} bis~\ref{fig:thompson_example_3} gehen wir Schritt für Schritt die Konstruktion durch. Man sieht wie der Automat aus dem vorigen Schritt in den Automaten aus dem aktuellen Schritt eingebettet ist. In Abbildung~\ref{fig:thompson_example_4} finden wir außerdem einen zustandsminimalen NFA, der sich recht schnell nur durch Ablesen des Ausdrucks hinschreiben lässt. Dies zeigt, dass auch bei einem solchen Minimalbeispiel bereits viele unnötige Zustände und Transitionen eingefügt werden in der Thompson-Konstruktion. Der Vorteil ist aber natürlich, dass ein Algorithmus immer funktioniert.
 \end{example}
 \begin{figure}
 	\centering
@@ -1315,6 +1316,12 @@ Ein Nebenprodukt der Thompson-Konstruktion aus dem Beweis ist folgendes Korollar
 		\input{figs/thompson_example_3}
 		\caption{Automat für \( (a+b)^\ast c \).}
 		\label{fig:thompson_example_3}
+	\end{subfigure}\\
+	\begin{subfigure}{.99\textwidth}
+		\centering
+		\input{figs/thompson_example_4}
+		\caption{Minimaler NFA für \( (a+b)^\ast c \).}
+		\label{fig:thompson_example_4}
 	\end{subfigure}
 	\caption{Thompson-Konstruktion für \( r = (a+b)^\ast c \).}
 	\label{fig:thompson_example}
@@ -1324,7 +1331,7 @@ Wir fahren nun fort mit dem zweiten Teil von Satz~\ref{thm:kleene_equivalence}. 
 \begin{lemma}\label{lem:nfa2regex}
 	Jede FA-erkennbare Sprache ist regulär.
 	\begin{proof}
-		Wir gehen von einem NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) aus und erzeugen einen äquivalenten regulären Ausdruck \( r_\mathcal{A} \in \mathsf{RE}_\Sigma \). Die Idee des Verfahrens ist recht einfach. Wir suchen einen regulären Ausdruck der alle Wörter beschreibt mit denen man vom Startzustand \( q_0 \) zu einem der akzeptierenden Zustände \( q \in F \) kommt (\(\ast\)). Wir benutzen nun folgende Notation: Für \( P \subseteq Q \) und \( p, q \in Q \) ist \( r_P(p, q) \) der reguläre Ausdruck, der alle Wörter beschreibt mit den man von \( p \) nach \( q \) kommt und dazwischen nur Zustände aus \( P \) benutzt. Anders gesagt ist \( r_P(p, q) \) der reguläre Ausdruck zum Automaten \( \mathcal{A} = (P, \Sigma, \Delta \cap ((P \cup \{p\}) \times \Sigma \times (P \cup \{q\})), p, \{q\}) \). Bzgl. (\(\ast\)) suchen wir also den regulären Ausdruck
+		Wir gehen von einem NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) aus und erzeugen einen äquivalenten regulären Ausdruck \( r_\mathcal{A} \in \mathsf{RE}_\Sigma \). Die Idee des Verfahrens ist recht einfach. Wir suchen einen regulären Ausdruck der alle Wörter beschreibt mit denen man vom Startzustand \( q_0 \) zu einem der akzeptierenden Zustände \( q \in F \) kommt (\(\ast\)). Wir benutzen nun folgende Notation: Für \( P \subseteq Q \) und \( p, q \in Q \) ist \( r_P(p, q) \) der reguläre Ausdruck, der alle Wörter \( w \in \Sigma^\ast \) beschreibt mit den man von \( p \) nach \( q \) kommt und dazwischen nur Zustände aus \( P \) benutzt (für die Korrektheit später schreiben wir dafür \( p \reachess{w}{P} q \)). Anders gesagt ist \( r_P(p, q) \) der reguläre Ausdruck zum Automaten \( \mathcal{A} = (P, \Sigma, \Delta \cap ((P \cup \{p\}) \times \Sigma \times (P \cup \{q\})), p, \{q\}) \). Bzgl. (\(\ast\)) suchen wir also den regulären Ausdruck
 		\[
 			r_\mathcal{A} = \sum_{q \in F} r_Q(q_0, q).
 		\]
@@ -1348,7 +1355,7 @@ wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache
 			\caption{Rekursionsschritt um einen Zustand rauszuwerfen. Die blau getönte Fläche ist \( P^\prime \coloneqq P \setminus \{ s \} \). Die größere Fläche ist \( P \). Wichtig: Die Kanten in diesem Graphen sind keine Transitionen, sondern sind mit einem regulären Ausdruck beschriftet, der die Sprache zwischen den Knoten beschreibt mit Zuständen aus dem Index!}
 			\label{fig:state_elimination}
 		\end{figure}
-		%TODO Soundness, Completeness
+		%TODO Soundness Completeness
 	\end{proof}
 \end{lemma}
 \begin{remark*}
@@ -1357,7 +1364,7 @@ wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache
 \begin{example}\label{exp:fw_example}
 	Wir betrachten den NFA in Abbildung~\ref{fig:fw_example}. Wir suchen also einen regulären Ausdruck, der die Worte beschreibt mit denen man von \( q_0 \) nach \( q_0 \) (\( q_0 \) ist einziger akzeptierender Zustand) kommt mit allen Zuständen, also den Ausdruck \( r_Q(q_0, q_0) \). Wir wählen zunächst \( s = q_1 \) (eliminieren \( q_1 \)):
 	\[
-		r_Q(q_0, q_0) = r_{\{ q_0 \}}(q_0, q_0) + r_{\{ q_0 \}}(q_0, q_1) r_{\{ q_0 \}}(q_1, q_1)^\ast r_{\{ q_0 \}}(q_1, q_0)
+		r_\mathcal{A} = r_Q(q_0, q_0) = r_{\{ q_0 \}}(q_0, q_0) + r_{\{ q_0 \}}(q_0, q_1) r_{\{ q_0 \}}(q_1, q_1)^\ast r_{\{ q_0 \}}(q_1, q_0)
 	\]
 	Noch zu berechnen sind \( r_{\{ q_0 \}}(q_0, q_0), r_{\{ q_0 \}}(q_0, q_1), r_{\{ q_0 \}}(q_1, q_1), r_{\{ q_0 \}}(q_1, q_0) \). Wir berechnen \( r_{\{ q_0 \}}(q_0, q_0) \) und eliminieren jetzt auch \( q_0 \) und können dann direkt den Basisfall einsetzen. Dabei vereinfachen wir die regulären Ausdrücke noch:
 	\begin{align*}
@@ -1385,16 +1392,21 @@ wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache
 	\end{align*}
 	Diese Ausdrücke können wir nun rückwärts wieder einsetzen:
 	\begin{align*}
-		r_Q(q_0, q_0) &= \varepsilon + c (a + b + \varepsilon + ac)^\ast  a\\
+		r_\mathcal{A} = r_Q(q_0, q_0) &= \varepsilon + c (a + b + \varepsilon + ac)^\ast  a\\
 		&\equiv \varepsilon + c(a+b+ac)^\ast a.
 	\end{align*}
+	Da der Automat recht einfach ist, lässt sich hier natürlich auch ein einfacher Ausdruck einfach ablesen:
+	\[
+		r_\mathcal{A}^\prime = (c (a+b)^\ast a)^\ast \equiv r_\mathcal{A}.
+	\]
 \end{example}
 \begin{figure}
 	\centering
 	\input{figs/fw_example}
-	\caption{NFA für Beispiel~\ref{exp:fw_example}.}
+	\caption{NFA \( \mathcal{A} \) für Beispiel~\ref{exp:fw_example}.}
 	\label{fig:fw_example}
 \end{figure}
+Die beiden Lemmata~\ref{lem:regex2nfa} und~\ref{lem:nfa2regex} ergeben zusammen den Äquivalenzsatz von Kleene. Mit den Sätzen~\ref{thm:regular_complement} und~\ref{cor:regular_intersection} können wir auch schließen, dass sich die regulären Ausdrücke auch um Operatoren für Komplement und Schnitt erweitern ließen, ohne dadurch zusätzliche Sprachen zu beschreiben. Dies ist nicht offensichtlich: Dazu versuche man einmal Komplement und Schnitt nur mit Hilfe von Vereinigung (\(+\)), Konkatenation (\(\cdot\)) und Iteration (\(^\ast\)) zu simulieren.
 
 
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
