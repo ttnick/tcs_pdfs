@@ -1,0 +1,8 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
+	\node[state, initial, accepting, initial text=] (q0) at (0, 0) {$q_0$};
+	\node[state] (q1) at (4, 0) {$q_1$};
+	
+	\path (q0) edge[bend left] node {$c$} (q1)
+		(q1) edge[loop above] node {$a, b$} (q1)
+		(q1) edge[bend left] node {$a$} (q0);   
+\end{tikzpicture}

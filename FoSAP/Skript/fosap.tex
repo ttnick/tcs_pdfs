@@ -1325,24 +1325,24 @@ Wir fahren nun fort mit dem zweiten Teil von Satz~\ref{thm:kleene_equivalence}. 
 	Jede FA-erkennbare Sprache ist regulär.
 	\begin{proof}
 		Wir gehen von einem NFA \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) aus und erzeugen einen äquivalenten regulären Ausdruck \( r_\mathcal{A} \in \mathsf{RE}_\Sigma \). Die Idee des Verfahrens ist recht einfach. Wir suchen einen regulären Ausdruck der alle Wörter beschreibt mit denen man vom Startzustand \( q_0 \) zu einem der akzeptierenden Zustände \( q \in F \) kommt (\(\ast\)). Wir benutzen nun folgende Notation: Für \( P \subseteq Q \) und \( p, q \in Q \) ist \( r_P(p, q) \) der reguläre Ausdruck, der alle Wörter beschreibt mit den man von \( p \) nach \( q \) kommt und dazwischen nur Zustände aus \( P \) benutzt. Anders gesagt ist \( r_P(p, q) \) der reguläre Ausdruck zum Automaten \( \mathcal{A} = (P, \Sigma, \Delta \cap ((P \cup \{p\}) \times \Sigma \times (P \cup \{q\})), p, \{q\}) \). Bzgl. (\(\ast\)) suchen wir also den regulären Ausdruck
-			\[
-				r_\mathcal{A} = \sum_{q \in F} r_Q(q_0, q).
-			\]
+		\[
+			r_\mathcal{A} = \sum_{q \in F} r_Q(q_0, q).
+		\]
 		Das Verfahren lässt sich rekursiv beschreiben nun mit folgender Überlegung: Ein regulärer Ausdruck \( r_\emptyset(p, q) \) ist \( \sum_{(p, a, q) \in \Delta} a \), also alle Symbole \( a \in \Sigma \) mit denen eine direkte Transition von \( p \) nach \( q \) möglich ist (oder noch anschaulicher: Alle Symbole die im Transitionsgraphen auf der Kante von \( p \) nach \( q \) stehen). Sollte keine Transition existieren, dann ist der reguläre Ausdruck entsprechend \( \emptyset \) für \( p \neq q \) und \( \varepsilon \) für \( p = q \). Einmal formal aufgeschrieben:
-			\[
-				r_\emptyset(p, q) = \left\lbrace
-					\begin{array}{*3{>{\displaystyle}l}p{5cm}}
-						\ &\sum_{(p, a, q) \in \Delta} a, & p \neq q\\
-						\varepsilon + &\sum_{(p, a, q) \in \Delta} a, & p = q.
-					\end{array}
-				\right.
-			\]
+		\[
+			r_\emptyset(p, q) = \left\lbrace
+				\begin{array}{*3{>{\displaystyle}l}p{5cm}}
+					\ &\sum_{(p, a, q) \in \Delta} a, & p \neq q\\
+					\varepsilon + &\sum_{(p, a, q) \in \Delta} a, & p = q.
+				\end{array}
+			\right.
+		\]
 		Der Rekursionsschritt funktioniert nun folgendermaßen: Für ein \( P \neq \emptyset \) wählen wir einen Zustand  \( s \in P \) und entfernen diesen mit folgenderr Umformung
-\[
-	r_P(p, q) = r_{P^\prime}(p, q) + r_{P^\prime}(p, s) r_{P^\prime}(s, s)^\ast r_{P^\prime}(s, q),
-\]
+		\[
+			r_P(p, q) = r_{P^\prime}(p, q) + r_{P^\prime}(p, s) r_{P^\prime}(s, s)^\ast r_{P^\prime}(s, q),
+		\]
 wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache Worte gefasst: Um von \( p \) nach \( q \) zu kommen über Zustände ausschließlich aus \( P \) können wir entweder (links vom +) von \( p \) nach \( q \) gehen ohne einen Zustand \( s \) zu besuchen oder (rechts vom +) von \( p \) nach \( s \) gehen, Pfade von \( s \) nach \( s \) benutzen und schließlich von \( s \) nach \( q \) gehen, wobei auch hier nur Zustände in \( P \setminus \{ s \} \) benutzt werden (s. Abbildung~\ref{fig:state_elimination}).
-		\begin{figure}[h]
+		\begin{figure}
 			\centering
 			\input{figs/state_elimination}
 			\caption{Rekursionsschritt um einen Zustand rauszuwerfen. Die blau getönte Fläche ist \( P^\prime \coloneqq P \setminus \{ s \} \). Die größere Fläche ist \( P \). Wichtig: Die Kanten in diesem Graphen sind keine Transitionen, sondern sind mit einem regulären Ausdruck beschriftet, der die Sprache zwischen den Knoten beschreibt mit Zuständen aus dem Index!}
@@ -1352,11 +1352,49 @@ wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache
 	\end{proof}
 \end{lemma}
 \begin{remark*}
-	Das Verfahren könnte einem auch aus Algorithmik-Vorlesungen bekannt vorkommen. Es handelt sich dabei um eine (zugegeben umständlich aufgeschriebene) Variante des Floyd-Warshall-Algorithmus mit dem sich auch kürzeste Wege in gerichteten Graphen finden lassen.
+	Das Verfahren könnte einem auch aus Algorithmik-Vor\-le\-sung\-en bekannt vorkommen. Es handelt sich dabei um eine (zugegeben umständlich aufgeschriebene) Variante des Floyd-Warshall-Algorithmus mit dem sich auch kürzeste Wege in gerichteten Graphen finden lassen.
 \end{remark*}
-\begin{example}
-	Wir betrachten den NFA in Abbildung~\ref{fig:fw_example}.
+\begin{example}\label{exp:fw_example}
+	Wir betrachten den NFA in Abbildung~\ref{fig:fw_example}. Wir suchen also einen regulären Ausdruck, der die Worte beschreibt mit denen man von \( q_0 \) nach \( q_0 \) (\( q_0 \) ist einziger akzeptierender Zustand) kommt mit allen Zuständen, also den Ausdruck \( r_Q(q_0, q_0) \). Wir wählen zunächst \( s = q_1 \) (eliminieren \( q_1 \)):
+	\[
+		r_Q(q_0, q_0) = r_{\{ q_0 \}}(q_0, q_0) + r_{\{ q_0 \}}(q_0, q_1) r_{\{ q_0 \}}(q_1, q_1)^\ast r_{\{ q_0 \}}(q_1, q_0)
+	\]
+	Noch zu berechnen sind \( r_{\{ q_0 \}}(q_0, q_0), r_{\{ q_0 \}}(q_0, q_1), r_{\{ q_0 \}}(q_1, q_1), r_{\{ q_0 \}}(q_1, q_0) \). Wir berechnen \( r_{\{ q_0 \}}(q_0, q_0) \) und eliminieren jetzt auch \( q_0 \) und können dann direkt den Basisfall einsetzen. Dabei vereinfachen wir die regulären Ausdrücke noch:
+	\begin{align*}
+		r_{\{ q_0 \}}(q_0, q_0) &= r_\emptyset(q_0, q_0) + r_\emptyset(q_0, q_0) r_\emptyset(q_0, q_0)^\ast r_\emptyset(q_0, q_0)\\
+		&= \varepsilon + \varepsilon \varepsilon^\ast \varepsilon\\
+		&\equiv \varepsilon.
+	\end{align*}
+	Wir berechnen nun \( r_{\{ q_0 \}}(q_0, q_1) \) und eliminieren wieder \( q_0 \):
+	\begin{align*}
+		r_{\{ q_0 \}}(q_0, q_1) &= r_\emptyset(q_0, q_1) + r_\emptyset(q_0, q_0) r_\emptyset(q_0, q_0)^\ast r_\emptyset(q_0, q_1)\\
+		&= c + \varepsilon \varepsilon^\ast c\\
+		&\equiv c.
+	\end{align*}
+	Jetzt berechnen wir: \( r_{\{ q_0 \}}(q_1, q_1) \) und eliminieren wieder \( q_0 \):
+	\begin{align*}
+		r_{\{ q_0 \}}(q_1, q_1) &= r_\emptyset(q_1, q_1) + r_\emptyset(q_1, q_0) r_\emptyset(q_0, q_0)^\ast r_\emptyset(q_0, q_1)\\
+		&= (a + b + \varepsilon) + a \varepsilon^\ast c\\
+		&\equiv a + b + \varepsilon + ac.
+	\end{align*}
+	Zuletzt berechnen wir \( r_{\{ q_0 \}}(q_1, q_0) \) und eliminieren wieder den einzigen verbleibenden Zustand \( q_0 \):
+	\begin{align*}
+		r_{\{ q_0 \}}(q_1, q_0) &= r_\emptyset(q_1, q_0) + r_\emptyset(q_1, q_0) r_\emptyset(q_0, q_0)^\ast r_\emptyset(q_0, q_0)\\
+		&= a + a \varepsilon^\ast \varepsilon\\
+		&\equiv a.
+	\end{align*}
+	Diese Ausdrücke können wir nun rückwärts wieder einsetzen:
+	\begin{align*}
+		r_Q(q_0, q_0) &= \varepsilon + c (a + b + \varepsilon + ac)^\ast  a\\
+		&\equiv \varepsilon + c(a+b+ac)^\ast a.
+	\end{align*}
 \end{example}
+\begin{figure}
+	\centering
+	\input{figs/fw_example}
+	\caption{NFA für Beispiel~\ref{exp:fw_example}.}
+	\label{fig:fw_example}
+\end{figure}
 
 
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
