@@ -379,7 +379,12 @@ Die Beweise hierfür bleiben als Übung.
 	\]
 	\( + \) ist surjektiv (jedes \( y \in \mathbb{N} \) wird z.B. durch \( (y, 0) \in \mathbb{N}^2 \) getroffen), aber nicht injektiv (\( 1 \in \mathbb{N} \) wird sowohl von \( (1, 0) \) als auch \( (0, 1) \) getroffen).
 \end{example*}
-Für Abbildungen \( f\colon [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).
+Für Abbildungen \( f\colon [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).\par
+Falls wir den Definitionsbereich einschränken wollen schreiben wir benutzen wir folgende Definition.
+\begin{definition}
+	Sei \( f\colon M \to N \) eine Abbildung und \( A \subseteq M \). Dann ist \( f\vert_A\colon A \to N \) die \textit{Einschränkung von \( f \) auf \( A \)} mit \( f\vert_A(x) = f(x) \) für alle \( x \in A \).
+\end{definition}
+%TODO id, \equiv
 
 
 \subsection{Strukturen}\label{sec:pre_structures}
@@ -802,6 +807,9 @@ Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 \begin{remark*}
 	Für NFAs müssen Läufe nicht mehr eindeutig sein. Es kann zu einem Wort mehrere Läufe geben oder auch gar keine Läufe, wenn entsprechende Transitionen fehlen.
 \end{remark*}
+\begin{remark*}
+	Produktkonstruktionen um zum Beispiel den Schnitt zweier NFA-erkennbaren Sprachen zu erkennen funktioniert für NFAs genauso wie für DFAs. Schwieriger ist es aber schon das Komplement zu erkennen -- ein einfaches vertauschen von akzeptierenden und nicht-akzeptierenden Zuständen genügt nicht, da weiterhin Wörter aus der Sprache rausgelassen werden für die kein Lauf existiert.
+\end{remark*}
 \begin{definition}
 \
 	\begin{enumerate}
@@ -1150,7 +1158,7 @@ Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen 
 		\item Für jedes \( a \in \Sigma \) ist \( \bm{a} \) ein regulärer Ausdruck.
 		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{+} r^\prime) \) ein regulärer Ausdruck.
 		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{\cdot} r^\prime) \) ein regulärer Ausdruck.
-		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( r \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
+		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( (r) \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
 	\end{itemize}
 	Die \textit{Menge aller regulären Ausdrücke} über \( \Sigma \) bezeichnen mit \( \mathsf{RE}_\Sigma \).
 \end{definition}
@@ -1166,11 +1174,11 @@ Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun defin
 		\item \( \llbracket \bm{a} \rrbracket = \{ a \} \) für jedes \( \bm{a} \in \mathsf{RE}_\Sigma \),
 		\item \( \llbracket (r \bm{+} r^\prime) \rrbracket = \llbracket r \rrbracket \cup \llbracket r^\prime \rrbracket \),
 		\item \( \llbracket (r \bm{\cdot} r^\prime) \rrbracket = \llbracket r \rrbracket \cdot \llbracket r^\prime \rrbracket \),
-		\item \( \llbracket r \overset{\bm{\ast}}{} \rrbracket = \llbracket r \rrbracket^\ast \).
+		\item \( \llbracket (r) \overset{\bm{\ast}}{} \rrbracket = \llbracket r \rrbracket^\ast \).
 	\end{itemize}
 	Eine Sprache \( L \subseteq \Sigma^\ast \) heißt \textit{regulär}, wenn ein regulärer Ausdruck \( r \in \mathsf{RE}_\Sigma \) existiert mit \( \llbracket r \rrbracket = L \).
 \end{definition}
-Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( \bm{\emptyset} \overset{\bm{\ast}}{} \) und \( r \overset{\bm{+}}{} \) für \( r \bm{\cdot} r \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt (\( \bm{\cdot} \)) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass \( \overset{\bm{\ast}}{} \) stärker bindet als \( \bm{\cdot} \), was wiederum stärker bindet als \( \bm{+} \). Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.\par
+Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( (\bm{\emptyset}) \overset{\bm{\ast}}{} \) und \( (r) \overset{\bm{+}}{} \) für \( r \bm{\cdot} (r) \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt (\( \bm{\cdot} \)) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass \( \overset{\bm{\ast}}{} \) stärker bindet als \( \bm{\cdot} \), was wiederum stärker bindet als \( \bm{+} \). Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.\par
 Reguläre Ausdrücke kennt man auch für Computerprogramme wie \texttt{grep}, \texttt{awk} oder \texttt{sed}. Diese sind syntaktisch etwas anders aufgebaut, jedoch lässt sich jeder POSIX-Ausdruck (das sind die regulären Ausdrücke für oben genannte Programme) auch als regulärer Ausdruck wie in Definition~\ref{def:regexsyntax} umschreiben.
 \begin{example}
 	Die POSIX-Syntax für reguläre Ausdrücke geht wie folgt.
@@ -1406,14 +1414,47 @@ wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache
 	\caption{NFA \( \mathcal{A} \) für Beispiel~\ref{exp:fw_example}.}
 	\label{fig:fw_example}
 \end{figure}
-Die beiden Lemmata~\ref{lem:regex2nfa} und~\ref{lem:nfa2regex} ergeben zusammen den Äquivalenzsatz von Kleene. Mit den Sätzen~\ref{thm:regular_complement} und~\ref{cor:regular_intersection} können wir auch schließen, dass sich die regulären Ausdrücke auch um Operatoren für Komplement und Schnitt erweitern ließen, ohne dadurch zusätzliche Sprachen zu beschreiben. Dies ist nicht offensichtlich: Dazu versuche man einmal Komplement und Schnitt nur mit Hilfe von Vereinigung (\(+\)), Konkatenation (\(\cdot\)) und Iteration (\(^\ast\)) zu simulieren.
+Die beiden Lemmata~\ref{lem:regex2nfa} und~\ref{lem:nfa2regex} ergeben zusammen den Äquivalenzsatz von Kleene. Mit den Sätzen~\ref{thm:regular_complement} und~\ref{cor:regular_intersection} können wir auch schließen, dass sich die regulären Ausdrücke auch um Operatoren für Komplement und Schnitt erweitern ließen, ohne dadurch zusätzliche Sprachen zu beschreiben. Dies ist nicht offensichtlich: Dazu versuche man einmal Komplement und Schnitt nur mit Hilfe von Vereinigung (\(+\)), Konkatenation (\(\cdot\)) und Iteration (\(^\ast\)) zu simulieren.\par
+Wir werden nun anstelle von FA-erkennbaren Sprachen auch nur noch von regulären Sprachen sprechen.
 
 
-\subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
+Wir haben bis hier hin reguläre Sprachen eine umfangreiche Charakterisierung gegeben, nämlich als Sprachen, die sich durch reguläre Ausdrücke oder Sprachen von endliche Automaten beschreiben lassen -- auf die Äquivalenz dieser Charakterisierungen haben wir lange hingearbeitet und mit dem Ä\-qui\-va\-lenz\-satz von Kleene einen schweren Brocken der theoretischen Informatik bewiesen. Dieser Abschnitt wird nun wieder deutlich einfacher. Wir haben bereits einige Abschlusseigenschaften regulärer Sprachen bewiesen: Schnitt, Vereinigung, Komplement, Konkatenation, Iteration usw., aber auch unter ''erfundenen`` Operatoren wie \textit{Perfect Shuffle}. Diese Abschlüsse allein zusammen mit dem Äquivalenzsatz von Kleene ergeben bereits genug Gründe um reguläre Sprachen als eine in wissenschaftlicher Hinsicht \textit{sinnvolle} Sprachklasse zu sehen. Wir werden in diesem Abschnitt nun ein paar weitere sinnvolle Abschlusseigenschaften beweisen.\par
+%TODO Freies Monoid
+\begin{definition}\label{def:stringhomomorphism}
+	Seien \( \Sigma, \Gamma \) Alphabete. Die  Abbildung \( h\colon \Sigma^\ast \to \Gamma^\ast \) heißt \textit{(Wort-)Homomorphismus}, wenn für alle \( a_0 \ldots a_{n-1} \in \Sigma^\ast \) gilt, dass
+	\[
+		h(a_0 \ldots a_{n-1}) = h(a_0) \ldots h(a_{n-1}).
+	\]
+\end{definition}
+Insbesondere gilt bei einem Homomorphismus \( h \), dass \( h(uv) = h(u)h(v) \) und somit auch \( h(\varepsilon) = \varepsilon \).
+\begin{definition}
+	Sei \( L \subseteq \Sigma^\ast \) eine Sprache und \( h\colon \Sigma^\ast \to \Gamma^\ast \) ein Homomorphismus. Dann ist
+	\[
+		h(L) \coloneqq \{h(w) : w \in L\}
+	\]
+	die \textit{Sprache unter dem Homomorphismus} \( h \) von \( L \) (über \( \Gamma \)).
+\end{definition}
+\begin{theorem}
+	Sei \( L \subseteq \Sigma^\ast \) eine reguläre Sprache und \( h\colon \Sigma^\ast \to \Gamma^\ast \) ein Homomorphismus. Dann ist auch \( h(L) \subseteq \Gamma^\ast \) regulär.
+	\begin{proof}
+		Sei \( L \subseteq \Sigma^\ast \) regulär und \( h \) Homomorphismus auf \( \Sigma \). Da \( L \) regulär existiert ein regulärer Ausdruck \( e \in \mathsf{RE}_\Sigma \) mit \( \llbracket e \rrbracket = L \). Wir können auf dem regulären Ausdruck den Homomorphismus anwenden, wobei wir Klammern, Punkte und Sterne ignorieren, dazu definieren wir die Erweiterung \( \hat{h} \) von \( h \) mit \( \hat{h} \vert_\Sigma \equiv h \) und \( \hat{h}(\sigma) = \sigma \) für \( \sigma \in \{(,),\bm{+}, \bm{\cdot}, \overset{\bm{\ast}}{}\} \). Aus der Definition~\ref{def:stringhomomorphism} geht hervor, dass es genügt den Homomorphismus auf den einzelnen Symbolen \( a \in \Sigma \) anzuwenden. Im Detail heißt das: 
+		\begin{itemize}
+			\item \( \hat{h}(\bm{\emptyset}) = \bm{\emptyset} \),
+			\item \( \hat{h}(\bm{a}) = \bm{b}_0 \ldots \bm{b}_{n-1} \), wenn \( h(a) = b_0 \ldots b_{n-1} \),
+			\item \( \hat{h}((r \bm{+} r^\prime)) = ((\hat{h}(r)) + (\hat{h}(r^\prime))) \),
+			\item \( \hat{h}((r \bm{\cdot} r^\prime)) = ((\hat{h}(r)) \bm{\cdot} (\hat{h}(r^\prime))) \),
+			\item \( \hat{h}((r)\overset{\bm{\ast}}{}) = (\hat{h}(r))\overset{\bm{\ast}}{} \).
+		\end{itemize} 
+		Es bleibt zu zeigen, dass \( \llbracket \hat{h}(e) \rrbracket = h(L) \).
+	\end{proof}
+\end{theorem}
+
+
 \subsection{Nicht-reguläre Sprachen}\label{sec:regular_nonregular}
 \subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
 \subsection{Minimierung von DFAs}\label{sec:regular_minimization}
+\subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 \subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
 
 
