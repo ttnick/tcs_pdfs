@@ -250,7 +250,10 @@
 							(p1q1) edge[loop below] node {$a$} (p1q1)
 							(p1q2) edge[loop below] node {$a$} (p1q2);
 }
-\uncover<3->	{		\path[blue]	(p0q0) edge node {$a$} (p0q1)
+\uncover<3->	{		\path[blue]	(p1q0) edge node {$a$} (p1q1)
+							(p1q1) edge node {$a$} (p1q2)
+							(p1q2) edge[bend left=45] node[below] {$a$} (p1q0)
+							(p0q0) edge node {$a$} (p0q1)
 							(p0q1) edge node {$a$} (p0q2)
 							(p0q2) edge[bend right] node[above, near end] {$a$} (p0q0);
 }
