@@ -1,0 +1,21 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick, every state/.style={inner sep=0pt, minimum size=15pt}]
+	\node[initial, initial text=, state]		(0)	at (0, 0)		{$0$};
+	\node[state]								(1) at (1.2, 0)		{$1$};
+	\node[state, accepting]					(2) at (2.4, 0)		{$2$};
+	\node[state, accepting]					(3) at (3.6, 0)		{$3$};
+	\node									(d1) at (4.8, 0)		{$\cdots$};
+	\node[state, accepting]					(p) at (6, 0)		{$p$};
+	\node[draw, rectangle, rounded corners]	(p1) at (7.4, 0)		{$p+1$};
+	\node									(d2) at (8.9, 0)		{$\cdots$};
+	\node[draw, rectangle, rounded corners]	(pc) at (10.5, 0)	{$p+c-1$};
+	
+	\path	(0) edge node {$a$} (1)
+			(1) edge node {$a$} (2)
+			(2) edge node {$a$} (3)
+			(3) edge node {$a$} (d1)
+			(d1) edge node {$a$} (p)
+			(p) edge node {$a$} (p1)
+			(p1) edge node {$a$} (d2)
+			(d2) edge node {$a$} (pc)
+			(pc) edge[dashed, bend right, in=-130, out=-50] node[above] {$a$} (p);
+\end{tikzpicture}

@@ -689,18 +689,18 @@ Wir zeigen als erstes, dass die DFA-erkennbaren Sprachen unter Komplementbildung
 \end{theorem}
 Diese Abschlusseigenschaft war einfach zu beweisen, da wir nur eine kleine Änderung am ursprünglichen DFA machen mussten und dann wieder einfach über den eindeutigen Lauf argumentieren konnten. Die Idee hinter der Konstruktion ist auch sehr intuitiv, da wir genau die Wörter akzeptieren wollen, die vom ursprünglichen Automaten verworfen wurden, also deren Läufe in nicht-akzeptierenden Zuständen enden. Der Ansatz die Zustände einfach zu vertauschen drängt sich also geradezu auf.\par
 Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben also nun zwei DFA-erkennbare Sprachen (und damit die zugehörigen Automaten) und wollen nun prüfen ob ein Wort in wenigstens einer der beiden Sprachen liegt. Wir müssen nun also einen Automaten konstruieren, der zwei gegebene Automaten simuliert. Diese Simulation muss synchron bzw. parallel stattfinden, eine sequentielle (d.h. Hintereinander-) Ausführung beider Automaten ist nicht möglich (da DFAs bereits gelesene Symbole ``vergessen``, ein explizites ``Abspeichern`` ist nur möglich für konstant viele Symbole -- das reicht nicht für beliebig große Eingabelängen). Wir präsentieren für die parallele Ausführung nun die Produktkonstruktion im Rahmen des nächsten Satzes.
-\begin{theorem}\label{thm:regular_union}
-	Seien \( L_1, L_2 \subseteq \Sigma^\ast \) DFA-erkennbare Sprachen. Dann ist auch \( L_1 \cup L_2 \) DFA-erkennbar.
+\begin{theorem}\label{thm:regular_intersection}
+	Seien \( L_1, L_2 \subseteq \Sigma^\ast \) DFA-erkennbare Sprachen. Dann ist auch \( L_1 \cap L_2 \) DFA-erkennbar.
 	\begin{proof}
 		Seien \( \mathcal{A}_1 = (Q_1, \Sigma, \delta_1, q_0^1, F_1) \) und \( \mathcal{A}_1 = (Q_2, \Sigma, \delta_2, q_0^2, F_2) \) die DFAs für \( L_1, L_2 \). Wir betrachten den \textit{Produktautomaten}
 		\[
 			\mathcal{A} \coloneqq (Q_1 \times Q_2, \Sigma, \delta, (q_0^1, q_0^2), F)
 		\]
-		mit \( \delta((p, q), a) = (\delta_1(p, a), \delta_2(q, a)) \) für alle \( p \in Q_1, q \in Q_2, a \in \Sigma \) und \( F = (F_1 \times Q_2) \cup (Q_1 \times F_2) \).\\
-		Wir zeigen nun, dass \( L(\mathcal{A}) = L(\mathcal{A}_1) \cup L(\mathcal{A}_2) \) ist.
-		Sei dazu \( w = a_0 \ldots a_{n-1} \) gegeben. Wir zeigen, dass \( \mathcal{A} \) akzeptiert \( w \) {g.d.w.} \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \) das Wort \( w \) akzeptiert.\\
-		``Wenn \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \) akzeptiert, dann akzeptiert \( \mathcal{A} \)``:
-		{O.B.d.A.} sei \( \mathcal{A}_1 \) der Automat, der \( w \) akzeptiert. Es gibt also einen Lauf \( (r_0, \ldots, r_n) \) mit \( r_n \in F_1 \) von \( \mathcal{A}_1 \) auf \( w \). Sei \( (p_0, \ldots, p_n) \) der Lauf auf \( \mathcal{A}_2 \) mit \( p_n \) beliebig. Dann ist der Lauf auf auf \( \mathcal{A} \)
+		mit \( \delta((p, q), a) = (\delta_1(p, a), \delta_2(q, a)) \) für alle \( p \in Q_1, q \in Q_2, a \in \Sigma \) und \( F = F_1 \times F_2 \).\\
+		Wir zeigen nun, dass \( L(\mathcal{A}) = L(\mathcal{A}_1) \cap L(\mathcal{A}_2) \) ist.
+		Sei dazu \( w = a_0 \ldots a_{n-1} \) gegeben. Wir zeigen, dass \( \mathcal{A} \) akzeptiert \( w \) {g.d.w.} \( \mathcal{A}_1 \) und \( \mathcal{A}_2 \) das Wort \( w \) akzeptiert.\\
+		``Wenn \( \mathcal{A}_1 \) und \( \mathcal{A}_2 \) akzeptiert, dann akzeptiert \( \mathcal{A} \)``:
+		Es gibt also einen Lauf \( (r_0, \ldots, r_n) \) mit \( r_n \in F_1 \) von \( \mathcal{A}_1 \) und einen Lauf \( (p_0, \ldots, p_n) \) mit \( p_n \in F_2 \) von \( \mathcal{A}_2 \) jeweils auf \( w \). Dann ist der Lauf auf auf \( \mathcal{A} \)
 		\[
 			((r_0, p_0), \ldots, (r_n, p_n)),
 		\]
@@ -709,23 +709,23 @@ Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben 
 			\delta((r_i, p_i), a_i) &= (\delta_1(r_i, a_i), \delta_2(p_i, a_i)) \\
 			&= (r_{i+1}, p_{i+1}).
 		\end{align*}
-		Wegen \( r_n \in F_1 \) ist auch \( (r_n, p_n) \in F_1 \times Q_2 \subseteq F \). Also akzeptiert \( \mathcal{A} \).\\
-		``Wenn \( \mathcal{A} \) akzeptiert, dann akzeptiert \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \)``:
-		Wir zeigen die Kontraposition dieser Aussage. \( \mathcal{A}_1 \) und \( \mathcal{A}_2 \) verwerfen also beide. Die Läufe von \( \mathcal{A}_1, \mathcal{A}_2 \) sind also \( (r_0, \ldots, r_n) \) und \( (p_0, \ldots, p_n) \) mit \( r_n \notin F_1, p_n \notin F_2 \). Wie oben ist \( ((r_0, p_0), \ldots, (r_n, p_n)) \) der Lauf von \( \mathcal{A} \) und es gilt \( (r_n, p_n) \notin F \). Somit verwirft auch \( \mathcal{A} \) das Wort.
+		Wegen \( r_n \in F_1 \) und \( p_n \in F_2 \) ist auch \( (r_n, p_n) \in F_1 \times P_2 = F \). Also akzeptiert \( \mathcal{A} \).\\
+		``Wenn \( \mathcal{A} \) akzeptiert, dann akzeptieren \( \mathcal{A}_1 \) und \( \mathcal{A}_2 \)``:
+		Wir zeigen die Kontraposition dieser Aussage. \( \mathcal{A}_1 \) oder \( \mathcal{A}_2 \) verwirft. Die Läufe von \( \mathcal{A}_1, \mathcal{A}_2 \) sind also \( (r_0, \ldots, r_n) \) und \( (p_0, \ldots, p_n) \) mit \( r_n \notin F_1 \) oder \( p_n \notin F_2 \). Wie oben ist \( ((r_0, p_0), \ldots, (r_n, p_n)) \) der Lauf von \( \mathcal{A} \) und es gilt \( (r_n, p_n) \notin F_1 \times F_2 = F \). Somit verwirft auch \( \mathcal{A} \) das Wort.
 	\end{proof}
 \end{theorem}
-Eine Beispielkonstruktion für einen Produktautomaten für die Vereinigung zweier DFA-erkennbarer Sprachen befindet sich in Abbildung~\ref{fig:dfa_product}.
+Eine Beispielkonstruktion für einen Produktautomaten für den Schnitt zweier DFA-erkennbarer Sprachen befindet sich in Abbildung~\ref{fig:dfa_product}.
 \begin{figure}
 	\centering
 	\input{figs/dfa_product}
-	\caption{Produktkonstruktion: Der Automat \( \mathcal{A} \) erkennt die Sprache \( \{ w \in \{a, b \}^\ast \mid \left| w \right|_a + \left| w \right|_b \text{ teilbar durch } 3 \} \), \( \mathcal{B} \) erkennt die Sprache \( \{ ua : u \in \{a, b\}^\ast \} \). Der Produktautomat erkennt die Vereinigung.}
+	\caption{Produktkonstruktion: Der Automat \( \mathcal{A} \) erkennt die Sprache \( \{ w \in \{a, b \}^\ast \mid \left| w \right|_a + \left| w \right|_b \text{ teilbar durch } 3 \} \), \( \mathcal{B} \) erkennt die Sprache \( \{ ua : u \in \{a, b\}^\ast \} \). Der Produktautomat erkennt den Schnitt.}
 	\label{fig:dfa_product}
 \end{figure}
-Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_union} erhält man nun einfach alle übrigen Abschlusseigenschaften für die üblichen Mengenoperationen, aber auch mit der Produktkonstruktion lassen sich diese Eigenschaften zeigen.
+Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_intersection} erhält man nun einfach alle übrigen Abschlusseigenschaften für die üblichen Mengenoperationen, aber auch mit der Produktkonstruktion lassen sich diese Eigenschaften zeigen.
 \begin{corollary}\label{cor:regular_intersection}
-	Seien \( L_1, L_2 \) DFA-erkennbare Sprachen. Dann sind auch die Sprachen \( L_1 \cap L_2, L_1 \setminus L_2 \) DFA-erkannbar.
+	Seien \( L_1, L_2 \) DFA-erkennbare Sprachen. Dann sind auch die Sprachen \( L_1 \cup L_2, L_1 \setminus L_2 \) DFA-erkannbar.
 	\begin{proof}
-		Wegen Satz~\ref{thm:regular_complement} sind auch \( \comp{L_1}, \comp{L_2} \) DFA-erkennbar und damit nach Satz~\ref{thm:regular_union} \( \comp{L_1} \cup \comp{L_2} \). Mit erneuter Anwendung von Satz~\ref{thm:regular_complement} ist auch \( \comp{\comp{L_1} \cup \comp{L_1}} \) DFA-erkennbar, was nach den DeMorgan'schen Gesetzen \( L_1 \cap L_2 \) entspricht. Alternativ kann man in der Produktkonstruktion auch \( F = F_1 \times F_2 \) setzen und erhält einen DFA für \( L_1 \cap L_2 \).\\
+		Wegen Satz~\ref{thm:regular_complement} sind auch \( \comp{L_1}, \comp{L_2} \) DFA-erkennbar und damit nach Satz~\ref{thm:regular_intersection} \( \comp{L_1} \cap \comp{L_2} \). Mit erneuter Anwendung von Satz~\ref{thm:regular_complement} ist auch \( \comp{\comp{L_1} \cap \comp{L_1}} \) DFA-erkennbar, was nach den DeMorgan'schen Gesetzen \( L_1 \cup L_2 \) entspricht. Alternativ kann man in der Produktkonstruktion auch \( F = (F_1 \times Q_2) \cup (Q_1 \times F_2) \) setzen und erhält einen DFA für \( L_1 \cup L_2 \).\\
 		Für \( L_1 \setminus L_2 \) setzt man \( F = F_1 \times (Q_2 \setminus F_2) \) und erhält einen DFA für die Sprache.
 	\end{proof}
 \end{corollary}
@@ -1367,7 +1367,7 @@ wobei \( P^\prime \coloneqq P \setminus \{ s \} \). Auch dies einmal in einfache
 	\end{proof}
 \end{lemma}
 \begin{remark*}
-	Das Verfahren könnte einem auch aus Algorithmik-Vor\-le\-sung\-en bekannt vorkommen. Es handelt sich dabei um eine (zugegeben umständlich aufgeschriebene) Variante des Floyd-Warshall-Algorithmus mit dem sich auch kürzeste Wege in gerichteten Graphen finden lassen.
+	Das Verfahren könnte einem auch aus Algorithmik-Vor\-le\-sung\-en bekannt vorkommen. Es handelt sich dabei um eine (zugegeben umständlich aufgeschriebene) Variante des Floyd-Warshall-Algorithmus mit dem sich zum Beispiel auch kürzeste Wege in gerichteten Graphen finden lassen.
 \end{remark*}
 \begin{example}\label{exp:fw_example}
 	Wir betrachten den NFA in Abbildung~\ref{fig:fw_example}. Wir suchen also einen regulären Ausdruck, der die Worte beschreibt mit denen man von \( q_0 \) nach \( q_0 \) (\( q_0 \) ist einziger akzeptierender Zustand) kommt mit allen Zuständen, also den Ausdruck \( r_Q(q_0, q_0) \). Wir wählen zunächst \( s = q_1 \) (eliminieren \( q_1 \)):
@@ -1452,6 +1452,60 @@ Insbesondere gilt bei einem Homomorphismus \( h \), dass \( h(uv) = h(u)h(v) \) 
 
 
 \subsection{Nicht-reguläre Sprachen}\label{sec:regular_nonregular}
+Bisher haben wir nur sehr einfache Sprachen betrachtet, die alle regulär waren. D.h. wir konnten zu jeder bisher betrachteten Sprache einen regulären Ausdruck angeben oder einen endlichen Automaten. Man könnte auf die Idee kommen, dass alle formalen Sprachen regulär sind. Dies ist aber nicht der Fall. Dass es mehr Sprachen als nur reguläre Sprachen geben muss folgt bereits aus kombinatorischen Argumenten. Dies heben wir uns aber für ein späteres Kapitel noch auf. Schauen wir uns zunächst ein Beispiel für eine nicht-reguläre Sprache an:
+\[
+	L_\mathbb{P} \coloneqq \{ a^p : p \in \mathbb{P} \}.
+\]
+\( L_\mathbb{P} \) ist die Sprache aller (mit \( a \)) unär codierten Primzahlen, d.h. \( L_\mathbb{P} = \{ aa, aaa, a^5, a^7, a^{11}, \ldots \} \). Dass \( L_\mathbb{P} \) nicht regulär ist, ist auch nicht so schwer einzusehen: Intuitiv, wie würde ein regulärer Ausdruck aussehen? Natürlich könnten wir eine unendliche Vereinigung bilden (dies wäre jedoch nicht regulär, da reguläre Ausdrücke endlich sind):
+\[
+	r_\mathbb{P} = \sum_{p \in \mathbb{P}} a^p = aa + aaa + a^5 + a^7 + a^{11} + \ldots
+\]
+Es erscheint klar, dass es jedoch keine Möglichkeit gibt diesen Ausdruck zu vereinfachen. In einem Automaten wird es noch deutlicher. Wenn wir mit endlich vielen Zuständen auskämen um genau alle unendlich vielen Primzahlcodierungen zu erkennen würden wir Kreise im Transitionsgraphen und somit eine gewisse Regelmäßigkeit in der Wiederholung von Primzahlen bekommen. Dies würde bedeuten, dass die Generierung neuer Primzahlen viel einfacher wäre als bisher angenommen, da wir ab einer bestimmten Primzahl einfach immer eine Konstante addieren könnten um die nächste zu bekommen. Das ist natürlich nicht der Fall. Eine schematische Erklärung dieses Arguments ist in Abbildung~\ref{fig:dfa_primes}. Egal an welcher und an wie vielen Stellen wir eine Zustandwiederholung zulassen (durch gestrichtelte Kante angedeutet), wir würden stets Codierungen akzeptieren, die nicht zu Primzahlen gehören können. In diesem Abschnitt werden wir uns ansehen, wie wir dieses Argument formalisieren und auf weitere nicht-reguläre Sprachen anwenden können.
+\begin{figure}
+	\centering
+	\input{figs/dfa_primes}
+	\caption{Wenn \( L_\mathbb{P} \) regulär wäre gäbe es unendlich viele Primzahlen, die sich als \( p + ck \) darstellen lassen, wobei \( p \in \mathbb{P}, c \in \mathbb{N}, k = 0, 1, 2, \ldots \).}
+	\label{fig:dfa_primes}
+\end{figure}
+
+Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das später vorgestellte Lemma etwas sperrig ist. Tatsächlich basiert dieses Lemma jedoch auf dem wahrscheinlich einfachsten Prinzip der Mathematik. Wir führen die Idee des Lemmas anhand dieses Prinzips einmal vor. Man sollte dieses Beispiel zunächst verstehen, dann sollte der Schritt zum Lemma geradezu trivial wirken.
+
+\begin{example}\label{exp:pumping1}
+	Die Sprache \( L = \{a^n b^n : n \in \mathbb{N} \} \) ist nicht regulär.
+	\begin{proof}
+		Angenommen \( L \) wäre regulär. Dann existiert ein endlicher Automat \( \mathcal{A} \) mit \( L(\mathcal{A}) = L \). Wir nehmen an, dass \( \mathcal{A} \) \( n \) Zustände besitzt. Betrachten wir nun das Wort \( w = a^n b^n \) Offenbar ist \( w \in L \), also gibt es einen akzeptierenden Lauf \( \varrho = (r_0, \ldots, r_{2n}) \). Das Wort hat die Länge \( \left| w \right| = 2n \geq n \). Das heißt aber, dass spätestens nach Lesen des letzten \( a \)s sich im Lauf von \( \mathcal{A} \) ein Zustand wiederholt haben muss. Dies folgt aus dem sogenannten \textit{pigeonhole principle} (oder deutsch: \textit{Schubfachprinzip}): Der Lauf auf den ersten \( n \) Zeichen ist \( (r_0, \ldots, r_n) \), d.h. er besteht aus \( n+1 \) Zuständen. Da \( \mathcal{A} \) nur \( n \) Zustände hat, muss mindestens einer doppelt im Lauf vorkommen. Wir nehmen an, dass \( r_i = r_j \) mit oBdA \( i < j \). Es ist auch klar, dass bis zu dieser Wiederholung im \(j\)-ten Schritt nur \( a \)s gelesen wurden, da die ersten \( n \) Symbole von \( w \) alle \( a \) sind (d.h. \( j \leq n \)). Betrachten wir nun folgenden Lauf
+		\[
+			\varrho^\prime = (r_0, \ldots, r_i, r_{j+1}, \ldots, r_{2n})
+		\]
+		auf dem Wort \( w^\prime = a^{n-k}b^n \) mit \( k \coloneqq j-i > 0 \). Der Lauf entsteht also durch das Weglassen der \( a \)s die sonst zwischen der Zustandswiederholung gelesen worden wären. Dieser Lauf ist gültig auf dem Automaten, denn \( r_i = r_j \), d.h. die selben Transitionen die im \(j\)-ten Schritt möglich waren sind auch bereits im \(i\)-ten Schritt möglich. Außerdem gilt, dass \( \varrho^\prime \) ein akzeptierender Lauf ist, da er auf \( r_{2n} \in F \) endet. Also akzeptiert \( \mathcal{A} \) das Wort \( w^\prime \), welches aber echt weniger \( a \)s als \( b \)s besitzt (denn \( k > 0 \), weil \( i < j \)), also ist \( w^\prime \notin L \). Der Automat \( \mathcal{A} \) erkennt also nicht \( L \). Da \( \mathcal{A} \) und die Anzahl seiner Zustände \( n \) belieibig gewählt wurde, existiert also kein endlicher Automat für \( L \). Somit ist \( L \) nicht regulär.
+	\end{proof}
+\end{example}
+\begin{remark*}
+	Statt die \( a \)s zwischen der Zustandswiederholung wegzulassen hätten wir natürlich auch beliebig viele weitere Wiederholungen hinzufügen können. Wir würden also den Lauf
+	\[
+		\varrho^{\prime\prime} = (r_0, \ldots, r_i, \ldots, r_j, r_{i+1} \ldots r_j, \ldots, r_{j+1}, \ldots, r_{2n})
+	\]
+	betrachten zu dem Wort \( w^{\prime\prime} = a^{n+hk}b^n \) für ein beliebiges \( h > 0 \).
+\end{remark*}
+Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Überlegungen verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw.~eine einzelne Sprache ab.
+\begin{lemma}[Pumping-Lemma]
+	Sei \( L \subseteq \Sigma^\ast \) eine reguläre Sprache. Dann existiert ein \( n \in \mathbb{N}_+ \), sodass für alle \( w \in L \) mit \( \left| w \right| \geq n \) eine Zerlegung \( w = xyz \) existiert mit den Eigenschaften:
+	\begin{enumerate}
+		\item \( \left| xy \right| \leq n \),
+		\item \( y \neq \varepsilon \),
+		\item \( xy^iz \in L \) für alle \( i \in \mathbb{N} \). 
+	\end{enumerate}
+	\begin{proof}
+		Beweis Pumping-Lemma.
+	\end{proof}
+\end{lemma}
+\begin{remark*}
+	Wir stellen wieder fest, dass der Beweis des Pumping-Lemmas eine Verallgemeinerung des Vorgehens aus Beispiel~\ref{exp:pumping1} ist. Wir betrachten auch wieder einen Automaten mit \( n \) Zuständen und akzeptierte Wörter, die zu lang sind, als dass sie dann ohne Wiederholung erkannt werden könnten. Das Weglassen oder Wiederholen von Infixen (\textit{pumpen}) entspricht dem Weglassen oder Wiederholen im Lauf.
+\end{remark*}
+\begin{remark*}
+	Wir können mit dem Pumping-Lemma nicht zeigen, dass eine Sprache regulär ist. Es ist lediglich eine notwendige Bedingung für Regularität, aber keine hinreichende Bedingung. D.h. es gibt Sprachen, die nicht regulär sind, aber dennoch dem Pumping-Lemma genügen.
+\end{remark*}
+
 \subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
 \subsection{Minimierung von DFAs}\label{sec:regular_minimization}
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
