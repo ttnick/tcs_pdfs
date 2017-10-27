@@ -62,6 +62,8 @@
 \newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
 \newcommand{\reachess}[2]{\overset{#1}{\underset{#2}{\rightarrow}}}
 \DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\bin}{bin}
+\DeclareMathOperator{\xor}{xor}
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
 
@@ -144,9 +146,9 @@ Um eine konkrete Menge zu zu benennen gibt es im Wesentlichen vier verschiedene 
 		Aber Achtung: Natürliche Sprache neigt zu Uneindeutigkeit!
 	\item \textit{Aussondern.} Sei \( M \) eine Menge, dann ist
 		\[
-			\{ x \in M \mid A(x) \}
+			\{ x \in M \mid \varphi(x) \}
 		\]
-		die Menge aller Elemente aus \( M \), die die Aussage \( A \) erfüllen. Zum Beispiel:
+		die Menge aller Elemente aus \( M \), die die Eigenschaft \( \varphi \) erfüllen. Zum Beispiel:
 		\[
 			\mathbb{P} \coloneqq \{ n \in \mathbb{N} \mid n \text{ hat genau zwei Teiler} \}
 		\]
@@ -178,7 +180,7 @@ Eine wichtige Menge haben wir bisher außen vor gelassen: die \textit{leere Meng
 
 
 \subsection{Operationen auf Mengen}\label{sec:pre_setops}
-Im folgendem betrachten wir Mengen immer als Teilmenge eines \textit{Universums} (oder auch Grundemenge) \( \mathcal{U} \). In der Analysis ist das typischerweise die Menge der reellen Zahlen \( \mathbb{R} \) (solange man die komplexen Zahlen eben weglässt), die betrachteten Teilmengen sind oftmals Intervalle in denen zum Beispiel Funktionen auf Stetigkeit hin untersucht werden. Vorweg: Wir betrachten später im Allgemeinen das Universum \( \Sigma^\ast \) und Sprachen als Teilmenge von eben diesem. Genaueres folgt im nächsten Kapitel.\\
+Im folgendem betrachten wir Mengen immer als Teilmenge eines \textit{Universums} (oder auch \textit{Grundemenge}) \( \mathcal{U} \). In der Analysis ist das typischerweise die Menge der reellen Zahlen \( \mathbb{R} \) (oder die Menge der komplexen Zahlen \( \mathbb{C} \)), die betrachteten Teilmengen sind oftmals Intervalle in denen zum Beispiel Funktionen auf Stetigkeit hin untersucht werden. Vorweg: Wir betrachten später im Allgemeinen das Universum \( \Sigma^\ast \) und Sprachen als Teilmenge von eben diesem. Genaueres folgt im nächsten Kapitel.\\
 Um die Operatoren auf den Mengen zu veranschaulichen gibt es die sogenannten \textit{Venn-Diagramme}, bei denen Kreise oder Ellipsen die Mengen visualisieren. In Abbildung~\ref{fig:venn_subset} finden wir zum Beispiel für die Inklusion (\( \subseteq \)) ein entsprechendes Diagramm.
 \begin{figure}
 	\centering
@@ -210,7 +212,7 @@ Wir definieren nun einige Operationen auf Mengen ähnlich wie Addition und Multi
 			\[
 				\comp{A} \coloneqq \{ a \in \mathcal{U} \mid a \notin A \}.
 			\]
-		\item Die \textit{Differenz} (auch: relatives Komplement) von \( A \) und \( B \) ist definiert als
+		\item Die \textit{Differenz} (auch: \textit{relatives Komplement}) von \( A \) und \( B \) ist definiert als
 			\[
 				A \setminus B \coloneqq A \cap \comp{B}.
 			\]
@@ -278,7 +280,7 @@ Für 2-stellige Relationen verwenden wir oft Symbole wie \( \sim, \prec \) und s
 	\end{itemize}
 \end{definition}
 Wir klassifizieren außerdem 2-stellige Relationen, falls sie bestimmte Eigenschaften haben.
-\begin{definition}
+\begin{definition}\label{def:relations}
 	Sei \( \sim \,\subseteq M \times M \) eine 2-stellige Relation. \( \sim \) heißt
 	\begin{itemize}
 		\item \textit{Äquivalenzrelation}, falls sie reflexiv, symmetrisch und transitiv ist,
@@ -290,11 +292,11 @@ Wir klassifizieren außerdem 2-stellige Relationen, falls sie bestimmte Eigensch
 	\
 	\begin{enumerate}
 		\item Die Relation \( \leq \) ist auf \( \mathbb{N} \) eine Totalordnung.
-		\item Die Relation \( \{(a, b) \subseteq \mathbb{R}^2 \mid a^2 = b^2 \} \) ist eine Äquivalenzrelation auf \( \mathbb{R} \).
+		\item Die Relation \( \{(a, b) \in \mathbb{R}^2 \mid a^2 = b^2 \} \) ist eine Äquivalenzrelation auf \( \mathbb{R} \).
 	\end{enumerate}
 \end{example*}
 
-\begin{definition}
+\begin{definition}\label{def:equivalenceclass}
 	Sei \( \sim \) eine Äquivalenzrelation auf einer Menge \( M \). Für \( x \in M \) heißt
 	\[
 		[x] \coloneqq [x]_\sim \coloneqq \{ y \in M \mid x \sim y \}
@@ -363,10 +365,20 @@ Die Beweise hierfür bleiben als Übung.
 	\[
 		f\colon M \to N, \quad x \mapsto f(x).
 	\]
-	\( M \) heißt der \textit{Definitionsbereich} (auch Domäne) von \( f \), \( N \) heißt der \textit{Wertebereich} von \( f \). \( f(x) \) ist das \textit{Bild} von \( x \) unter \( f \) und \( x \) ist ein \textit{Urbild} von \( f(x) \) unter \( f \). Die Menge aller Abbildungen von \( M \) nach \( N \) wird mit \( N^M \) bezeichnet. Falls \( M = A^n, N = A \) für ein nicht-leeres \( A \) ist, sagen wir auch, dass \( f \) eine \textit{\( n \)-stellige} Funktion über \( A \) ist. Desweitere nennen wir eine \( 0 \)-stellige Funktion auch \textit{Konstante}.
+	\( M \) heißt der \textit{Definitionsbereich} (auch Domäne) von \( f \), \( N \) heißt der \textit{Wertebereich} von \( f \). \( f(x) \) ist das \textit{Bild} von \( x \) unter \( f \) und \( x \) ist ein \textit{Urbild} von \( f(x) \) unter \( f \). Die Menge aller Funktionen von \( M \) nach \( N \) wird mit \( N^M \) bezeichnet. Falls \( M = A^n, N = A \) für ein nicht-leeres \( A \) ist, sagen wir auch, dass \( f \) eine \textit{\( n \)-stellige} Funktion über \( A \) ist. Desweitere nennen wir eine \( 0 \)-stellige Funktion auch \textit{Konstante}.
 \end{definition}
 \begin{definition}
-	Eine Abbildung \( f\colon M \to N \) heißt
+	Sei \( f\colon M \to N \) eine Funktion.
+	\begin{itemize}
+		\item Für jede Teilmenge \( X \subseteq M \) ist \( f(X) \coloneqq \{ f(x) : x \in X \} \) das \textit{Bild von \( X \) unter \( f \)}. Falls \( X = M \) sprechen wir auch nur vom \textit{Bild} von \( f \).
+		\item Für jede Teilmenge \( Y \subseteq N \) ist \( f^{-1}(Y) \coloneqq \{ x \in M \mid f(x) \in Y \} \) das \textit{Urbild von \( Y \) unter \( f \)}.
+	\end{itemize}
+\end{definition}
+\begin{definition}
+	Zu einer Menge \( M \) ist \( \id_M\colon M \to M, x \mapsto x \) die \textit{Identität}.
+\end{definition}
+\begin{definition}
+	Eine Funktion \( f\colon M \to N \) heißt
 	\begin{itemize}
 		\item \textit{surjektiv}, falls für alle \( y \in N \) ein \( x \in M \) mit \( f(x) = y \) existiert,
 		\item \textit{injektiv}, falls für alle \( x, x^\prime \in M \) mit \( x \neq x^\prime \) gilt, dass \( f(x) \neq f(x^\prime) \),
@@ -374,22 +386,33 @@ Die Beweise hierfür bleiben als Übung.
 	\end{itemize}
 \end{definition}
 \begin{example*}
-	Die Addition zweier natürlicher Zahlen kann als Abbildung aufgefasst werden:
+	Die Addition zweier natürlicher Zahlen kann als Funktion aufgefasst werden:
 	\[
 		+\colon \mathbb{N}^2 \to \mathbb{N}, \quad (m, n) \mapsto m+n.
 	\]
 	\( + \) ist surjektiv (jedes \( y \in \mathbb{N} \) wird z.B. durch \( (y, 0) \in \mathbb{N}^2 \) getroffen), aber nicht injektiv (\( 1 \in \mathbb{N} \) wird sowohl von \( (1, 0) \) als auch \( (0, 1) \) getroffen).
 \end{example*}
-Für Abbildungen \( f\colon [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).\par
-Falls wir den Definitionsbereich einschränken wollen schreiben wir benutzen wir folgende Definition.
+Für Funktionen \( f\colon [k] \to M \) für beliebige \( k \in \mathbb{N} \) in beliebige \( M \) können wir auch abkürzend die Tupelschreibweise \( (y_0, \ldots, y_{k-1}) \) verwenden. Dann ist \( y_i = f(i) \) für alle \( i \in [k] \).\par
+Wir fügen nun noch ein paar nützliche Definitionen an um dieses Skript in sich abgeschlossen zu halten.
 \begin{definition}
-	Sei \( f\colon M \to N \) eine Abbildung und \( A \subseteq M \). Dann ist \( f\vert_A\colon A \to N \) die \textit{Einschränkung von \( f \) auf \( A \)} mit \( f\vert_A(x) = f(x) \) für alle \( x \in A \).
+	Sei \( f\colon M \to N \) eine Funktion und \( A \subseteq M \). Dann ist \( f\vert_A\colon A \to N \) die \textit{Einschränkung von \( f \) auf \( A \)} mit \( f\vert_A(x) = f(x) \) für alle \( x \in A \).
 \end{definition}
-%TODO id, \equiv, \circ
+\begin{definition}
+	Wir schreiben für zwei Funktionen \( f, g\colon M \to N \), dass sie \textit{identisch} sind (\( f \equiv g \)), wenn für alle \( x \in M \) gilt, dass \( f(x) = g(x) \).
+\end{definition}
+\begin{definition}
+	Die \textit{Komposition} zweier Funktionen \( f\colon M \to M^\prime, g\colon M^\prime \to N \) ist bezeichnet mit \( g \circ f\colon M \to N, x \mapsto g(f(x)) \).
+\end{definition}
+\begin{definition}
+	Seien \( f\colon M \to N, g\colon N \to M \) Funktionen. Dann heißt \( g \) eine \textit{linksseitige (rechtseitige) Umkehrfunktion} von \( f \), wenn \( g \circ f \equiv id_M \) (\( f \circ g \equiv id_N \)). Wenn \( g \) sowohl links- als auch rechtsseitige Umkehrfunktion ist sprechen wir schlicht von einer \textit{Umkehrfunktion} von \( f \) und bezeichnen diese mit \( f^{-1} \).
+\end{definition}
+\begin{remark*}
+	Die Schreibweise \( f^{-1} \) benutzen wir sowohl für das Urbild als auch für Umkehrabbildungen, was jedoch zwei verschiedene Begriffe sind!
+\end{remark*}
 
 
 \subsection{Strukturen}\label{sec:pre_structures}
-Wir haben Mengen, Relationen und Abbildungen jeweils eigenständig kennengelernt. Tatsächlich benutzen wir sie allerdings nur zusammen. Beispielsweise sind die natürlichen Zahlen für sich allein nicht sehr interessant, wenn man auf ihnen nicht addieren könnte. Umgekehrt sind auch Funktionsvorschriften wertlos, wenn sie nicht auf Elemente einer Menge angewndet werden kann. Wir fassen alles nun unter dem Begriff einer \textit{Struktur} zusammen.
+Wir haben Mengen, Relationen und Abbildungen jeweils eigenständig kennengelernt. Tatsächlich benutzen wir sie allerdings nur zusammen. Beispielsweise sind die natürlichen Zahlen für sich allein nicht sehr interessant, wenn man auf ihnen nicht addieren könnte. Umgekehrt sind auch Funktionsvorschriften wertlos, wenn sie nicht auf Elemente einer Menge angewendet werden kann. Wir fassen alles nun unter dem Begriff einer \textit{Struktur} zusammen.
 \begin{definition}
 	Sei \( \tau = \{ R_1, \ldots, R_m, f_1, \ldots, f_n \} \) eine Menge von Relationssymbolen und Funktionssymbolen, eine sogenannte \textit{Signatur}. Eine \textit{\( \tau \)-Struktur} ist ein Paar \( \mathfrak{A} = (A, \mathfrak{a}) \), wobei \( A \) eine nicht-leere Menge ist, die \textit{Universum} (oder \textit{Träger}) heißt und \( \mathfrak{a} \) ist eine Funktion, die jedem \( k \)-stelligem Relationssymbol \( R \in \tau \) eine \( k \)-stellige Relation und jedem \( k \)-stelligem Funktionssymbol \( f \in \tau \) eine \( k \)-stellige Funktion zuordnet.
 \end{definition}
@@ -416,15 +439,56 @@ Wir können Strukturen wieder klassifizieren nach sogenannten \textit{Axiomen}, 
 		\item \( (\mathbb{B}, \wedge) \) ist abelsches Monoid mit neutralem Element \( 1 \).
 	\end{enumerate}
 \end{example}
+Es ist bei Monoiden auch üblich, dass das neutrale Element mit in die Struktur geschrieben wird also, z.B. \( (\mathbb{R}, \cdot, 1) \).
 \begin{definition}
 	Sei \( \mathfrak{A} = (A, \bullet) \) ein Monoid. Eine Teilmenge \( E \subseteq A \) heißt \textit{Erzeugendensystem} von \( \mathfrak{A} \) falls jedes \( a \in A \) als \( a = e_0 \bullet \ldots \bullet e_{n-1} \) mit \( e_i \in E \) für alle \( i \in [n] \) dargestellt werden kann. \( E \) heißt \textit{frei}, falls diese Darstellung eindeutig ist. In diesem Fall nennen wir \( \mathfrak{A} \) auch das von \( E \) \textit{frei erzeugte Monoid} (oder unter Missbrauch der Notation auch \textit{freies Monoid}).
 \end{definition}
 \begin{remark*}
 	Das neutrale Element wird stets durch eine \textit{leere} Anwendung dargestellt. Beispielsweise ist für \( (\mathbb{N}, +) \) die Menge \( \{1\} \) ein (freies) Erzeugendensystem, denn jede natürliche Zahl \( n \) lässt sich als Summe von \( n \) \( 1 \)en darstellen \( n = \sum_{i=1}^n 1 \), für \( n = 0 \) erhalten wir eben genau die leere Summe ohne Summanden.
 \end{remark*}
+\begin{definition}
+	Sei \( (A, \bullet, e) \) Monoid und \( a \in A \).
+	\begin{itemize}
+		\item Gibt es ein \( b \in A \) mit \( a \bullet b = e \) so heißt \( a \) \textit{rechtsinvertierbar}.
+		\item Gibt es ein \( b \in A \) mit \( b \bullet a = e \) so heißt \( a \) \textit{linksinvertierbar}.
+		\item Ist \( a \) rechts- und linksinvertierbar, dann heißt \( a \) eine \textit{Einheit}.
+		\item Gibt es ein \( b \in A \) mit \( b \bullet a = a \bullet b = e \) so heißt \( a \) \textit{invertierbar} und \( b \) \textit{invers} zu \( a \). 
+	\end{itemize}
+	Die \textit{Menge aller Einheiten} von \( A \) bezeichnen wir mit \( A^\times \).
+\end{definition}
+Wir bezeichnen die Inversen zu Einheiten \( a \) in der Regel mit \( a^{-1} \) oder \( -a \). 
+\begin{definition}
+	Sei \( \mathfrak{A} = (A, \bullet, e) \) ein Monoid. Falls in \( \mathfrak{A} \) zusätzlich
+	\begin{enumerate}\setcounter{enumi}{2}
+		\item \textit{Invertierbarkeit}, für alle \( a \in A \) existiert \( b \in A \) mit \( a \bullet b = b \bullet a = e \), 
+	\end{enumerate}
+	dann ist \( \mathfrak{A} \) eine \textit{Gruppe} (bzw. \textit{abelsche Gruppe}).
+\end{definition}
+\begin{lemma}
+	Ist \( (A, \bullet, e) \) Monoid, so ist \( (A^\times, \bullet, e) \) Gruppe (Einheitengruppe).
+	\begin{proof}
+		Per Definition ist jedes Element in \( A^\times \) eine Einheit. Außerdem ist \( e \) stets eine Einheit, da es invers zu sich selbst ist. Es bleibt zu zeigen, dass \( A^\times \) auch abgeschlossen ist unter der Operation \( \bullet \). Sei dazu \( a, b \in A^\times \) und \( a^\prime, b^\prime \) die jeweiligen Inversen. Wir zeigen das \( a \bullet b \) Einheit ist mit Inversem \( b^\prime \bullet a^\prime \):
+		\[
+			(a \bullet b) \bullet (b^{-1} \bullet a^{-1}) = a \bullet (b \bullet b^{-1}) \bullet a^{-1} = a \bullet e \bullet a^{-1} = a \bullet a^{-1} = e. \qedhere
+		\]
+	\end{proof}
+\end{lemma}
+\begin{example}
+	Sei \( \mathbb{B} = \{ 0, 1 \} \). Das Symbol \( \nleftrightarrow \) steht für das Boolsche exklusive Oder (\( \xor \)).
+	\begin{enumerate}
+		\item \( (\mathbb{B}, \nleftrightarrow) \) ist abelsche Gruppe,
+		\item \( (\mathbb{R} \setminus \{ 0 \}, \cdot) \) ist abelsche Gruppe,
+		\item \( (\mathbb{Z}, -) \) ist Gruppe.
+	\end{enumerate}
+\end{example}
+\begin{definition}
+	Sei \( \mathfrak{A} = (A, \bullet) \) eine Gruppe und \( B \subseteq A \) nicht-leer. \( \mathfrak{B} = (B, \bullet) \) ist eine \textit{Untergruppe} von \( \mathfrak{A} \), wenn für alle \( a, b \in B \) auch \( a \bullet b^{-1} \in B \) gilt.
+\end{definition}
+% Ringe, Körper
 
 
 \subsection{Graphen}\label{sec:pre_graphs}
+
 
 \subsection{Beweismethoden}\label{sec:pre_proofs}
 
@@ -439,7 +503,7 @@ Wir fassen Aktionen eines Computers (oder eines Getränkeautomaten, \ldots) in u
 \begin{definition}
 	Ein \textit{Alphabet} ist eine nicht-leere endliche Menge, deren Elemente als \textit{Symbole} bezeichnet sind.
 \end{definition}
-Alphabete werden durch griechische Großbuchstaben \( \Sigma, \Gamma \) oder Variationen wie \( \Sigma_1, \Gamma^\prime \) bezeichnet. Symbole werden durch kleine lateinische Buchstaben \( a, b, c, \ldots \) oder arabische Ziffern bezeichnet.
+Alphabete werden durch griechische Großbuchstaben \( \Sigma, \Gamma \) oder Variationen wie \( \Sigma_1, \Gamma^\prime \) bezeichnet. Symbole werden durch kleine lateinische Buchstaben \( a, b, c, \ldots \) oder arabische Ziffern \( 0, 1, \ldots \) bezeichnet.
 \begin{example}
 	\
 	\begin{enumerate}
@@ -477,7 +541,7 @@ Sprachen bezeichnen wir in der Regel mit \( L, K, \ldots \) und Varianten.
 	\begin{itemize}
 		\item Die leere Sprache \( \emptyset \).
 		\item Die Sprache, die nur das leere Wort enthält \( \{ \varepsilon \} \).
-		\item Die Sprache aller Binärdarstellungen von Primzahlen \( \{ bin(n) : n \in \mathbb{P} \} \).
+		\item Die Sprache aller Binärdarstellungen von Primzahlen \( \{ \bin(n) : n \in \mathbb{P} \} \).
 		\item Die Menge aller grammatikalisch korrekten deutschen Sätze.
 	\end{itemize}
 \end{example}
@@ -500,7 +564,7 @@ Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhal
 		\item \textit{Konkatenation.} \( L \cdot K \coloneqq \{ uv : u \in L, v \in K \} \) und \( L^0 \coloneqq \{ \varepsilon \}, L^n \coloneqq L \cdot L^{n-1} \).
 		\item \textit{Inklusion.} Wie in Definition~\ref{def:subsets}.
 		\item \textit{Vereinigung, Schnitt, Komplement, Differenz.} Wie in Definiton~\ref{def:setops}.
-		\item \textit{Kleene'scher Abschluss.} (auch Iteration, Kleene-Stern)
+		\item \textit{Kleene'scher Abschluss.} (auch \textit{Iteration}, \textit{Kleene-Stern})
 			\[
 				L^\ast \coloneqq \bigcup_{n \in \mathbb{N}} L^n.
 			\]
@@ -723,7 +787,7 @@ Wir zeigen als erstes, dass die DFA-erkennbaren Sprachen unter Komplementbildung
 	\end{proof}
 \end{theorem}
 Diese Abschlusseigenschaft war einfach zu beweisen, da wir nur eine kleine Änderung am ursprünglichen DFA machen mussten und dann wieder einfach über den eindeutigen Lauf argumentieren konnten. Die Idee hinter der Konstruktion ist auch sehr intuitiv, da wir genau die Wörter akzeptieren wollen, die vom ursprünglichen Automaten verworfen wurden, also deren Läufe in nicht-akzeptierenden Zuständen enden. Der Ansatz die Zustände einfach zu vertauschen drängt sich also geradezu auf.\par
-Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben also nun zwei DFA-erkennbare Sprachen (und damit die zugehörigen Automaten) und wollen nun prüfen ob ein Wort in wenigstens einer der beiden Sprachen liegt. Wir müssen nun also einen Automaten konstruieren, der zwei gegebene Automaten simuliert. Diese Simulation muss synchron bzw. parallel stattfinden, eine sequentielle (d.h. Hintereinander-) Ausführung beider Automaten ist nicht möglich (da DFAs bereits gelesene Symbole ``vergessen``, ein explizites ``Abspeichern`` ist nur möglich für konstant viele Symbole -- das reicht nicht für beliebig große Eingabelängen). Wir präsentieren für die parallele Ausführung nun die Produktkonstruktion im Rahmen des nächsten Satzes.
+Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben also nun zwei DFA-erkennbare Sprachen (und damit die zugehörigen Automaten) und wollen nun prüfen ob ein Wort in wenigstens einer der beiden Sprachen liegt. Wir müssen nun also einen Automaten konstruieren, der zwei gegebene Automaten simuliert. Diese Simulation muss synchron bzw. parallel stattfinden, eine sequentielle (d.h. Hintereinander-)Ausführung beider Automaten ist nicht möglich (da DFAs bereits gelesene Symbole ``vergessen``, ein explizites ``Abspeichern`` ist nur möglich für konstant viele Symbole -- das reicht nicht für beliebig große Eingabelängen). Wir präsentieren für die parallele Ausführung nun die Produktkonstruktion im Rahmen des nächsten Satzes.
 \begin{theorem}\label{thm:regular_intersection}
 	Seien \( L_1, L_2 \subseteq \Sigma^\ast \) DFA-erkennbare Sprachen. Dann ist auch \( L_1 \cap L_2 \) DFA-erkennbar.
 	\begin{proof}
@@ -761,7 +825,7 @@ Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_intersection} 
 	Seien \( L_1, L_2 \) DFA-erkennbare Sprachen. Dann sind auch die Sprachen \( L_1 \cup L_2, L_1 \setminus L_2 \) DFA-erkannbar.
 	\begin{proof}
 		Wegen Satz~\ref{thm:regular_complement} sind auch \( \comp{L_1}, \comp{L_2} \) DFA-erkennbar und damit nach Satz~\ref{thm:regular_intersection} \( \comp{L_1} \cap \comp{L_2} \). Mit erneuter Anwendung von Satz~\ref{thm:regular_complement} ist auch \( \comp{\comp{L_1} \cap \comp{L_1}} \) DFA-erkennbar, was nach den DeMorgan'schen Gesetzen \( L_1 \cup L_2 \) entspricht. Alternativ kann man in der Produktkonstruktion auch \( F = (F_1 \times Q_2) \cup (Q_1 \times F_2) \) setzen und erhält einen DFA für \( L_1 \cup L_2 \).\\
-		Für \( L_1 \setminus L_2 \) setzt man \( F = F_1 \times (Q_2 \setminus F_2) \) und erhält einen DFA für die Sprache.
+		Für \( L_1 \setminus L_2 \) setzt man \( F = F_1 \times (Q_2 \setminus F_2) \) und erhält einen DFA für die Differenz.
 	\end{proof}
 \end{corollary}
 Die Produktkonstruktion ist eine sehr grundlegende Konstruktion, die in ähnlicher Form immer wieder Anwendungen findet. Wir können auch eigene Sprachoperatoren erfinden und DFA-erkennbare Sprachen daraufhin untersuchen ob sie abgeschlossen sind bzgl. dieser Operationen.
@@ -1387,7 +1451,7 @@ Wir fahren nun fort mit dem zweiten Teil von Satz~\ref{thm:kleene_equivalence}. 
 				\end{array}
 			\right.
 		\]
-		Der Rekursionsschritt funktioniert nun folgendermaßen: Für ein \( P \neq \emptyset \) wählen wir einen Zustand  \( s \in P \) und entfernen diesen mit folgenderr Umformung
+		Der Rekursionsschritt funktioniert nun folgendermaßen: Für ein \( P \neq \emptyset \) wählen wir einen Zustand  \( s \in P \) und entfernen diesen mit folgender Umformung
 		\[
 			r_P(p, q) = r_{P^\prime}(p, q) + r_{P^\prime}(p, s) r_{P^\prime}(s, s)^\ast r_{P^\prime}(s, q),
 		\]
@@ -1503,7 +1567,7 @@ Beachte, dass \( w^\mathcal{R} \) wohldefiniert ist für jedes \( w \in \Sigma
 \begin{theorem}
 	Sei \( L \subseteq \Sigma^\ast \) regulär. Dann ist auch \( L^\mathcal{R} \) regulär.
 	\begin{proof}
-		folgt.
+		folgt. %TODO
 	\end{proof}
 \end{theorem}
 
@@ -1588,96 +1652,49 @@ Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese 
 
 
 \subsection{Minimierung von DFAs}\label{sec:regular_minimization}
-folgt.
+folgt. %TODO
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
-Bisher sind reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert worden. Nun soll eine Eigenschaft gefunden werden, die reguläre Sprachen auf einer stark mathematisch-strukturellen Ebene charakterisiert, d.h. mit Aussagen, die sich auf die Struktur
-\[
-	(\Sigma^\ast, \cdot, \varepsilon)
-\]
-beziehen. Diese Struktur bezeichnet man auch als \textit{Wortmonoid}.
-
-\subsection*{Grundlegende Überlegungen}
-Bevor wir zur eigentlichen Definition der Myhill-Nerode-Äquivalenz kommen, wiederholen wir ein paar Definitionen:
+Bisher haben wir reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert. Nun wollen wir eine Eigenschaft finden, die reguläre Sprachen auf einer stark mathematisch-strukturellen Ebene charakterisiert. Dazu erinnern wir uns an unser freies Monoid \( (\Sigma^\ast, \cdot, \varepsilon) \), welches bereits in Abschnitt~\ref{sec:regular_closure2} uns einmal angesehen haben. Im vorigen Abschnitt haben wir außerdem den Begriff der Zustandsäquivalenz definiert und festgestelt, dass der minimale DFA zu einer regulären Sprache bis auf Isomorphie eindeutig ist. Wir wollen nun diese Äquivalenz auf Wörter übertragen: Die ganze Idee dabei ist die Wörter die im minimalen DFA den selben Zustand vom Startzustand erreichen als äquivalent zu betrachten. Wir definieren also eine Äquivalenzrelation (siehe Definition~\ref{def:relations}). Tatsächlich definiert die gleich eingeführte Relation sogar noch etwas mehr, deshalb schieben wir eine weitere Definition hier ein.
 \begin{definition}
-	Eine \textbf{Äquivalenzrelation} über einer Menge \( A \) ist eine zweistelltige Relation \( \sim \subseteq A \times A \), die 
-	\begin{enumerate}
-		\item reflexiv (für alle \( x \) gilt \( x \sim x \)),
-		\item symmetrisch (wenn \( x \sim y \) dann auch \( y \sim  x \)) und
-		\item transitiv (wenn \( x \sim y \) und \( y \sim z \) dann auch \( x \sim z \)) 
-	\end{enumerate}
-	ist.
-\end{definition}
-
-Da die Myhill-Nerode-Relation eigentlich sogar etwas mehr ist, hier noch eine weitere Definition:
-\begin{definition}
-	Sei \( A \) eine Menge und \( \circ \) eine zweistellige Funktion auf \( A \). Eine Relation \( \sim \subseteq A \times A \) heißt \textbf{rechtsseitige Kongruenz} (bezüglich \( \circ \)), wenn
+	Sei \( A \) eine Menge und \( \bullet \) eine zweistellige Funktion auf \( A \). Eine Relation \( \sim \subseteq A \times A \) heißt \textbf{rechtsseitige Kongruenz} (bezüglich \( \bullet \)), wenn
 	\begin{enumerate}
 		\item \( \sim \) eine Äquivalenzrelation ist und
-		\item \( \circ \) diese Relation respektiert (d.h. für alle \( x \sim y \) und alle \( z \in A \) gilt \( x \circ z \sim y \circ z \)).
+		\item \( \bullet \) diese Relation respektiert (d.h. für alle \( a \sim b \) und alle \( c \in A \) gilt \( a \bullet c \sim b \bullet c \)).
 	\end{enumerate}
 \end{definition}
-
-Die Myhill-Nerode-Äquivalenz ist definiert durch:
+Wir definieren nun wie angekündigt unsere Äquivalenzrelation auf Wörtern.
 \begin{definition}
-	Sei \( \Sigma \) ein Alphabet und \( L \subseteq \Sigma^\ast \). Seien \( u, v \in \Sigma^\ast \). \( u \) und \( v \) heißen \textbf{Myhill-Nerode-äquivalent} (\( u \equiv_L v \)) genau dann, wenn für alle \( w \in \Sigma^\ast \) gilt, dass \( uw \in L \) g.d.w. \( vw \in L \).
+	Sei \( \Sigma \) ein Alphabet und \( L \subseteq \Sigma^\ast \). Seien \( u, v \in \Sigma^\ast \). \( u \) und \( v \) heißen \textbf{Myhill-Nerode-äquivalent bezüglich \( L \)} (\( u \sim_L v \)) genau dann, wenn für alle \( w \in \Sigma^\ast \) gilt, dass \( uw \in L \) g.d.w. \( vw \in L \).
 \end{definition}
-
-Diese Relation ist streng genommen nicht nur eine Äquivalenz sondern auch eine rechtsseitige (!) Kongruenz, deswegen sind auch die Begriffe \textit{Myhill-Nerode-Rechtskongruenz} und -- nicht ganz korrekterweise -- \textit{Myhill-Nerode-Kongruenz} gebräuchlich.
-
+Diese Relation ist tatsächlich sogar nicht nur eine Äquivalenz sondern auch eine rechtsseitige Kongruenz, deswegen sind auch die Begriffe \textit{Myhill-Nerode-Rechtskongruenz} und -- nicht ganz korrekterweise -- \textit{Myhill-Nerode-Kongruenz} gebräuchlich. Dies wollen wir im folgenden zeigen.
 Eine einfacher Folgerung aus der Definition ist
-\begin{lemma}\label{kongruenzlemma}
-	Sei \( L \subseteq \Sigma^\ast \) eine Sprache. Für alle \( u, v, w \in \Sigma^\ast \) mit \( u \equiv_L v \) gilt
-	\[
-		uw \equiv_L vw.
-	\]
+\begin{lemma}\label{lem:mncongruence}
+	Sei \( L \subseteq \Sigma^\ast \) eine Sprache. Für alle \( u, v, w \in \Sigma^\ast \) mit \( u \sim_L v \) gilt \( uw \sim_L vw \).
+	\begin{proof}
+		folgt. %TODO
+	\end{proof}
 \end{lemma}
-
-Zuletzt der Begriff der Äquivalenzklasse:
-\begin{definition}
-	Sei \( A \) eine Menge und \( \equiv \subseteq A \times A \) eine Äquivalenzrelation. Eine Menge \( A^\prime \subseteq A \) heißt \textbf{Äquivalenzklasse}, wenn
-	\begin{enumerate}
-		\item Wenn \( a \in A^\prime \) und \( b \equiv a \), dann ist auch \( b \in A^\prime \),
-		\item Für alle \( a, b \in A^\prime \) gilt \( a \equiv b \).
-	\end{enumerate}
-\end{definition}
-
-Man benennt Äquivalenzklassen auch durch einzelne Repräsentanten, z.B. mit \( [u]_L \) oder \( u/_L \) für die Äquivalenzklasse in der alle Elemente enthalten sind, die zu \( u \) äquivalent sind.
-Die Vereinigung aller Äquivalenzklassen zu einer Äquivalenz über einer Menge \( A \) bildet stets eine Partition von \( A \).
-
-\subsection*{Finden der Äquivalenzklassen}
-Lemma~\ref{kongruenzlemma} kann dafür verwendet werden um Äquivalenzklassen (der Myhill-Nerode-Äquivalenz \( \equiv_L \)) zu finden. Wir gehen dabei wie folgt vor:\\
+Wir können auch wie in Definition~\ref{def:equivalenceclass} die Myhill-Nerode-Äquivalenzklassen bestimmen. Man benennt Äquivalenzklassen auch durch einzelne Repräsentanten, z.B. mit \( [u]_L \) für die Äquivalenzklasse in der alle Elemente enthalten sind, die zu \( u \) Myhill-Nerode-äquivalent sind.
+Das Lemma~\ref{lem:mncongruence} kann dafür verwendet werden um Myhill-Nerode-Äquivalenzklassen zu finden. Wir gehen dabei wie folgt vor:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Algo?
 Wir starten mit dem leeren Wort \( \varepsilon \) und der zugehörigen Äquivalenzklasse \( [\varepsilon]_L \). Danach wiederholen wir folgende Schritte bis keine neue Äquivalenzklassen mehr gefunden werden:\\
 Für jedes Symbol \( a \in \Sigma \) und jede bisher gefundene Äquivalenzklasse \( [u]_L \) betrachte die Äquivalenzklasse \( [ua]_L \). Ist \( [ua]_L = [v]_L \) für eine bereits gefundene Äquivalenzklasse, passiert nichts. Ist dies nicht der Fall, fügen wir \( [ua]_L \) als neue Äquivalenzklasse hinzu.\par
-Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen (s. Satz~\ref{nerode}).\par
-Dazu machen wir ein Beispiel. Sei 
-\[
-	L = \{ w \in \{ a, b \}^\ast \mid w \text{ beginnt mit } b \text{ und nach jedem } a \text{ folgt sofort ein } b \}.
-\]
-\begin{itemize}
-	\item Jedes Wort aus \( \{ a, b \}^\ast \) hat eine Äquivalenzklasse, also auch \( \varepsilon \). Wir bezeichnen diese mit \( [\varepsilon]_L \).
-	\item Betrachte nun \( [\varepsilon a]_L = [a]_L \). Es ist \( [a]_L \neq [\varepsilon]_L \) (also \( a \not\equiv_L \varepsilon \)), da \( b \) die Wörter trennt, d.h. \( a \cdot b \notin L \), aber \( \varepsilon \cdot b \in L \). d.h. \( [a]_L \) ist eine neue Äquivalenzklasse.
-	\item Betrachte nun \( [\varepsilon b]_L = [b]_L \). Es ist \( [b]_L \neq [\varepsilon]_L \), da \( \varepsilon \) die Wörter trennt, d.h. \( b \cdot \varepsilon \in L \), aber \( \varepsilon \cdot \varepsilon \notin L \). Außerdem \( [b]_L \neq [a]_L \), weil \( \varepsilon \) die Wörter trennt, d.h. \( b \cdot \varepsilon \in L \), aber \( a \cdot \varepsilon \notin L \).
-	\item Betrachte nun \( [aa]_L \). Es ist \( [aa]_L = [a]_L \), da es kein trennendes Wort gibt (egal, was man anhängt, man kann nicht mehr in der Sprache landen in beiden Fällen, da das Wort nicht mit \( b \) beginnt).
-	\item Betrachte nun \( [ab]_L \). Es ist \( [ab]_L = [a]_L \), da es kein trennendes Wort gibt (egal, was man anhängt, man kann nicht mehr in der Sprache landen in beiden Fällen, da das Wort nicht mit \( b \) beginnt).
-	\item Betrachte nun \( [ba]_L \). Es ist \( [ba]_L = [\varepsilon]_L \), da es kein trennendes Wort gibt.
-	\item Betrachte nun \( [bb]_L \). Es ist \( [bb]_L = [b]_L \), da es kein trennendes Wort gibt.
-	\item Damit sind alle Äquivalenzklassen gefunden: \( [\varepsilon]_L, [a]_L, [b]_L \). Dieser Punkt ist für viele Studenten oft erstmal schwierig zu sehen. Es folgt aber direkt aus der rechtsseitigen Kongruenz bzw. Lemma~\ref{kongruenzlemma}. Egal welches Wort wir betrachten, wir können es einer dieser Äquivalenklassen zuordnen. Betrachte zum Beispiel \( [bab]_L \). Wegen \( ba \equiv_L \varepsilon \) ist \( ba \cdot b \equiv_L \varepsilon \cdot b = b \) und somit \( [bab]_L = [b]_L \). 
-\end{itemize}
-
-\subsection*{Wofür ist das nützlich?}
+Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen (s. Satz~\ref{thm:nerode}).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Die Myhill-Nerode-Äquivalenz ist inhaltlich eines der schönsten Sachen in FoSAP, weil sie 1. eine notwendige und hinreichende Bedingung liefert, dass eine Sprache regulär ist und weil sie 2. auch einen direkten Weg zu einem minimalen deterministischen endlichen Automaten liefert.
-\begin{theorem}[Satz von Nerode]\label{nerode}
+\begin{theorem}[Satz von Nerode]\label{thm:nerode}
 	Eine Sprache ist genau dann regulär, wenn die Anzahl der Myhill-Nerode-Äquivalenzklassen endlich ist.
+	\begin{proof}
+		folgt. %TODO
+	\end{proof}
 \end{theorem}
-Man schreibt auch \( index(\equiv_L) < \infty \). Die Sprache \( L \) im Beispiel hat \( index(\equiv_L) = 3 < \infty \) und ist somit regulär. Betrachte nun ein Standardbeispiel für eine nicht-reguläre Sprache 
+Man schreibt auch \( index(\sim_L) < \infty \). Die Sprache \( L \) im Beispiel hat \( index(\sim_L) = 3 < \infty \) und ist somit regulär. Betrachte nun ein Standardbeispiel für eine nicht-reguläre Sprache 
 \[
 	K = \{ a^n b^n : n \in \mathbb{N} \}.
 \]
-\( K \) ist nicht regulär. Betrachte die Wörter \( u_i = a^i \) und \( u_j = a^j \) mit \( i \neq j \). Es gilt offensichtlich \( u_i \not\equiv_K u_j \), denn das Wort \( b^i \) trennt die Wörter, weil \( u_i b^i = a^i b^i \in K \), aber \( u_j b^i = a^j b^i \notin K \). Da es unendlich viele \( i, j \in \mathbb{N} \) mit \( i \neq j \) gibt, gibt es auch unendlich viele Äquivalenzklassen. Also ist \( K \) nach dem Satz von Nerode nicht regulär.
-
+\( K \) ist nicht regulär. Betrachte die Wörter \( u_i = a^i \) und \( u_j = a^j \) mit \( i \neq j \). Es gilt offensichtlich \( u_i \not\sim_K u_j \), denn das Wort \( b^i \) trennt die Wörter, weil \( u_i b^i = a^i b^i \in K \), aber \( u_j b^i = a^j b^i \notin K \). Da es unendlich viele \( i, j \in \mathbb{N} \) mit \( i \neq j \) gibt, gibt es auch unendlich viele Äquivalenzklassen. Also ist \( K \) nach dem Satz von Nerode nicht regulär.
 \begin{theorem}
 	Der minimale DFA zu einer reguläre Sprache \( L \) ist isomorph zum Myhill-Nerode-DFA:
 	\[
@@ -1685,23 +1702,6 @@ Man schreibt auch \( index(\equiv_L) < \infty \). Die Sprache \( L \) im Beispie
 	\]
 	mit \( \delta([u]_L, a) = [ua]_L \).
 \end{theorem}
-Für die Sprache \( L \) erhalten wir also den DFA in Abbildung~\ref{fig:mindfa}.
-\begin{figure}
-	\centering
-	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
-		\node[state, initial, initial text=] (0) at (0, 0) {$[\varepsilon]_L$};
-		\node[state] (1) at (3, -2) {$[a]_L$};
-		\node[state, accepting] (2) at (3, 2) {$[b]_L$};
-
-		\path (0) edge node {$a$} (1)
-			(0) edge[bend left] node {$b$} (2)
-			(1) edge[loop right] node {$a, b$} (1)
-			(2) edge[bend left] node {$a$} (0)
-			(2) edge[loop right] node {$b$} (2);
-	\end{tikzpicture}
-	\caption{Minimaler DFA für die Sprache \( L \).}
-	\label{fig:mindfa}
-\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -1715,7 +1715,7 @@ Wir schauen uns hier einmal eine praktische Anwendung von regulären Ausdrücken
 In diesem Dokument verwenden wir die Variablen \( h, i, j, k, \ell \) stets als natürliche Zahlen aus einer Menge \( [m] \coloneqq \{ 1, \ldots, m \} \). Manchmal ist die Notation etwas sloppy, aber hoffentlich verständlich genug.
 
 
-\subsection*{Problemstellung: Extended Matching Problem}
+%\subsection*{Problemstellung: Extended Matching Problem}
 Das \textit{erweiterte (extended) Matching-Problem} kommt direkt aus der Anwendung des Compilerbaus. Gegeben ist ein Wort \( w \in \Sigma^\ast \) und eine Reihe von regulären Ausdrücken \( r_1, \ldots, r_n \in \mathsf{RE}_\Sigma \). (\textit{Bemerkung:} In der Praxis ist die Annahme \( \varepsilon \notin L(r_i) \neq \emptyset \) für alle \( i \) sinnvoll). Gesucht ist nun eine Zerlegung des Wortes \( w = u_1 \ldots u_k \), wobei für jedes \( u_j \) ein \( r_{i_j} \) existieren muss, sodass \( u_j \in L(r_{i_j}) \). Man nennt die Zerlegung in \( (u_1, \ldots, u_k) \) auch \textit{Dekomposition} und die zugehörigen Indizes der regulären Ausdrücke \( (i_1, \ldots, i_k) \) \textit{Analyse} von \( w \) bezüglich \( r_1, \ldots, r_n \).
 
 Wir sehen schnell, dass weder Dekomposition, noch Analyse eindeutig sein müssen (insbesondere dann, wenn wir \( \varepsilon \in L(r_i) \) zulassen).
@@ -1730,7 +1730,7 @@ Wir sehen schnell, dass weder Dekomposition, noch Analyse eindeutig sein müssen
 Wir wollen nun sowohl, die Dekomposition, als auch die Analyse eindeutig machen. Ein erster Ansatz wäre zunächst das leere Wort zu verbieten und sicherzustellen, dass \( L(r_i) \cap L(r_j) = \emptyset \) für alle \( i \neq j \), indem wir den gemeinsamen Schnitt von zwei Ausdrücken aus dem ''unwichtigeren`` Ausdruck entfernen. Dadurch würde zumindest die Analyse eindeutig werden. Diese Idee ist jedoch nicht sinnvoll, u.a. deshalb, da das Entfernen des Schnittes -- also das Erkennen von \( L(r_j^\prime) \coloneqq L(r_j) \setminus L(r_i) \) -- eine Produktkonstruktion erfordert und somit tendenziell teuer ist.
 
 
-\subsection*{Eindeutigkeit durch First-Longest-Match}
+%\subsection*{Eindeutigkeit durch First-Longest-Match}
 Der am meisten verbreitete Weg ist es folgende zwei Prinzipien zu implementieren:
 \begin{description}
 	\item[Longest Match] Mache jedes \( u_i \) der Zerlegung so lang wie möglich.
@@ -1757,7 +1757,7 @@ Es ist klar, dass eine LMD eindeutig ist, falls sie existiert. Sie muss jedoch n
 Auch hier ist klar, dass es höchstens eine FLM-Analyse gibt und sie existiert, wenn die LMD existiert.
 
 
-\subsection*{Eine mögliche Implementierung}
+%\subsection*{Eine mögliche Implementierung}
 Es gibt viele Möglichkeiten eine FLM-Analyse durchzuführen. Die von mir hier vorgestellte Art ist nicht die von mir favorisierte, aber sie ist insofern intuitiv, als dass sie nur Konzepte aus der FoSAP-Vorlesung verwendet und ein wenig über Arrays.
 
 Als Eingabe erhalten wir also \( w \in \Sigma^\ast \) und die regulären Ausdrücke \( r_1, \ldots, r_n \in \mathsf{RE}_\Sigma \). Gesucht ist eine FLM-Analyse inklusive zugehöriger LMD oder ein Error, falls diese nicht existieren.
