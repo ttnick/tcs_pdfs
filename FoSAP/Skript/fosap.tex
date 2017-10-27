@@ -1,4 +1,5 @@
 \documentclass[11pt, a4paper]{article}
+\usepackage[left=3cm, right=3cm]{geometry}
 
 % packages
 \usepackage{natbib}
@@ -60,6 +61,7 @@
 \newcommand{\shuffle}{\mathrel{\shifttext{5pt}{$\equiv$}\shifttext{-5pt}{$=$}}}
 \newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
 \newcommand{\reachess}[2]{\overset{#1}{\underset{#2}{\rightarrow}}}
+\DeclareMathOperator{\id}{id}
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
 
@@ -355,15 +357,14 @@ Weiterhin nützlich sind noch folgende Bemerkungen.
 Die Beweise hierfür bleiben als Übung.
 
 
-\subsection{Abbildungen}\label{sec:pre_mappings}
+\subsection{Funktionen}\label{sec:pre_mappings}
 \begin{definition}
-	Seien \( M, N \) Mengen. Eine \textit{Abbildung} \( f \) von \( M \) nach \( N \) ist eine Vorschrift (z.B. eine Formel), die jedem \( x \in M \) genau ein \( f(x) \in N \) zuordnet. Wir schreiben dazu
+	Seien \( M, N \) Mengen. Eine \textit{Funktion} (oder \textit{Abbildung)} \( f \) von \( M \) nach \( N \) ist eine Vorschrift (z.B. eine Formel), die jedem \( x \in M \) genau ein \( f(x) \in N \) zuordnet. Wir schreiben dazu
 	\[
 		f\colon M \to N, \quad x \mapsto f(x).
 	\]
-	\( M \) heißt der \textit{Definitionsbereich} (auch Domäne) von \( f \), \( N \) heißt der \textit{Wertebereich} von \( f \). \( f(x) \) ist das \textit{Bild} von \( x \) unter \( f \) und \( x \) ist ein \textit{Urbild} von \( f(x) \) unter \( f \). Die Menge aller Abbildungen von \( M \) nach \( N \) wird mit \( N^M \) bezeichnet. 
+	\( M \) heißt der \textit{Definitionsbereich} (auch Domäne) von \( f \), \( N \) heißt der \textit{Wertebereich} von \( f \). \( f(x) \) ist das \textit{Bild} von \( x \) unter \( f \) und \( x \) ist ein \textit{Urbild} von \( f(x) \) unter \( f \). Die Menge aller Abbildungen von \( M \) nach \( N \) wird mit \( N^M \) bezeichnet. Falls \( M = A^n, N = A \) für ein nicht-leeres \( A \) ist, sagen wir auch, dass \( f \) eine \textit{\( n \)-stellige} Funktion über \( A \) ist. Desweitere nennen wir eine \( 0 \)-stellige Funktion auch \textit{Konstante}.
 \end{definition}
-
 \begin{definition}
 	Eine Abbildung \( f\colon M \to N \) heißt
 	\begin{itemize}
@@ -384,10 +385,44 @@ Falls wir den Definitionsbereich einschränken wollen schreiben wir benutzen wir
 \begin{definition}
 	Sei \( f\colon M \to N \) eine Abbildung und \( A \subseteq M \). Dann ist \( f\vert_A\colon A \to N \) die \textit{Einschränkung von \( f \) auf \( A \)} mit \( f\vert_A(x) = f(x) \) für alle \( x \in A \).
 \end{definition}
-%TODO id, \equiv
+%TODO id, \equiv, \circ
 
 
 \subsection{Strukturen}\label{sec:pre_structures}
+Wir haben Mengen, Relationen und Abbildungen jeweils eigenständig kennengelernt. Tatsächlich benutzen wir sie allerdings nur zusammen. Beispielsweise sind die natürlichen Zahlen für sich allein nicht sehr interessant, wenn man auf ihnen nicht addieren könnte. Umgekehrt sind auch Funktionsvorschriften wertlos, wenn sie nicht auf Elemente einer Menge angewndet werden kann. Wir fassen alles nun unter dem Begriff einer \textit{Struktur} zusammen.
+\begin{definition}
+	Sei \( \tau = \{ R_1, \ldots, R_m, f_1, \ldots, f_n \} \) eine Menge von Relationssymbolen und Funktionssymbolen, eine sogenannte \textit{Signatur}. Eine \textit{\( \tau \)-Struktur} ist ein Paar \( \mathfrak{A} = (A, \mathfrak{a}) \), wobei \( A \) eine nicht-leere Menge ist, die \textit{Universum} (oder \textit{Träger}) heißt und \( \mathfrak{a} \) ist eine Funktion, die jedem \( k \)-stelligem Relationssymbol \( R \in \tau \) eine \( k \)-stellige Relation und jedem \( k \)-stelligem Funktionssymbol \( f \in \tau \) eine \( k \)-stellige Funktion zuordnet.
+\end{definition}
+Statt \( \mathfrak{a}(R), \mathfrak{a}(f) \) schreibt man auch häufig \( R^\mathfrak{A}, f^\mathfrak{A} \). In der mathematischen Logik ist es wichtig eine Unterscheidung zwischen Relations- und Funktionssymbolen und ihren Interpretationen durch konkrete Relationen \( R^\mathfrak{A} \) bzw. Funktionen \( f^\mathfrak{A} \) zu machen. Deshalb sollten Schreibweisen wie \( \mathfrak{N} = (\mathbb{N}, +) \) nur als Abkürzungen verstanden werden für \( \mathfrak{N} = (\mathbb{N}, +^\mathfrak{N}) \) mit \( +^\mathfrak{N}\colon \mathbb{N}^2 \to \mathbb{N}, (m, n) \mapsto +^\mathfrak{N}(m, n) = m + n \), wobei wir mit \( m + n \) den gewohnten \( n \)-ten Nachfolger von \( m \) bezeichnen. Der Autor hofft, dass es klar ist worauf er hinaus wollte.\par
+Wir können Strukturen wieder klassifizieren nach sogenannten \textit{Axiomen}, die sie erfüllen.
+\begin{definition}
+	Sei \( \mathfrak{A} = (A, \bullet) \) eine Struktur mit \( \bullet\colon A \times A \to A \). Wir sagen \( \mathfrak{A} \) ist ein \textit{Monoid}, wenn folgende Axiome gelten:
+	\begin{enumerate}
+		\item \textit{Assoziativität}, für alle \( a, b, c \in A \) gilt \( (x \bullet y) \bullet z = x \bullet (y \bullet z) \).
+		\item \textit{neutrales Element}, es gibt ein \( e \in A \), sodass für alle \( a \in A \) gilt \( a \bullet e = e \bullet a = a \).
+	\end{enumerate}
+	Gilt zusätzlich
+	\begin{enumerate}\setcounter{enumi}{3}
+		\item \textit{Kommutativität}, für alle \( a, b \in A \) gilt \( a \bullet b = b \bullet a \).
+	\end{enumerate}
+	so heißt das Monoid \textit{abelsch}.
+\end{definition}
+\begin{example}
+	Sei \( A \) eine beliebige nicht-leere Menge und \( \mathbb{B} = \{ 0, 1 \} \).
+	\begin{enumerate}
+		\item \( (\mathbb{N}, +) \) ist abelsches Monoid mit neutralem Element \( 0 \),
+		\item \( (\mathbb{R}, \cdot) \) ist abelsches Monoid mit neutralem Element \( 1 \),
+		\item \( (A^A, \circ) \) ist Monoid mit neutralem Element \( \id_A \),
+		\item \( (\mathbb{B}, \wedge) \) ist abelsches Monoid mit neutralem Element \( 1 \).
+	\end{enumerate}
+\end{example}
+\begin{definition}
+	Sei \( \mathfrak{A} = (A, \bullet) \) ein Monoid. Eine Teilmenge \( E \subseteq A \) heißt \textit{Erzeugendensystem} von \( \mathfrak{A} \) falls jedes \( a \in A \) als \( a = e_0 \bullet \ldots \bullet e_{n-1} \) mit \( e_i \in E \) für alle \( i \in [n] \) dargestellt werden kann. \( E \) heißt \textit{frei}, falls diese Darstellung eindeutig ist. In diesem Fall nennen wir \( \mathfrak{A} \) auch das von \( E \) \textit{frei erzeugte Monoid} (oder unter Missbrauch der Notation auch \textit{freies Monoid}).
+\end{definition}
+\begin{remark*}
+	Das neutrale Element wird stets durch eine \textit{leere} Anwendung dargestellt. Beispielsweise ist für \( (\mathbb{N}, +) \) die Menge \( \{1\} \) ein (freies) Erzeugendensystem, denn jede natürliche Zahl \( n \) lässt sich als Summe von \( n \) \( 1 \)en darstellen \( n = \sum_{i=1}^n 1 \), für \( n = 0 \) erhalten wir eben genau die leere Summe ohne Summanden.
+\end{remark*}
+
 
 \subsection{Graphen}\label{sec:pre_graphs}
 
@@ -1449,6 +1484,28 @@ Insbesondere gilt bei einem Homomorphismus \( h \), dass \( h(uv) = h(u)h(v) \) 
 		Es bleibt zu zeigen, dass \( \llbracket \hat{h}(e) \rrbracket = h(L) \).
 	\end{proof}
 \end{theorem}
+Wir betrachten nun eine weitere Abbildung:
+\begin{definition}
+	Die \textit{Reverse}-Operation ist definiert als
+	\[
+		\cdot^\mathcal{R} \colon \Sigma^\ast \to \Sigma^\ast, \quad\quad a_0 a_1 \ldots a_{n-1} \mapsto a_{n-1} \ldots a_1 a_0.
+	\]
+	Wir können sie auf Sprachen \( L \subseteq \Sigma^\ast \) natürlich erweitern durch
+	\[
+		L^\mathcal{R} \coloneqq \{ w^\mathcal{R} : w \in L \}.
+	\]
+\end{definition}
+Beachte, dass \( w^\mathcal{R} \) wohldefiniert ist für jedes \( w \in \Sigma
+^\ast \) da jedes \( w \) eine eindeutige Darstellung besitzt im freien Monoid \( (\Sigma^\ast, \cdot) \).
+\begin{remark*}
+	Die Reverse-Operation ist kein Homomorphismus für \( \left| \Sigma \right| > 1 \), denn es gilt für z.B: \( abb = (bba)^\mathcal{R} \). Wäre \( \cdot^\mathcal{R} \) Homomorphismus müsste aber gelten \( (bba)^\mathcal{R} = b^\mathcal{R} b^\mathcal{R} a^\mathcal{R} = bba \neq abb \). Eine zeichenweise Anwendung von \( \cdot^\mathcal{R} \) ist also nicht möglich.
+\end{remark*}
+\begin{theorem}
+	Sei \( L \subseteq \Sigma^\ast \) regulär. Dann ist auch \( L^\mathcal{R} \) regulär.
+	\begin{proof}
+		folgt.
+	\end{proof}
+\end{theorem}
 
 
 \subsection{Nicht-reguläre Sprachen}\label{sec:regular_nonregular}
@@ -1467,9 +1524,7 @@ Es erscheint klar, dass es jedoch keine Möglichkeit gibt diesen Ausdruck zu ver
 	\caption{Wenn \( L_\mathbb{P} \) regulär wäre gäbe es unendlich viele Primzahlen, die sich als \( p + ck \) darstellen lassen, wobei \( p \in \mathbb{P}, c \in \mathbb{N}, k = 0, 1, 2, \ldots \).}
 	\label{fig:dfa_primes}
 \end{figure}
-
 Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das später vorgestellte Lemma etwas sperrig ist. Tatsächlich basiert dieses Lemma jedoch auf dem wahrscheinlich einfachsten Prinzip der Mathematik. Wir führen die Idee des Lemmas anhand dieses Prinzips einmal vor. Man sollte dieses Beispiel zunächst verstehen, dann sollte der Schritt zum Lemma geradezu trivial wirken.
-
 \begin{example}\label{exp:pumping1}
 	Die Sprache \( L = \{a^n b^n : n \in \mathbb{N} \} \) ist nicht regulär.
 	\begin{proof}
@@ -1487,7 +1542,7 @@ Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das
 	\]
 	betrachten zu dem Wort \( w^{\prime\prime} = a^{n+hk}b^n \) für ein beliebiges \( h > 0 \).
 \end{remark*}
-Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Überlegungen verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw.~eine einzelne Sprache ab.
+Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Überlegungen verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw. eine einzelne Sprache ab.
 \begin{lemma}[Pumping-Lemma]
 	Sei \( L \subseteq \Sigma^\ast \) eine reguläre Sprache. Dann existiert ein \( n \in \mathbb{N}_+ \), sodass für alle \( w \in L \) mit \( \left| w \right| \geq n \) eine Zerlegung \( w = xyz \) existiert mit den Eigenschaften:
 	\begin{enumerate}
@@ -1496,21 +1551,283 @@ Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese 
 		\item \( xy^iz \in L \) für alle \( i \in \mathbb{N} \). 
 	\end{enumerate}
 	\begin{proof}
-		Beweis Pumping-Lemma.
+		Sei \( L \subseteq \Sigma^\ast \) eine beliebige reguläre Sprache und \( \mathcal{A} = (Q, \Sigma, \Delta, q_0, F) \) ein NFA mit \( L(\mathcal{A}) = L \). Wir setzen \( n \coloneqq \left| Q \right| \). Betrachte nun ein belibiges Wort \( w = a_0 \ldots a_{m-1} \in L \) mit Länge \( \left| w \right| \eqqcolon m \geq n \). Falls kein solches Wort existiert sind wir bereits fertig. Ansonsten betrachten wir den Lauf \( \varrho = (r_0, \ldots, r_m) \) von \( \mathcal{A} \) auf \( w \). Da \( w \in L = L(\mathcal{A}) \) ist \( r_m \in F \). Wegen \( m \leq n \) muss eine Zustandswiederholung in \( \varrho \) vorkommen, spätestens nach Lesen des \(n\)-ten Zeichens. Seien also die Zustände \( r_k \) und \( r_j \) mit \( 0 \leq k < j \leq n \) gleich. Wir wählen die Zerlegung \( x \coloneqq a_0 \ldots a_{k-1}, y \coloneqq a_k \ldots a_{j-1}, z \coloneqq a_j \ldots a_m \) und zeigen, dass diese die gewünschten Eigenschaften hat:
+		\begin{enumerate}
+			\item \( \left| xy \right| = \left| a_0 \ldots a_{j-1} \right| = j \leq n \). \checkmark
+			\item \( y = a_k \ldots a_{j-1} \neq \varepsilon \), da nach Annahme \( j-k > 0 \). \checkmark
+			\item Die Aussage gilt offensichtlich für \( i = 1 \). Für \( i = 0 \) betrachten wir nun den Lauf für das Wort \( xz = xy^0z \): \( (r_0, \ldots, r_k, r_{j+1}, \ldots, r_m) \). Dieser Lauf ist tatsächlich korrekt, denn \( r_k = r_j \eqqcolon r \) und somit gilt \( (r_k, a_j, r_{j+1}) = (r_j, a_j, r_{j+1}) \in \Delta \) (alle anderen Transitionen sind nach Annahme trivialerweise ebenfalls in \( \Delta \)). Außerdem gilt weiterhin \( r_m \in F \). Also akzeptiert \( \mathcal{A} \) das Wort \( xz \). Ansonsten haben wir, dass \( r \reaches{y} r \) und somit auch \( r \reaches{y^i} r \) für \( i \geq 2 \).\checkmark \qedhere
+		\end{enumerate}
 	\end{proof}
 \end{lemma}
+\begin{figure}
+	\centering
+	\input{figs/pumping}
+	\caption{Zustandswiederholung in \( p \). Es gibt also einen Lauf von \( q_0 \) nach \( p \) und einen Lauf von \( p \) nach \( q \in F \). Den Zwischenlauf von \( p \) nach \( p \) kann man also weglassen (oder auch beliebig oft wiederholen).}
+	\label{fig:pumping}
+\end{figure}
 \begin{remark*}
 	Wir stellen wieder fest, dass der Beweis des Pumping-Lemmas eine Verallgemeinerung des Vorgehens aus Beispiel~\ref{exp:pumping1} ist. Wir betrachten auch wieder einen Automaten mit \( n \) Zuständen und akzeptierte Wörter, die zu lang sind, als dass sie dann ohne Wiederholung erkannt werden könnten. Das Weglassen oder Wiederholen von Infixen (\textit{pumpen}) entspricht dem Weglassen oder Wiederholen im Lauf.
+	Eine Visualisierung des Prinzip ist in Abbildung~\ref{fig:pumping}.
 \end{remark*}
 \begin{remark*}
-	Wir können mit dem Pumping-Lemma nicht zeigen, dass eine Sprache regulär ist. Es ist lediglich eine notwendige Bedingung für Regularität, aber keine hinreichende Bedingung. D.h. es gibt Sprachen, die nicht regulär sind, aber dennoch dem Pumping-Lemma genügen.
+	Wir können mit dem Pumping-Lemma nicht zeigen, dass eine Sprache regulär ist. Es ist lediglich eine notwendige Bedingung für Regularität, aber keine hinreichende Bedingung. D.h. es gibt Sprachen, die nicht regulär sind, aber dennoch dem Pumping-Lemma genügen, z.B.
+	\[
+		K = \{a^m b^n c^n : m \in \mathbb{N}_+, n \in \mathbb{N} \} \cup \{ b^m c^n : m, n \in \mathbb{N} \}.
+	\]
 \end{remark*}
+\begin{example}
+	Wir betrachten die Sprache
+	\[
+		L = \{ ww^\mathcal{R} : w \in \Sigma^\ast \}
+	\]
+	aller Palindrome gerader Länge über \( \Sigma = \{a, b\} \). \( L \) ist nicht regulär.
+	\begin{proof}
+		Angenommen \( L \) wäre regulär. Dann gilt das Pumping-Lemma. Sei also \( n \in \mathbb{N}_+ \) beliebig und wir betrachten das Wort \( w = a^n bb a^n \in L \). Es hat die Länge \( \left| w \right| = 2n+2 \geq n \). Wir betrachten nun Zerlegungen, die die Eigenschaften (i) und (ii) erfüllen und zeigen, dass (iii) dann nicht gelten kann. Wegen (i) ist \( y = a^k \) für ein \( k \leq n \) (\( k = \left| y \right| \leq \left| xy \right| \leq n \), da die ersten \( n \) Zeichen alle \( a \) sind, kommt also auch kein \( b \) in \( y \) vor). Wegen (ii) gilt außerdem, dass \( k > 0 \). Betrachte nun das Wort \( w^\prime \coloneqq xyyz = a^{n+k}bba^n \). Es liegt nicht in \( L \), da \( w^\prime \) kein Palindrom ist. Damit gilt die Eigenschaft (iii) für \( i = 2 \) nicht (gilt sogar für gar kein \( i \neq 1 \)). Dies ist ein Widerspruch zum Pumping-Lemma, also kann \( L \) nicht regulär sein. 
+	\end{proof}
+\end{example}
 
-\subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
+
 \subsection{Minimierung von DFAs}\label{sec:regular_minimization}
-\subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
-\subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
+folgt.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
+Bisher sind reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert worden. Nun soll eine Eigenschaft gefunden werden, die reguläre Sprachen auf einer stark mathematisch-strukturellen Ebene charakterisiert, d.h. mit Aussagen, die sich auf die Struktur
+\[
+	(\Sigma^\ast, \cdot, \varepsilon)
+\]
+beziehen. Diese Struktur bezeichnet man auch als \textit{Wortmonoid}.
+
+\subsection*{Grundlegende Überlegungen}
+Bevor wir zur eigentlichen Definition der Myhill-Nerode-Äquivalenz kommen, wiederholen wir ein paar Definitionen:
+\begin{definition}
+	Eine \textbf{Äquivalenzrelation} über einer Menge \( A \) ist eine zweistelltige Relation \( \sim \subseteq A \times A \), die 
+	\begin{enumerate}
+		\item reflexiv (für alle \( x \) gilt \( x \sim x \)),
+		\item symmetrisch (wenn \( x \sim y \) dann auch \( y \sim  x \)) und
+		\item transitiv (wenn \( x \sim y \) und \( y \sim z \) dann auch \( x \sim z \)) 
+	\end{enumerate}
+	ist.
+\end{definition}
+
+Da die Myhill-Nerode-Relation eigentlich sogar etwas mehr ist, hier noch eine weitere Definition:
+\begin{definition}
+	Sei \( A \) eine Menge und \( \circ \) eine zweistellige Funktion auf \( A \). Eine Relation \( \sim \subseteq A \times A \) heißt \textbf{rechtsseitige Kongruenz} (bezüglich \( \circ \)), wenn
+	\begin{enumerate}
+		\item \( \sim \) eine Äquivalenzrelation ist und
+		\item \( \circ \) diese Relation respektiert (d.h. für alle \( x \sim y \) und alle \( z \in A \) gilt \( x \circ z \sim y \circ z \)).
+	\end{enumerate}
+\end{definition}
+
+Die Myhill-Nerode-Äquivalenz ist definiert durch:
+\begin{definition}
+	Sei \( \Sigma \) ein Alphabet und \( L \subseteq \Sigma^\ast \). Seien \( u, v \in \Sigma^\ast \). \( u \) und \( v \) heißen \textbf{Myhill-Nerode-äquivalent} (\( u \equiv_L v \)) genau dann, wenn für alle \( w \in \Sigma^\ast \) gilt, dass \( uw \in L \) g.d.w. \( vw \in L \).
+\end{definition}
+
+Diese Relation ist streng genommen nicht nur eine Äquivalenz sondern auch eine rechtsseitige (!) Kongruenz, deswegen sind auch die Begriffe \textit{Myhill-Nerode-Rechtskongruenz} und -- nicht ganz korrekterweise -- \textit{Myhill-Nerode-Kongruenz} gebräuchlich.
+
+Eine einfacher Folgerung aus der Definition ist
+\begin{lemma}\label{kongruenzlemma}
+	Sei \( L \subseteq \Sigma^\ast \) eine Sprache. Für alle \( u, v, w \in \Sigma^\ast \) mit \( u \equiv_L v \) gilt
+	\[
+		uw \equiv_L vw.
+	\]
+\end{lemma}
+
+Zuletzt der Begriff der Äquivalenzklasse:
+\begin{definition}
+	Sei \( A \) eine Menge und \( \equiv \subseteq A \times A \) eine Äquivalenzrelation. Eine Menge \( A^\prime \subseteq A \) heißt \textbf{Äquivalenzklasse}, wenn
+	\begin{enumerate}
+		\item Wenn \( a \in A^\prime \) und \( b \equiv a \), dann ist auch \( b \in A^\prime \),
+		\item Für alle \( a, b \in A^\prime \) gilt \( a \equiv b \).
+	\end{enumerate}
+\end{definition}
+
+Man benennt Äquivalenzklassen auch durch einzelne Repräsentanten, z.B. mit \( [u]_L \) oder \( u/_L \) für die Äquivalenzklasse in der alle Elemente enthalten sind, die zu \( u \) äquivalent sind.
+Die Vereinigung aller Äquivalenzklassen zu einer Äquivalenz über einer Menge \( A \) bildet stets eine Partition von \( A \).
+
+\subsection*{Finden der Äquivalenzklassen}
+Lemma~\ref{kongruenzlemma} kann dafür verwendet werden um Äquivalenzklassen (der Myhill-Nerode-Äquivalenz \( \equiv_L \)) zu finden. Wir gehen dabei wie folgt vor:\\
+Wir starten mit dem leeren Wort \( \varepsilon \) und der zugehörigen Äquivalenzklasse \( [\varepsilon]_L \). Danach wiederholen wir folgende Schritte bis keine neue Äquivalenzklassen mehr gefunden werden:\\
+Für jedes Symbol \( a \in \Sigma \) und jede bisher gefundene Äquivalenzklasse \( [u]_L \) betrachte die Äquivalenzklasse \( [ua]_L \). Ist \( [ua]_L = [v]_L \) für eine bereits gefundene Äquivalenzklasse, passiert nichts. Ist dies nicht der Fall, fügen wir \( [ua]_L \) als neue Äquivalenzklasse hinzu.\par
+Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen (s. Satz~\ref{nerode}).\par
+Dazu machen wir ein Beispiel. Sei 
+\[
+	L = \{ w \in \{ a, b \}^\ast \mid w \text{ beginnt mit } b \text{ und nach jedem } a \text{ folgt sofort ein } b \}.
+\]
+\begin{itemize}
+	\item Jedes Wort aus \( \{ a, b \}^\ast \) hat eine Äquivalenzklasse, also auch \( \varepsilon \). Wir bezeichnen diese mit \( [\varepsilon]_L \).
+	\item Betrachte nun \( [\varepsilon a]_L = [a]_L \). Es ist \( [a]_L \neq [\varepsilon]_L \) (also \( a \not\equiv_L \varepsilon \)), da \( b \) die Wörter trennt, d.h. \( a \cdot b \notin L \), aber \( \varepsilon \cdot b \in L \). d.h. \( [a]_L \) ist eine neue Äquivalenzklasse.
+	\item Betrachte nun \( [\varepsilon b]_L = [b]_L \). Es ist \( [b]_L \neq [\varepsilon]_L \), da \( \varepsilon \) die Wörter trennt, d.h. \( b \cdot \varepsilon \in L \), aber \( \varepsilon \cdot \varepsilon \notin L \). Außerdem \( [b]_L \neq [a]_L \), weil \( \varepsilon \) die Wörter trennt, d.h. \( b \cdot \varepsilon \in L \), aber \( a \cdot \varepsilon \notin L \).
+	\item Betrachte nun \( [aa]_L \). Es ist \( [aa]_L = [a]_L \), da es kein trennendes Wort gibt (egal, was man anhängt, man kann nicht mehr in der Sprache landen in beiden Fällen, da das Wort nicht mit \( b \) beginnt).
+	\item Betrachte nun \( [ab]_L \). Es ist \( [ab]_L = [a]_L \), da es kein trennendes Wort gibt (egal, was man anhängt, man kann nicht mehr in der Sprache landen in beiden Fällen, da das Wort nicht mit \( b \) beginnt).
+	\item Betrachte nun \( [ba]_L \). Es ist \( [ba]_L = [\varepsilon]_L \), da es kein trennendes Wort gibt.
+	\item Betrachte nun \( [bb]_L \). Es ist \( [bb]_L = [b]_L \), da es kein trennendes Wort gibt.
+	\item Damit sind alle Äquivalenzklassen gefunden: \( [\varepsilon]_L, [a]_L, [b]_L \). Dieser Punkt ist für viele Studenten oft erstmal schwierig zu sehen. Es folgt aber direkt aus der rechtsseitigen Kongruenz bzw. Lemma~\ref{kongruenzlemma}. Egal welches Wort wir betrachten, wir können es einer dieser Äquivalenklassen zuordnen. Betrachte zum Beispiel \( [bab]_L \). Wegen \( ba \equiv_L \varepsilon \) ist \( ba \cdot b \equiv_L \varepsilon \cdot b = b \) und somit \( [bab]_L = [b]_L \). 
+\end{itemize}
+
+\subsection*{Wofür ist das nützlich?}
+Die Myhill-Nerode-Äquivalenz ist inhaltlich eines der schönsten Sachen in FoSAP, weil sie 1. eine notwendige und hinreichende Bedingung liefert, dass eine Sprache regulär ist und weil sie 2. auch einen direkten Weg zu einem minimalen deterministischen endlichen Automaten liefert.
+\begin{theorem}[Satz von Nerode]\label{nerode}
+	Eine Sprache ist genau dann regulär, wenn die Anzahl der Myhill-Nerode-Äquivalenzklassen endlich ist.
+\end{theorem}
+Man schreibt auch \( index(\equiv_L) < \infty \). Die Sprache \( L \) im Beispiel hat \( index(\equiv_L) = 3 < \infty \) und ist somit regulär. Betrachte nun ein Standardbeispiel für eine nicht-reguläre Sprache 
+\[
+	K = \{ a^n b^n : n \in \mathbb{N} \}.
+\]
+\( K \) ist nicht regulär. Betrachte die Wörter \( u_i = a^i \) und \( u_j = a^j \) mit \( i \neq j \). Es gilt offensichtlich \( u_i \not\equiv_K u_j \), denn das Wort \( b^i \) trennt die Wörter, weil \( u_i b^i = a^i b^i \in K \), aber \( u_j b^i = a^j b^i \notin K \). Da es unendlich viele \( i, j \in \mathbb{N} \) mit \( i \neq j \) gibt, gibt es auch unendlich viele Äquivalenzklassen. Also ist \( K \) nach dem Satz von Nerode nicht regulär.
+
+\begin{theorem}
+	Der minimale DFA zu einer reguläre Sprache \( L \) ist isomorph zum Myhill-Nerode-DFA:
+	\[
+		\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta, [\varepsilon]_L, \{[u]_L : u \in L \}),
+	\]
+	mit \( \delta([u]_L, a) = [ua]_L \).
+\end{theorem}
+Für die Sprache \( L \) erhalten wir also den DFA in Abbildung~\ref{fig:mindfa}.
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
+		\node[state, initial, initial text=] (0) at (0, 0) {$[\varepsilon]_L$};
+		\node[state] (1) at (3, -2) {$[a]_L$};
+		\node[state, accepting] (2) at (3, 2) {$[b]_L$};
+
+		\path (0) edge node {$a$} (1)
+			(0) edge[bend left] node {$b$} (2)
+			(1) edge[loop right] node {$a, b$} (1)
+			(2) edge[bend left] node {$a$} (0)
+			(2) edge[loop right] node {$b$} (2);
+	\end{tikzpicture}
+	\caption{Minimaler DFA für die Sprache \( L \).}
+	\label{fig:mindfa}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
+% Emptiness, Universality, Equivalence, Membership
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
+Wir schauen uns hier einmal eine praktische Anwendung von regulären Ausdrücken und endlichen Automaten an. Bisher haben wir stets das \textit{einfache Matching-Problem} für reguläre Ausdrücke betrachtet. Dabei ging es darum zu prüfen, ob ein gegebenes Wort \( w \in \Sigma^\ast \) zur Sprache eines regulären Ausdrucks \( r \in \mathsf{RE}_\Sigma \) gehört. Dies ließ sich mit Hilfe der Thompson-Konstruktion einfach als das Wortproblem eines \(\varepsilon\)-NFA betrachten. In der Praxis ist das einfach Matching-Problem aber zu primitiv um echte Probleme lösen zu können. Vorallem im Compilerbau benötigen wir etwas mehr, wenn wir Programmcode in seine Bestandteile zerlegen wollen um später Syntax-Checks darauf durchführen zu können und schließlich eine Semantik für das Programm festzulegen. In der Fachsprache nennt man diesen Teil eines Compilers auch \textit{Scanner} oder \textit{Lexer} (siehe auch die Programme \texttt{lex}, \texttt{flex}).
+In diesem Dokument verwenden wir die Variablen \( h, i, j, k, \ell \) stets als natürliche Zahlen aus einer Menge \( [m] \coloneqq \{ 1, \ldots, m \} \). Manchmal ist die Notation etwas sloppy, aber hoffentlich verständlich genug.
+
+
+\subsection*{Problemstellung: Extended Matching Problem}
+Das \textit{erweiterte (extended) Matching-Problem} kommt direkt aus der Anwendung des Compilerbaus. Gegeben ist ein Wort \( w \in \Sigma^\ast \) und eine Reihe von regulären Ausdrücken \( r_1, \ldots, r_n \in \mathsf{RE}_\Sigma \). (\textit{Bemerkung:} In der Praxis ist die Annahme \( \varepsilon \notin L(r_i) \neq \emptyset \) für alle \( i \) sinnvoll). Gesucht ist nun eine Zerlegung des Wortes \( w = u_1 \ldots u_k \), wobei für jedes \( u_j \) ein \( r_{i_j} \) existieren muss, sodass \( u_j \in L(r_{i_j}) \). Man nennt die Zerlegung in \( (u_1, \ldots, u_k) \) auch \textit{Dekomposition} und die zugehörigen Indizes der regulären Ausdrücke \( (i_1, \ldots, i_k) \) \textit{Analyse} von \( w \) bezüglich \( r_1, \ldots, r_n \).
+
+Wir sehen schnell, dass weder Dekomposition, noch Analyse eindeutig sein müssen (insbesondere dann, wenn wir \( \varepsilon \in L(r_i) \) zulassen).
+\begin{example}
+	\begin{enumerate}
+		\item \( r_1 = a^+, w = aa \). Ergibt Dekompositionen \( (aa) \) und \( (a, a) \) mit zugehöriger (eindeutiger) Analyse \( (1) \) bzw. \( (1, 1) \).
+		\item \( r_1 = a+b, r_2 = a+c, w = a \). Ergibt eindeutige Dekomposition \( (a) \) mit zwei verschiedenen Analysen \( (1) \) und \( (2) \).	
+	\end{enumerate}
+	Im zweiten Fall stellen wir uns vor, dass \( r_1 \) mögliche Schlüsselwörter einer Programmiersprache (\texttt{while}, \texttt{true}, \texttt{if}) beschreibt und \( r_2 \) mögliche Variablennanem (Identifier), dann sieht man warum eine eindeutige Analyse wichtig ist. In diesem Anwendungsfall ist es natürlich zu sagen, dass der Ausdruck \( r_1 \) ''wichtiger`` ist als \( r_2 \) (deshalb verbieten die mesiten Programmiersprachen auch Schlüsselwörter als Identifier). Ähnliche Beispiele lassen sich auch für die Dekomposition finden.
+\end{example}
+
+Wir wollen nun sowohl, die Dekomposition, als auch die Analyse eindeutig machen. Ein erster Ansatz wäre zunächst das leere Wort zu verbieten und sicherzustellen, dass \( L(r_i) \cap L(r_j) = \emptyset \) für alle \( i \neq j \), indem wir den gemeinsamen Schnitt von zwei Ausdrücken aus dem ''unwichtigeren`` Ausdruck entfernen. Dadurch würde zumindest die Analyse eindeutig werden. Diese Idee ist jedoch nicht sinnvoll, u.a. deshalb, da das Entfernen des Schnittes -- also das Erkennen von \( L(r_j^\prime) \coloneqq L(r_j) \setminus L(r_i) \) -- eine Produktkonstruktion erfordert und somit tendenziell teuer ist.
+
+
+\subsection*{Eindeutigkeit durch First-Longest-Match}
+Der am meisten verbreitete Weg ist es folgende zwei Prinzipien zu implementieren:
+\begin{description}
+	\item[Longest Match] Mache jedes \( u_i \) der Zerlegung so lang wie möglich.
+	\item[First Match] Wähle aus den matchenden regulären Ausdrücken den mit dem kleinesten Index.
+\end{description}
+
+\begin{definition}
+	Eine Dekomposition \( (u_1, \ldots, u_k) \) von \( w \in \Sigma^\ast \) bezüglich der regulären Ausdrücke \( r_1, \ldots, r_n \in \mathsf{RE}_\Sigma \) heißt \textit{Longest-Match-Dekomposition} (LMD), wenn für jedes \( i \in [k] \), \( x \in \Sigma^+ \), \( y \in \Sigma^\ast \) mit \( w = u_1 \ldots u_i x y \) gilt, dass kein \( j \in [n] \) existiert, sodass \( u_i x \in L(r_j) \). 
+\end{definition}
+Umgangssprachlich bedeutet das, dass wir an einen Teil der Komposition \( u_i \) kein nicht-leeres Wort mehr anhängen können, was noch nicht verarbeitet wurde.
+Es ist klar, dass eine LMD eindeutig ist, falls sie existiert. Sie muss jedoch nicht immer existieren:
+
+\begin{example}
+	\( r_1 = a^+, r_2 = ab, w = aab \) hat Dekomposition \( (a, ab) \) aber keine LMD.
+\end{example}
+
+\begin{definition}
+	Sei \( (u_1, \ldots, u_k) \) eine LMD von \( w \in \Sigma^\ast \) bezüglich der regulären Ausdrücke \( r_1, \ldots, r_n \in \mathsf{RE}_\Sigma \). Die zugehörige \textit{First-Longest-Match-Analyse} (FLM-Analyse) \( (i_1, \ldots, i_k) \) ist gegeben durch
+	\[
+		i_j \coloneqq \min \{ \ell \mid u_j \in L(r_\ell) \}
+	\]
+	für jedes \( j \in [k] \).
+\end{definition}
+Auch hier ist klar, dass es höchstens eine FLM-Analyse gibt und sie existiert, wenn die LMD existiert.
+
+
+\subsection*{Eine mögliche Implementierung}
+Es gibt viele Möglichkeiten eine FLM-Analyse durchzuführen. Die von mir hier vorgestellte Art ist nicht die von mir favorisierte, aber sie ist insofern intuitiv, als dass sie nur Konzepte aus der FoSAP-Vorlesung verwendet und ein wenig über Arrays.
+
+Als Eingabe erhalten wir also \( w \in \Sigma^\ast \) und die regulären Ausdrücke \( r_1, \ldots, r_n \in \mathsf{RE}_\Sigma \). Gesucht ist eine FLM-Analyse inklusive zugehöriger LMD oder ein Error, falls diese nicht existieren.
+\begin{algorithm}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\SetKwComment{Comment}{\texttt{// }}{}
+	\underline{FLM}{($w, (r_i)_{i=1}^n$)}\\
+	\Output{FLM-Analyse $(i_j)_{j=1}^k$ und LMD $(u_j)_{j=1}^k$}	
+	\Comment{Vorbereitung}
+	Wandle alle \( r_i \) mit Thompson-Konstruktion in \(\varepsilon\)-NFAs \( \mathcal{A}_i = (Q_i, \Sigma, \delta_i, q_0^i, F_i) \) um.\\
+	Baue neuen $\varepsilon$-NFA $\mathcal{A} = (\biguplus_i Q_i \uplus \{q_0, q_f\}, \Sigma \uplus [n], \delta, q_0, \{q_f\})$ mit $\delta(p, a) = \delta_i(p, a)$ falls $p \in Q_i$ und $\delta(q_0, \varepsilon) = \{q_0^i \mid i \in [n]\}$ und $\delta(q, i) = \{q_f\}$, falls $q \in F_i$.\\
+	Eliminiere $\varepsilon$-Transitionen.\\
+	Determinisiere mit Potenzmengenkonstruktion.\\
+	Minimiere mit Markierungsalgorithmus.\\
+	\tcc{Wir haben jetzt einen DFA mit folgender Eigenschaft: Vom Zustand $\hat{\delta}(q_0, u)$ ist genau dann eine Transition mit $i \in [n]$ in einen Endzustand möglich, wenn $u \in L(r_i)$.}
+	\Comment{Löse nun das erweiterte Matching-Problem}	
+	Setze $\ell = 1, w_\ell = w$.\\
+	\While{$w_\ell \neq \varepsilon$}{
+		\texttt{A} = leeres Array der Länge $\left| w_\ell \right|$.\\
+		Simuliere $\mathcal{A}$ auf $w_\ell$, prüfe in jedem Schritt $j$, ob eine $i$-Transition in einen akzeptierenden Zustand möglich ist.
+		Falls ja, setze \texttt{A[$j$]} auf das kleinste mögliche $i$.\\
+		Nach der Simulation laufe \texttt{A} von hinten nach vorne durch bis wir den ersten nicht-leeren Eintrag an Stelle $h$ finden. Sollte es keinen geben gebe einen Error aus, ansonsten ist $u_\ell = w_{\ell_1} \ldots w_{\ell_h}$ und $i_\ell = \texttt{A[}h\texttt{]}$.\\
+		Setze $w_{\ell+1} = w_{\ell_h} \ldots w_{\ell_{\left| w_\ell \right|}}, \ell = \ell+1$.
+	}
+	\Comment{Jetzt ist $w_\ell = \varepsilon$.}
+	Gebe $(u_1, \ldots, u_{\ell-1})$ und $(i_1, \ldots, i_{\ell-1})$ aus.
+	\caption{First-Longest-Match-Analyse}
+	\label{alg:algorithm}
+\end{algorithm}\\
+In Abbildung~\ref{fig:nfa} seht ihr wie der \(\varepsilon\)-NFA der nach Zeile 3 entsteht aussieht.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
+		\node[state, initial, initial text=] (0) at (0, 0) {$q_0$};
+		
+		\node at (1.7, 2.5) {$\mathcal{A}_1$};
+		\draw[black, rounded corners] (1.5, 2.3) rectangle (4.5, 1.3);
+		\node[state] (01) at (2, 1.8) {$q_0^1$};
+		\node[state] (f1) at (4, 1.8) {$q_f^1$};
+		\node (d1) at (3, 1.8) {$\cdots$};
+		
+		\node at (1.7, .8) {$\mathcal{A}_2$};
+		\draw[black, rounded corners] (1.5, .6) rectangle (4.5, -.4);
+		\node[state] (02) at (2, .1) {$q_0^2$};
+		\node[state] (f2) at (4, .1) {$q_f^2$};
+		\node (d2) at (3, .1) {$\cdots$};
+		
+		\node (dv) at (3, -1.1) {$\vdots$};		
+		
+		\node at (1.7, -1.6) {$\mathcal{A}_n$};
+		\draw[black, rounded corners] (1.5, -1.8) rectangle (4.5, -2.8);
+		\node[state] (0n) at (2, -2.3) {$q_0^n$};
+		\node[state] (fn) at (4, -2.3) {$q_f^n$};
+		\node (dn) at (3, -2.3) {$\cdots$};
+		
+		\node[state, accepting] (f) at (6, 0) {$q_f$};
+		
+		\path (0) edge node {$\varepsilon$} (01)
+			(0) edge node[below left] {$\varepsilon$} (02)
+			(0) edge node[below left] {$\varepsilon$} (0n)
+			(f1) edge node {$1$} (f)
+			(f2) edge node[below left] {$2$} (f)
+			(fn) edge node[below right] {$n$} (f);	
+	\end{tikzpicture}
+	\caption{Skizze des NFAs aus Algorithmus~\ref{alg:algorithm}.}
+	\label{fig:nfa}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 

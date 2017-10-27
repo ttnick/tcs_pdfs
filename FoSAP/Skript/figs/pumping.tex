@@ -1,0 +1,9 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
+	\node[state, initial, initial text=] (0) at (0, 0) {$q_0$};
+	\node[state] (p) at (3, 0) {$p$};
+	\node[state, accepting] (q) at (6, 0) {$q$};
+		
+	\path (0) edge[decorate, decoration={snake, amplitude=.6mm, segment length=4mm, post length=1mm}] node {$x$} (p)
+		(p) edge[decorate, decoration={snake, amplitude=.6mm, segment length=4mm, post length=1mm}] node {$z$} (q);
+	\draw[decorate, decoration={snake, amplitude=.6mm, segment length=4mm, post length=1mm}] (p) .. controls (5, 2) and (1, 2) .. node[above] {$y$} (p);
+\end{tikzpicture}
