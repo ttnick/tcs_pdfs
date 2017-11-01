@@ -44,7 +44,7 @@ Wir betrachten dazu einmal diese Sprache \( K \) mit dem Satz von Rice: Sei
 \]
 \( \mathcal{S} \) ist nicht trivial. Betrachte dazu die berechenbaren Funktionen:
 \[
-	f_i: \Sigma^\ast \to \Sigma \text{ mit } f(w) = i \quad\text{ f.a. } w \in \Sigma^\ast
+	f_i: \Sigma^\ast \to \Sigma \text{ mit } f_i(w) = i \quad\text{ f.a. } w \in \Sigma^\ast
 \]
 mit \( i \in \{ 0, 1 \} \). Dann ist
 \begin{itemize}
@@ -213,7 +213,7 @@ In Abbildung \ref{fig:ps} ist für ein moderates \( \varphi \) der entsprechend 
 Aus der Konstruktion von \( V \) und \( E \) können wir einige Schlussfolgerungen ziehen:
 \begin{enumerate}
 	\item Die Menge \( \lbrace x_i, x_i^\prime \,\vert\, 1 \leq i \leq n \rbrace \cup \lbrace d_2, d_4 \rbrace \) ist für jedes \( \varphi \) ein Stable Set.
-	\item Jedes Stable Set enthält entweder \( d_1, d_3 \) oder \( d_2, d_4 \), aufgrund der internen Stabilität aber niemals beide Paare.
+	\item Jedes Stable Set enthält entweder \( d_1, d_3 \) oder \( d_2, d_4 \), aufgrund der inneren Stabilität aber niemals beide Paare.
 	\item Jedes Stable Set enthält für jedes \( i \in \lbrace 1, \ldots, n \rbrace \) entweder \( x_i, x_i^\prime \) oder \( \bar{x}_i, \bar{x}_i^\prime \), jedoch ebenfalls wegen der internen Stabilität niemals beide Paare.
 	\item Zwei Knoten \( c_{ij}, c_{ik} \) mit \( j \neq k \), die aus den Klauseln von \( \varphi \) generiert wurden, können nicht zusammen in einem Stable Set liegen. Daraus folgt aber, dass es für jede Klausel einen Knoten geben muss, die zwei Knoten der zugehörigen Klausel dominieren. Da jedoch jeder Knoten, der eine Kanten zu einem Knoten \( c_{ij} \) der Klausel \( c_i \) hat, zu allen Knoten von \( c_i \) eine Kanten haben muss, folgt, dass kein Knoten, der aus einer Klausel generiert wurde, in einem Stable Set liegen kann.
 \end{enumerate}
