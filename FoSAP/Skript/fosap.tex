@@ -111,7 +111,7 @@ Dieses Skript entstand aus der Vorlesung Formale Systeme, Automaten, Prozesse an
 \newpage
 \pagestyle{headings}
 \section{Mathematisches Vorwissen}\label{sec:pre}
-In diesem ersten Kapitel fixieren wir einige mathematischen Notationen und geben elementare Sätze aus der diskreten Mathematik, die im weiteren verlauf der Vorlesung benötigt werden. In der Regel sollten sämtliche Begriffe und Notationen aus dem ersten Semester bereits bekannt sein. Deshalb ist dieses Kapitel eher nur für Sommersemesteranfänger bestimmt.
+In diesem ersten Kapitel fixieren wir einige mathematischen Notationen und geben elementare Sätze aus der diskreten Mathematik, die im weiteren verlauf der Vorlesung benötigt werden. In der Regel sollten nahezu alle Begriffe und Notationen aus dem ersten Semester bereits bekannt sein. Deshalb ist dieses Kapitel eher nur für Sommersemesteranfänger bestimmt. Die in diesem Abschnitt gesammelten Definitionen und Sätze sind nicht alle relevant, aber dennoch nützlich zu kennen im weiteren Verlauf des Studiums.
 
 
 \subsection{Mengen}\label{sec:pre_sets}
@@ -176,8 +176,10 @@ oder auch
 \[
 	\{ n^2 : n \in 2\mathbb{N}+1 \}.
 \]
-
 Eine wichtige Menge haben wir bisher außen vor gelassen: die \textit{leere Menge}. Wir schreiben \( \emptyset \coloneqq \{ \} \). Gelegentlich verwenden wir außerdem folgende Notation, wenn wir nur eine endliche geordnete Menge benötigen: \( [\ell] \coloneqq \{ 0, 1, \ldots, \ell-1 \} \). Ein-elementige Mengen (z.B. \( [1] = \{ 0 \} \)) nennt man auch \textit{Singleton}.
+\begin{remark*}
+	Im Allgemeinen gibt es keine Elemente in Mengen, die mehrfach vorkommen. Man kann dies explizit zulassen, durch \textit{Multimengen}, z.B.: \( \{^\ast 1, 1, 2, \pi, \clubsuit, \pi ^\ast\} \).
+\end{remark*}
 
 
 \subsection{Operationen auf Mengen}\label{sec:pre_setops}
@@ -420,6 +422,9 @@ Wir haben Mengen, Relationen und Abbildungen jeweils eigenständig kennengelernt
 Statt \( \mathfrak{a}(R), \mathfrak{a}(f) \) schreibt man auch häufig \( R^\mathfrak{A}, f^\mathfrak{A} \). In der mathematischen Logik ist es wichtig eine Unterscheidung zwischen Relations- und Funktionssymbolen und ihren Interpretationen durch konkrete Relationen \( R^\mathfrak{A} \) bzw. Funktionen \( f^\mathfrak{A} \) zu machen. Deshalb sollten Schreibweisen wie \( \mathfrak{N} = (\mathbb{N}, +) \) nur als Abkürzungen verstanden werden für \( \mathfrak{N} = (\mathbb{N}, +^\mathfrak{N}) \) mit \( +^\mathfrak{N}\colon \mathbb{N}^2 \to \mathbb{N}, (m, n) \mapsto +^\mathfrak{N}(m, n) = m + n \), wobei wir mit \( m + n \) den gewohnten \( n \)-ten Nachfolger von \( m \) bezeichnen. Der Autor hofft, dass es klar ist worauf er hinaus wollte.\par
 Wir können Strukturen wieder klassifizieren nach sogenannten \textit{Axiomen}, die sie erfüllen.
 \begin{definition}
+	Eine Struktur vom Typ \( (A, \bullet) \) heißt \textit{Magma}. Ein Magma \( (A, \bullet) \) heißt \textit{abelsch} (oder \textit{kommutativ)}, falls für alle \( a, b \in A \) gilt: \( a \bullet b = b \bullet a \). Es heißt \textit{assoziativ} (oder \textit{Halbgruppe}) falls für alle \( a, b, c \in A \) gilt: \( (a \bullet b) \bullet c = a \bullet (b \bullet c) \).
+\end{definition}
+\begin{definition}
 	Sei \( \mathfrak{A} = (A, \bullet) \) eine Struktur mit \( \bullet\colon A \times A \to A \). Wir sagen \( \mathfrak{A} \) ist ein \textit{Monoid}, wenn folgende Axiome gelten:
 	\begin{enumerate}
 		\item \textit{Assoziativität}, für alle \( a, b, c \in A \) gilt \( (x \bullet y) \bullet z = x \bullet (y \bullet z) \).
@@ -485,13 +490,67 @@ Wir bezeichnen die Inversen zu Einheiten \( a \) in der Regel mit \( a^{-1} \) o
 \begin{definition}
 	Sei \( \mathfrak{A} = (A, \bullet) \) eine Gruppe und \( B \subseteq A \) nicht-leer. \( \mathfrak{B} = (B, \bullet) \) ist eine \textit{Untergruppe} von \( \mathfrak{A} \), wenn für alle \( a, b \in B \) auch \( a \bullet b^{-1} \in B \) gilt.
 \end{definition}
-% Ringe, Körper
+Natürlich ist es auch möglich eine solche Klassifizierung von Strukturen mit mehr als einer Funktion vorzunehmen.
+\begin{definition}
+	Eine Struktur \( (A, \oplus, \odot) \) heißt \textit{Ring}, falls gilt
+	\begin{enumerate}
+		\item \( (A, \oplus) \) ist abelsche Gruppe,
+		\item \( (A, \odot) \) ist Halbgruppe,
+		\item \textit{Distributivität}, für alle \( a, b, c \in A \) gilt \( a \odot (b \oplus c) = a \odot b \oplus a \odot c \) und \( (a \oplus b) \odot c = a \odot c \oplus b \odot c \).
+	\end{enumerate}
+	Das neutrale Element von \( (A, \oplus) \) heißt \textit{Nullelement} des Rings. Der Ring heißt \textit{kommutativ}, falls er bzgl. \( \odot \) kommutativ ist, ansonsten \textit{nicht-kommutativ}. Ist \( (A, \odot) \) Monoid, so heißt der Ring \textit{unitär}. Das neutrale Element von \( (A, \odot) \) heißt dann \textit{Einselement}. Ist \( (A, \oplus) \) nur eine abelsche Halbgruppe, so heißt \( (A, \oplus, \odot) \) \textit{Halbring}. Ist \( ( A, \oplus) \) Halbgruppe, aber \( (A, \odot) \) Gruppe, so heißt \( (A, \oplus, \odot) \) \textit{Halbkörper}.
+\end{definition}
+\begin{definition}
+	Eine Struktur \( (A, \oplus, \odot) \) heißt \textit{Körper}, wenn gilt
+	\begin{enumerate}
+		\item \( (A, \oplus) \) ist abelsche Gruppe,
+		\item \( (A \setminus \{0\}, \odot) \) ist abelsche Gruppe (mit \( 0 \) neutralem Element bzgl. \( \oplus \)),
+		\item Distributivität ist erfüllt.
+	\end{enumerate}
+	Ist \( (A \setminus \{0\}, \odot) \) nur Gruppe (ohne Kommutativität), so ist \( (A, \oplus, \odot) \) \textit{Schiefkörper}.
+\end{definition}
+\begin{remark*}
+	Jeder Körper ist ein kommutativer Ring und auch ein Schiefkörper. Jeder Schiefkörper ist ein Ring.
+\end{remark*}
 
 
 \subsection{Graphen}\label{sec:pre_graphs}
+Eine weitere wichtige Klasse von Strukturen sind Graphen. Dise werden häufig genutzt um Operatoren wie Funktionen und Relationen zu visualisieren, allerdings untersucht man Graphen auch selbst als mathematische Objekte.
+\begin{definition}
+	Ein \textit{Graph} ist eine Struktur \( G = (V, E) \) mit \textit{Knotenmenge} \( V \) und \textit{Kantenmenge} (oder Multimenge) \( E \subseteq V \times V \).
+\end{definition}
+\begin{definition}
+	Sei \( G = (V, E) \) ein Graph, \( v, w \in V \) und \( e = (v, w) \in E \).
+	\begin{itemize}
+		\item \( v, w \) heißen \textit{adjazent} (oder \textit{benachbart}) durch \( e \).
+		\item \( e \) heißt \textit{Schleife} (oder \textit{Loop}), falls \( v = w \).
+		\item Zwei Kanten \( e, e^\prime \) heißen \textit{parallel}, falls \( e = e^\prime \).
+		\item Ein Graph heißt \textit{einfach}, falls er keine parallelen Kanten enthält.
+		\item Ein Graph heißt \textit{ungerichtet}, falls \( (v, w) \in E \) impliziert, dass \( (w, v) \in E \), ansonsten \textit{gerichtet}. 
+	\end{itemize}
+\end{definition}
+\begin{definition}
+	Sei \( G = (V, E) \) ein Graph und \( v \in V \). Der \textit{Knotengrad} von \( v \) ist definiert durch
+	\[
+		\deg(v) = \left| \{ e \in E \,\vert\, e = (v, w), w \neq v \} \right|.
+	\]
+\end{definition}
+\begin{definition}
+	Ein Graph \( G = (V, E) \) heißt \( k \)-\textit{regulär}, falls für alle \( v \in V \) gilt \( \deg(v) = k \).
+	\( G \) heißt \textit{vollständig}, falls für alle Knotenpaare \( v \neq w \in V \) gilt: \( (v, w) \in E \). Mit \( K_n \) bezeichnen wir den vollständigen Graphen mit \( n \) Knoten.
+	\( G \) heißt \textit{bipartit}, falls sich \( V \) als disjunkte Vereinigung aus \( U, W \) darstellen lässt, sodass für alle \( (u, v) \in E \) entweder \( u \in U, v \in W \) oder \( u \in W, v \in U \) gilt. Er heißt \textit{vollständig bipartit}, wenn zudem gilt, dass \( E = \{ (u, w) \mid u \in U, w \in W \} \). Wir schreiben \( K_{p,q} \) mit \( p = \left| U \right| \) und \( q = \left| W \right| \) für den vollständig bipartiten Graphen mit Knotenmenge \( V = U \cup W, U \cap W = \emptyset \).
+\end{definition}
+\begin{remark*}
+	Den Graphen \( S_n = K_{1,n-1} \) nennt man auch \textit{Stern}.
+\end{remark*}
+\begin{definition}
+	Sei \( G = (V, E) \) ein Graph. Ein \textit{Teilgraph} von \( G \) ist ein Graph \( G^\prime = (V^\prime, E^\prime) \), wenn gilt \( V^\prime \subseteq V \) und \( E^\prime \subseteq E \). Ein \textit{induzierter Teilgraph} von \( G \) ist ein ein Graph \( G^\prime = (V^\prime, E^\prime) \), wenn gilt \( V^\prime \subseteq V \) und \( E^\prime = E \cap V^\prime \times V^\prime \). Wir schreiben für den durch \( V^\prime \) induzierten Teilgraphen von \( G \) auch \( G[V^\prime] \).
+\end{definition}
+%TODO Pfade, Kreise, Cliquen, Zusammenhang
 
 
 \subsection{Beweismethoden}\label{sec:pre_proofs}
+%TODO Deduktion, Induktion, Widerspruchsbeweis, Kontraposition
 
 
 
