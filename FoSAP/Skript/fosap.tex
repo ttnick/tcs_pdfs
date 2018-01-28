@@ -473,9 +473,9 @@ Wir bezeichnen die Inversen zu Einheiten \( a \) in der Regel mit \( a^{-1} \) o
 \begin{lemma}
 	Ist \( (A, \bullet, e) \) Monoid, so ist \( (A^\times, \bullet, e) \) Gruppe (Einheitengruppe).
 	\begin{proof}
-		Per Definition ist jedes Element in \( A^\times \) eine Einheit. Außerdem ist \( e \) stets eine Einheit, da es invers zu sich selbst ist. Es bleibt zu zeigen, dass \( A^\times \) auch abgeschlossen ist unter der Operation \( \bullet \). Sei dazu \( a, b \in A^\times \) und \( a^\prime, b^\prime \) die jeweiligen Inversen. Wir zeigen das \( a \bullet b \) Einheit ist mit Inversem \( b^\prime \bullet a^\prime \):
+		Per Definition ist jedes Element in \( A^\times \) eine Einheit. Außerdem ist \( e \) stets eine Einheit, da es invers zu sich selbst ist. Es bleibt zu zeigen, dass \( A^\times \) auch abgeschlossen ist unter der Operation \( \bullet \). Sei dazu \( a, b \in A^\times \) und \( a^{-1}, b^{-1} \) die jeweiligen Inversen \( (\ast) \). Wir zeigen das \( a \bullet b \) Einheit ist mit Inversem \( b^{-1} \bullet a^{-1} \):
 		\[
-			(a \bullet b) \bullet (b^{-1} \bullet a^{-1}) = a \bullet (b \bullet b^{-1}) \bullet a^{-1} = a \bullet e \bullet a^{-1} = a \bullet a^{-1} = e. \qedhere
+			(a \bullet b) \bullet (b^{-1} \bullet a^{-1}) \overset{\text{(i)}}{=} a \bullet (b \bullet b^{-1}) \bullet a^{-1} \overset{(\ast)}{=} a \bullet e \bullet a^{-1} \overset{\text{(ii)}}{=} a \bullet a^{-1} \overset{(\ast)}{=} e. \qedhere
 		\]
 	\end{proof}
 \end{lemma}
@@ -1317,7 +1317,7 @@ Bisher haben wir Sprachen betrachtet, die sich von endlichen Automaten erkennen 
 		\item Für jedes \( a \in \Sigma \) ist \( \bm{a} \) ein regulärer Ausdruck.
 		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{+} r^\prime) \) ein regulärer Ausdruck.
 		\item Falls \( r, r^\prime \) reguläre Ausdrücke sind, dann ist auch \( (r \bm{\cdot} r^\prime) \) ein regulärer Ausdruck.
-		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( (r) \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
+		\item Falls \( r \) reguläre Ausdrücke sind, dann ist auch \( r \overset{\bm{\ast}}{} \) ein regulärer Ausdruck.
 	\end{itemize}
 	Die \textit{Menge aller regulären Ausdrücke} über \( \Sigma \) bezeichnen mit \( \mathsf{RE}_\Sigma \).
 \end{definition}
@@ -1333,11 +1333,11 @@ Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun defin
 		\item \( \llbracket \bm{a} \rrbracket = \{ a \} \) für jedes \( \bm{a} \in \mathsf{RE}_\Sigma \),
 		\item \( \llbracket (r \bm{+} r^\prime) \rrbracket = \llbracket r \rrbracket \cup \llbracket r^\prime \rrbracket \),
 		\item \( \llbracket (r \bm{\cdot} r^\prime) \rrbracket = \llbracket r \rrbracket \cdot \llbracket r^\prime \rrbracket \),
-		\item \( \llbracket (r) \overset{\bm{\ast}}{} \rrbracket = \llbracket r \rrbracket^\ast \).
+		\item \( \llbracket r \overset{\bm{\ast}}{} \rrbracket = \llbracket r \rrbracket^\ast \).
 	\end{itemize}
 	Eine Sprache \( L \subseteq \Sigma^\ast \) heißt \textit{regulär}, wenn ein regulärer Ausdruck \( r \in \mathsf{RE}_\Sigma \) existiert mit \( \llbracket r \rrbracket = L \).
 \end{definition}
-Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( (\bm{\emptyset}) \overset{\bm{\ast}}{} \) und \( (r) \overset{\bm{+}}{} \) für \( r \bm{\cdot} (r) \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt (\( \bm{\cdot} \)) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass \( \overset{\bm{\ast}}{} \) stärker bindet als \( \bm{\cdot} \), was wiederum stärker bindet als \( \bm{+} \). Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.\par
+Wir erlauben in der Regel auch als Abkürzung die Ausdrücke \( \bm{\varepsilon} \) für \( \bm{\emptyset}\overset{\bm{\ast}}{} \) und \( r \overset{\bm{+}}{} \) für \( r \bm{\cdot} r \overset{\bm{\ast}}{} \). Außerdem lassen wir den Punkt (\( \bm{\cdot} \)) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass \( \overset{\bm{\ast}}{} \) stärker bindet als \( \bm{\cdot} \), was wiederum stärker bindet als \( \bm{+} \). Statt \( \llbracket r \rrbracket \) ist auch die Schreibweise \( L(r) \) gebräuchlich.\par
 Reguläre Ausdrücke kennt man auch für Computerprogramme wie \texttt{grep}, \texttt{awk} oder \texttt{sed}. Diese sind syntaktisch etwas anders aufgebaut, jedoch lässt sich jeder POSIX-Ausdruck (das sind die regulären Ausdrücke für oben genannte Programme) auch als regulärer Ausdruck wie in Definition~\ref{def:regexsyntax} umschreiben.
 \begin{example}
 	Die POSIX-Syntax für reguläre Ausdrücke geht wie folgt.
@@ -1579,7 +1579,6 @@ Wir werden nun anstelle von FA-erkennbaren Sprachen auch nur noch von regulären
 
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
 Wir haben bis hier hin reguläre Sprachen eine umfangreiche Charakterisierung gegeben, nämlich als Sprachen, die sich durch reguläre Ausdrücke oder Sprachen von endliche Automaten beschreiben lassen -- auf die Äquivalenz dieser Charakterisierungen haben wir lange hingearbeitet und mit dem Ä\-qui\-va\-lenz\-satz von Kleene einen schweren Brocken der theoretischen Informatik bewiesen. Dieser Abschnitt wird nun wieder deutlich einfacher. Wir haben bereits einige Abschlusseigenschaften regulärer Sprachen bewiesen: Schnitt, Vereinigung, Komplement, Konkatenation, Iteration usw., aber auch unter ''erfundenen`` Operatoren wie \textit{Perfect Shuffle}. Diese Abschlüsse allein zusammen mit dem Äquivalenzsatz von Kleene ergeben bereits genug Gründe um reguläre Sprachen als eine in wissenschaftlicher Hinsicht \textit{sinnvolle} Sprachklasse zu sehen. Wir werden in diesem Abschnitt nun ein paar weitere sinnvolle Abschlusseigenschaften beweisen.\par
-%TODO Freies Monoid
 \begin{definition}\label{def:stringhomomorphism}
 	Seien \( \Sigma, \Gamma \) Alphabete. Die  Abbildung \( h\colon \Sigma^\ast \to \Gamma^\ast \) heißt \textit{(Wort-)Homomorphismus}, wenn für alle \( a_0 \ldots a_{n-1} \in \Sigma^\ast \) gilt, dass
 	\[
@@ -1627,7 +1626,7 @@ Beachte, dass \( w^\mathcal{R} \) wohldefiniert ist für jedes \( w \in \Sigma
 \begin{theorem}
 	Sei \( L \subseteq \Sigma^\ast \) regulär. Dann ist auch \( L^\mathcal{R} \) regulär.
 	\begin{proof}
-		folgt. %TODO
+		Übung.
 	\end{proof}
 \end{theorem}
 
@@ -1637,9 +1636,9 @@ Bisher haben wir nur sehr einfache Sprachen betrachtet, die alle regulär waren.
 \[
 	L_\mathbb{P} \coloneqq \{ a^p : p \in \mathbb{P} \}.
 \]
-\( L_\mathbb{P} \) ist die Sprache aller (mit \( a \)) unär codierten Primzahlen, d.h. \( L_\mathbb{P} = \{ aa, aaa, a^5, a^7, a^{11}, \ldots \} \). Dass \( L_\mathbb{P} \) nicht regulär ist, ist auch nicht so schwer einzusehen: Intuitiv, wie würde ein regulärer Ausdruck aussehen? Natürlich könnten wir eine unendliche Vereinigung bilden (dies wäre jedoch nicht regulär, da reguläre Ausdrücke endlich sind):
+\( L_\mathbb{P} \) ist die Sprache aller (mit \( a \)) unär codierten Primzahlen, d.h. \( L_\mathbb{P} = \{ a^2, a^3, a^5, a^7, a^{11}, \ldots \} \). Dass \( L_\mathbb{P} \) nicht regulär ist, ist auch nicht so schwer einzusehen: Intuitiv, wie würde ein regulärer Ausdruck aussehen? Natürlich könnten wir eine unendliche Vereinigung bilden (dies wäre jedoch nicht regulär, da reguläre Ausdrücke endlich sind):
 \[
-	r_\mathbb{P} = \sum_{p \in \mathbb{P}} a^p = aa + aaa + a^5 + a^7 + a^{11} + \ldots
+	r_\mathbb{P} = \sum_{p \in \mathbb{P}} a^p = a^2 + a^3 + a^5 + a^7 + a^{11} + \ldots
 \]
 Es erscheint klar, dass es jedoch keine Möglichkeit gibt diesen Ausdruck zu vereinfachen. In einem Automaten wird es noch deutlicher. Wenn wir mit endlich vielen Zuständen auskämen um genau alle unendlich vielen Primzahlcodierungen zu erkennen würden wir Kreise im Transitionsgraphen und somit eine gewisse Regelmäßigkeit in der Wiederholung von Primzahlen bekommen. Dies würde bedeuten, dass die Generierung neuer Primzahlen viel einfacher wäre als bisher angenommen, da wir ab einer bestimmten Primzahl einfach immer eine Konstante addieren könnten um die nächste zu bekommen. Das ist natürlich nicht der Fall. Eine schematische Erklärung dieses Arguments ist in Abbildung~\ref{fig:dfa_primes}. Egal an welcher und an wie vielen Stellen wir eine Zustandwiederholung zulassen (durch gestrichtelte Kante angedeutet), wir würden stets Codierungen akzeptieren, die nicht zu Primzahlen gehören können. In diesem Abschnitt werden wir uns ansehen, wie wir dieses Argument formalisieren und auf weitere nicht-reguläre Sprachen anwenden können.
 \begin{figure}
@@ -1709,6 +1708,8 @@ Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese 
 		Angenommen \( L \) wäre regulär. Dann gilt das Pumping-Lemma. Sei also \( n \in \mathbb{N}_+ \) beliebig und wir betrachten das Wort \( w = a^n bb a^n \in L \). Es hat die Länge \( \left| w \right| = 2n+2 \geq n \). Wir betrachten nun Zerlegungen, die die Eigenschaften (i) und (ii) erfüllen und zeigen, dass (iii) dann nicht gelten kann. Wegen (i) ist \( y = a^k \) für ein \( k \leq n \) (\( k = \left| y \right| \leq \left| xy \right| \leq n \), da die ersten \( n \) Zeichen alle \( a \) sind, kommt also auch kein \( b \) in \( y \) vor). Wegen (ii) gilt außerdem, dass \( k > 0 \). Betrachte nun das Wort \( w^\prime \coloneqq xyyz = a^{n+k}bba^n \). Es liegt nicht in \( L \), da \( w^\prime \) kein Palindrom ist. Damit gilt die Eigenschaft (iii) für \( i = 2 \) nicht (gilt sogar für gar kein \( i \neq 1 \)). Dies ist ein Widerspruch zum Pumping-Lemma, also kann \( L \) nicht regulär sein. 
 	\end{proof}
 \end{example}
+%TODO Pumping-Lemma-Spiel
+%TODO Nicht-Regularität durch Abschlusseigenschaften zeigen.
 
 
 \subsection{Minimierung von DFAs}\label{sec:regular_minimization}

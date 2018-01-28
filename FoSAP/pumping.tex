@@ -1,0 +1,126 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[left=3cm, right=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage[justification=centering]{caption}
+\usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
+\parindent = 0pt
+\let\emptyset\varnothing
+
+% define environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem*{remark*}{Bemerkung}
+
+\theoremstyle{plain}
+\newtheorem*{lemma*}{Lemma}
+
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\renewcommand{\labelenumi}{(\roman{enumi})}
+
+\author{Niklas Rieken}
+\title{Pumping-Lemma und Varianten}
+
+\begin{document}
+\maketitle
+
+Der in der Vorlesung (zu Unrecht, meiner Meinung nach) am meisten beworbene Weg um zu zeigen, dass eine Sprache nicht regulär ist, ist die Anwendung des Pumping-Lemmas, was für viele FoSAP-Hörer der Endgegner der Vorlesung ist, obwohl das dahinter stehende Argument recht einfach ist. Dieses Dokument soll beim Verständnis etwas helfen, indem wir das selbe Argument auf drei verschiedene Arten anwenden.
+
+Wir betrachten jetzt die Sprache 
+$$
+	L = \{ uav \,\vert\, u, v \in \{ a, b \}^\ast \text{ mit } \left| u \right| = \left| v \right| \} 
+$$
+und zeigen, dass diese nicht regulär ist auf drei verschiedene Arten: 1. Direktes Argument am Automaten, 2. Einfache Anwendung des Pumping-Lemmas, 3. Pumping-Lemma-Spiel.
+
+\section*{Direkte Argumentation über Automaten}
+Angenommen $L$ ist regulär, dann gibt es einen NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$, der $L$ erkennt. Angenommen $\mathcal{A}$ habe $n$ Zustände (d.h. $\left| Q \right| = n$). Wir betrachten das Wort $w = b^n a b^n$. Das Wort ist in der Sprache, also gibt es einen akzeptierenden Lauf $\varrho = (r_0, \ldots, r_{2n+1})$ mit $r_0 = q_0$ und $r_{2n+1} \eqqcolon q^\prime \in F$. In dem Lauf gibt es insgesamt also $2n+2$ Zustände, der Automat hat jedoch nur $n$ viele verschiedenen Zustände. Daraus folgt, dass spätestens nach dem Zustand $r_n$ ein Zustand doppelt in $\varrho$ vorgekommen sein muss. Sei also $r_i = r_j \eqqcolon q$ ($i < j \leq n$) ein Zustand, der zwei mal im Lauf vorkam. Wir wissen außerdem, dass die Zeichen, die zwischen der Zustandswiederholung gelesen wurden, alle aus dem Präfix $b^n$ waren. Betrachten wir nun den Lauf 
+$$
+	\varrho^\prime = (r_0, \ldots, r_i, r_{j+1}, \ldots, r_{2n+1}).
+$$
+Dieser ist entsteht, wenn wir die $j-i \eqqcolon k > 0$ vielen $b$s, die zwischen der Wiederholung gelesen werden, weglassen, also $w^\prime = b^i b^{n-j} a b^n = b^{n-k} a b^n$ lesen. Dieser Lauf existiert, denn $r_i = r_j$ und somit ist auch die Transition $(r_j, b, r_{j+1}) = (r_i, b, r_{j+1}) \in \Delta$. Alle anderen Transitionen sind ohnehin die gleichen wie in $\varrho$. Auch der Lauf $\varrho^\prime$ endet in $r_{2n+1} \in F$. Somit wird auch das Wort $w^\prime$ von $\mathcal{A}$ akzeptiert, aber $w^\prime \notin L$, da vor dem $a$ weniger $b$s gelesen werden als nach dem $a$. D.h. $\mathcal{A}$ erkennt eine andere Sprache als $L$. Da $\mathcal{A}$ beliebig gewählt war, kann also kein solcher NFA für $L$ existieren. Somit ist $L$ nicht regulär. In Abbildung~\ref{fig:pl} ist eine Skizze zu diesem Argument.
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
+		\node[state, initial, initial text=] (0) at (0, 0) {$q_0$};
+		\node[state] (i) at (3, 0) {$q$};
+		\node[state, accepting] (p) at (6, 0) {$q^\prime$};
+		
+		\path (0) edge[decorate, decoration={snake, amplitude=.6mm, segment length=4mm, post length=1mm}] node {$b^i$} (i)
+			(i) edge[decorate, decoration={snake, amplitude=.6mm, segment length=4mm, post length=1mm}] node {$b^{n-k-i}ab^n$} (p);
+		\draw[decorate, decoration={snake, amplitude=.6mm, segment length=4mm, post length=1mm}] (i) .. controls (5, 2) and (1, 2) .. node[above] {$b^k$} (i);
+	\end{tikzpicture}
+	\caption{Zustandswiederholung in $q$. Es gibt also einen Lauf von $q_0$ nach $q$ und einen Lauf von $q$ nach $p$. Den Zwischenlauf von $q$ nach $q$ kann man also weglassen (oder auch beliebig oft wiederholen).}
+	\label{fig:pl}
+\end{figure}
+
+
+\section*{Anwendung des Pumping-Lemmas}
+Zunächst wiederholen wir das Lemma einmal im Wortlaut:
+\begin{lemma*}
+	Sei $L$ eine reguläre Sprache. Dann existiert ein $n \in \mathbb{N}_+$, sodass für alle $w \in L$ mit $\left| w \right| \geq n$ eine Zerlegung $w = xyz$ existiert für die gilt:
+	\begin{enumerate}
+		\item $\left| xy \right| \leq n$,
+		\item $y \neq \varepsilon$,
+		\item $xy^i z \in L$ für alle $i \in \mathbb{N}$.
+	\end{enumerate}
+\end{lemma*}
+Um nun zu zeigen, dass $L$ nicht regulär ist zeigen wir die Kontraposition des Lemmas, d.h.
+\begin{center}
+	\textit{Wenn für alle $n \in \mathbb{N}_+$ ein $w \in L$ mit $\left| w \right| \geq n$ existiert, sodass für mindestens eine Zerlegung $xyz = w$ mindestens eine der drei Bedingungen (i-iii) nicht erfüllt ist, dann ist $L$ nicht-regulär}.
+\end{center}
+Beachte: Das Pumping-Lemma kann nur dafür eingesetzt werden, um zu zeigen, dass eine Sprache nicht reguär ist! Es gibt auch nicht-reguläre Sprachen, die dem Pumping-Lemma genügen! Nun zum Beweis:\par
+Angenommen $L$ wäre regulär. Sei dann $n \in \mathbb{N}_+$ beliebig aber fest gewählt gemäß Pumping-Lemma. Betrachte das Wort $w = b^n a b^n \in L$. Es gilt $\left| w \right| = 2n+1 \geq n$. Sei nun $xyz = w$ eine beliebige Zerlegung, sodass \textit{(i+ii)} erfüllt sind. Wir zeigen, dass dan \textit{(iii)} nicht erfüllt sein kann. Es gilt, dass $y = b^k$ mit $k \leq n$ (wegen \textit{(i)}: $\left| y \right| \leq \left| xy \right| \leq n$, die ersten $n$ Zeichen sind auch alles $b$s, sodass $xy$ nur aus $b$s bestehen kann und somit auch $y$). Außerdem ist $k > 0$ (wegen \textit{(ii)}: $y \neq \varepsilon = b^0$). Wähle nun $i = 0$ und betrachte das Wort $w^\prime = xy^0z = xz = b^{n-k} a b^n$. Nach Pumping-Lemma müsste dies zu $L$ gehören, was jedoch offenbar nicht der Fall ist. Damit haben wir einen Widerspruch zum Pumping-Lemma und es folgt, dass $L$ nicht regulär ist.
+
+\begin{remark*}
+	Man sieht leicht wie analog die Argumentation über das Pumping-Lemma und über das direkte Argument am NFA verlaufen.
+\end{remark*}
+\begin{remark*}
+	Eine Wahl von $i \geq 2$ und das daraus resultierende ''aufgepumpte`` Wort $b^{n+(i-1)k} a b^n \notin L$ wäre natürlich ebenfalls möglich gewesen.
+\end{remark*}
+
+
+\section*{Das Pumping-Lemma-Spiel}
+Es ist auch möglich, das Pumping-Lemma als Spiel aufzufassen. Das Vorgehen ist dabei identisch zu Model-Checking-Spielen für First Order Logic (\textit{Prädikatenlogik}), die man in der Vorlesung Mathematische Logik (normalerweise im 4. Semester) sieht. Wir beginnen mit den Spielern:
+\begin{description}
+	\item[Alice] versucht die Beweisführung der Nicht-Regualarität zu sabotieren,\\
+		\textit{(Verifiziererin, Defender)}
+	\item[Bob] möchte zeigen, dass eine Sprache nicht regulär ist.\\
+		\textit{(Falsifizierer, Attacker)}
+\end{description}
+Die Spielregeln gehen wie folgt: Das "Spielfeld" ist die Sprache $L$.
+\begin{enumerate}[label=\arabic*)]
+	\item Alice wählt eine Zahl $n \in \mathbb{N}_+$.
+	\item Bob wählt ein Wort $w \in L$ mit $\left| w \right| \geq n$.
+	\item Alice wählt eine Zerlegung $xyz = w$, mit $\left| xy \right| \leq n$ und $y \neq \varepsilon$.
+	\item Bob wählt eine Zahl $i \in \mathbb{N}$.
+\end{enumerate}
+Alice gewinnt, wenn $xy^iz \in L$ oder Bob in Schritt 2 nicht ziehen kann (das wäre der Fall wenn jedes Wort aus $L$ kürzer ist als das $n$, welches Alice vorgegeben hat -- die Sprache wäre dann endlich und somit regulär).\\
+Bob gewinnt, wenn $xy^iz \notin L$.
+
+\begin{remark*}
+	Falls $L$ regulär ist, so hat Alice eine Gewinnstrategie, d.h. sie kann ein $n$ wählen, sodass sie für jedes Wort, mit dem Bob in Schritt 2 antworten könnte eine Zerlegung findet, die Bob in Schritt 4 nicht aus der Sprache rauspumpen kann.\\
+	Äquivalent dazu: Falls Bob eine Gewinnstrategie hat, so ist $L$ nicht regulär.
+\end{remark*}
+\begin{remark*}
+	Beachtet, dass in Schritt 3 Alice(!) diejenige ist, die eine Zerlegung wählt. Wenn wir zeigen wollen, dass Bob eine Gewinnstrategie hat, heißt das, dass wir für alles(!) was Alice wählen könnte im 4. Schritt noch aus der Sprache herausgepumpt werden kann. Es wäre keine Gewinnstrategie, wenn Bob nur auf manche Züge von Alice eine passende Antwort findet.
+\end{remark*}
+
+Wir geben nun eine Gewinnstrategie für Bob auf der Sprache $L$ von oben an.\par
+\begin{enumerate}[label=\arabic*)]
+	\item Alice wählt eine Zahl $n$.
+	\item Bob wählt das Wort $w = b^n a b^n$ ($\left| w \right| \geq n$ \checkmark).
+	\item Alice wählt eine Zerlegung $xyz = w$ mit $\left| xy \right| \leq n, y \neq \varepsilon$ (d.h. $y = b^k$ für ein $0 < k \leq n$ mit der selben Begründung wie oben).
+	\item Bob wählt $i = 0$, unabhängig von Alice' Zerlegung.
+\end{enumerate}
+Das Wort $xz = b^{n-k} a b^n$ gehört nicht zur Sprache $L$ für egal welches $k > 0$ welches wir aus Alice' Zerlegung erhalten. Damit hat Bob eine Gewinnstrategie und somit ist $L$ nicht regulär.
+\end{document}

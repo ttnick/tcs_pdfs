@@ -1,15 +1,20 @@
 \documentclass[11pt, a4paper]{article}
+\usepackage[left=3cm, right=3cm]{geometry}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\usepackage[ngerman]{babel}
 \usepackage{amsmath}
-\usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{array}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage[justification=centering]{caption}
 \usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
+\parindent = 0pt
+\let\emptyset\varnothing
 
 % define environments
 \theoremstyle{definition}
@@ -28,7 +33,7 @@
 \begin{document}
 \maketitle
 
-Bisher sind reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert worden. Nun soll eine Eigenschaft gefunden werden, die reguläre Sprachen auf einer stark mathematisch-strukturellen Ebene charakterisiert, d.h. mit Aussagen, die sich auf die Struktur
+Bisher sind reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert worden. Nun soll eine Eigenschaft gefunden werden, die reguläre Sprachen auf einer stark mathematisch-struk\-tur\-ellen Ebene charakterisiert, d.h. mit Aussagen, die sich auf die Struktur
 \[
 	(\Sigma^\ast, \cdot, \varepsilon)
 \]
@@ -83,7 +88,7 @@ Man benennt Äquivalenzklassen auch durch einzelne Repräsentanten, z.B. mit \( 
 Die Vereinigung aller Äquivalenzklassen zu einer Äquivalenz über einer Menge \( A \) bildet stets eine Partition von \( A \).
 
 \subsection*{Finden der Äquivalenzklassen}
-Lemma~\ref{kongruenzlemma} kann dafür verwendet werden um Äquivalenzklassen (der Myhill-Nerode-Äquivalenz \( \equiv_L \)) zu finden. Wir gehen dabei wie folgt vor:\\
+Lemma~\ref{kongruenzlemma} kann dafür verwendet werden um Äquivalenzklassen (der Myhill-Nerode-Ä\-qui\-va\-lenz \( \equiv_L \)) zu finden. Wir gehen dabei wie folgt vor:\\
 Wir starten mit dem leeren Wort \( \varepsilon \) und der zugehörigen Äquivalenzklasse \( [\varepsilon]_L \). Danach wiederholen wir folgende Schritte bis keine neue Äquivalenzklassen mehr gefunden werden:\\
 Für jedes Symbol \( a \in \Sigma \) und jede bisher gefundene Äquivalenzklasse \( [u]_L \) betrachte die Äquivalenzklasse \( [ua]_L \). Ist \( [ua]_L = [v]_L \) für eine bereits gefundene Äquivalenzklasse, passiert nichts. Ist dies nicht der Fall, fügen wir \( [ua]_L \) als neue Äquivalenzklasse hinzu.\par
 Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen (s. Satz~\ref{nerode}).\par
