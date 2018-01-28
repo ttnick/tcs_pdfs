@@ -1,20 +1,24 @@
 \documentclass[11pt, a4paper]{article}
+\usepackage[left=3cm, right=3cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{array}
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage[justification=centering]{caption}
 \usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
-
+\let\emptyset\varnothing
+\parindent = 0pt
 \renewcommand{\labelenumi}{(\roman{enumi})}
 
 \author{Niklas Rieken}
-\title{Äquivalenzsatz von Kleene}
+\title{Äquivalenzsatz von Kleene\\Rossmanith-Edition}
 
 
 \begin{document}
@@ -28,7 +32,7 @@ Reguläre Ausdrücke sind wie folgt definiert:\\
 Basisfälle: \( \emptyset, \varepsilon \) und \( a \) sind reguläre Ausdrücke für jedes \( a \in \Sigma \).\\
 Rekursionsschritt: Sind \( r \) und \( e \) reguläre Ausdrücke, so sind auch \( (r \cdot e), (r + e) \) und \( r^\ast \) reguläre Ausdrücke.\\
 Semantisch stehen die Ausdrücke \( \emptyset, \varepsilon, a \) für die Sprachen \( L(\emptyset) := \emptyset, L(\varepsilon) := \{ \varepsilon \}, L(a) := \{ a \} \) und im rekursiven Fall \( L(r \cdot e) := L(r) \cdot L(e), L(r + e) := L(r) \cup L(e), L(r^\ast) := L(r)^\ast \). Klammern und \( \cdot \) werden gerne auch weggelassen, wenn der Ausdruck auch so klar ist.\par
-Gelegentlich kennen Studenten reguläre Ausdrücke bereits durch Programme wie \texttt{grep, sed, vim}, womit sich Textdateien u.a. durchsuchen lassen mithilfe von POSIX-Ausdrücken. Diese sind gleichmächtig mit denen aus der Vorlesung, sollten aber nicht verwendet werden. Man möchte die Anzahl der Rekursionen auf das Minimum reduzieren, da dadurch auch die Beweise über reguläre Ausdrücke kürzer werden. Auf POSIX-Shortcuts wie \( (r?) \) für \( (r + \varepsilon) \), Umbenennungen wie \( (r|e) \) für \( (r + e) \) oder Schreibweisen wie \( [a-c] \) für \( (a + b + c) \) solltet ihr also verzichten. Die einzige Ausnahme ist hier vielleicht \( r^+ \) für \( rr^\ast \).\par
+Gelegentlich kennen Studenten reguläre Ausdrücke bereits durch Programme wie \texttt{grep}, \texttt{sed}, womit sich Textdateien u.a. durchsuchen lassen mithilfe von POSIX-Ausdrücken. Diese sind gleichmächtig mit denen aus der Vorlesung, sollten aber nicht verwendet werden. Man möchte die Anzahl der Rekursionen auf das Minimum reduzieren, da dadurch auch die Beweise über reguläre Ausdrücke kürzer werden. Auf POSIX-Shortcuts wie \( (r?) \) für \( (r + \varepsilon) \), Umbenennungen wie \( (r|e) \) für \( (r + e) \) oder Schreibweisen wie \( [a-c] \) für \( (a + b + c) \) solltet ihr also verzichten. Die einzige Ausnahme ist hier vielleicht \( r^+ \) für \( rr^\ast \).\par
 Aus den Tutoraufgaben eines alten Übungsblattes hier zwei Beispiele nun:
 \begin{description}
 	\item[a)] \( L_1 = \{ w \in \{ a, b, c \}^\ast \mid w \text{ hat gerade Länge } \} \).\\
