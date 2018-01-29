@@ -43,11 +43,11 @@ $$
 und zeigen, dass diese nicht regulär ist auf drei verschiedene Arten: 1. Direktes Argument am Automaten, 2. Einfache Anwendung des Pumping-Lemmas, 3. Pumping-Lemma-Spiel.
 
 \section*{Direkte Argumentation über Automaten}
-Angenommen $L$ ist regulär, dann gibt es einen NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$, der $L$ erkennt. Angenommen $\mathcal{A}$ habe $n$ Zustände (d.h. $\left| Q \right| = n$). Wir betrachten das Wort $w = b^n a b^n$. Das Wort ist in der Sprache, also gibt es einen akzeptierenden Lauf $\varrho = (r_0, \ldots, r_{2n+1})$ mit $r_0 = q_0$ und $r_{2n+1} \eqqcolon q^\prime \in F$. In dem Lauf gibt es insgesamt also $2n+2$ Zustände, der Automat hat jedoch nur $n$ viele verschiedenen Zustände. Daraus folgt, dass spätestens nach dem Zustand $r_n$ ein Zustand doppelt in $\varrho$ vorgekommen sein muss. Sei also $r_i = r_j \eqqcolon q$ ($i < j \leq n$) ein Zustand, der zwei mal im Lauf vorkam. Wir wissen außerdem, dass die Zeichen, die zwischen der Zustandswiederholung gelesen wurden, alle aus dem Präfix $b^n$ waren. Betrachten wir nun den Lauf 
+Angenommen $L$ ist regulär, dann gibt es einen NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$, der $L$ erkennt. Angenommen $\mathcal{A}$ habe $n$ Zustände (d.h. $\left| Q \right| = n$). Wir betrachten das Wort $w = b^n a b^n$. Das Wort ist in der Sprache, also gibt es einen akzeptierenden Lauf $\varrho = (r_0, \ldots, r_{2n+1})$ mit $r_0 = q_0$ und $r_{2n+1} \eqqcolon q^\prime \in F$. In dem Lauf gibt es insgesamt also $2n+2$ Zustände, der Automat hat jedoch nur $n$ viele verschiedenen Zustände. Daraus folgt mit \textit{pigeon hole principle} (\textit{Schubfachprinzip}), dass spätestens nach dem Zustand $r_n$ ein Zustand doppelt in $\varrho$ vorgekommen sein muss. Sei also $r_i = r_j \eqqcolon q$ ($i < j \leq n$) ein Zustand, der zwei mal im Lauf vorkam. Wir wissen außerdem, dass die Zeichen, die zwischen der Zustandswiederholung gelesen wurden, alle aus dem Präfix $b^n$ waren. Betrachten wir nun den Lauf 
 $$
 	\varrho^\prime = (r_0, \ldots, r_i, r_{j+1}, \ldots, r_{2n+1}).
 $$
-Dieser ist entsteht, wenn wir die $j-i \eqqcolon k > 0$ vielen $b$s, die zwischen der Wiederholung gelesen werden, weglassen, also $w^\prime = b^i b^{n-j} a b^n = b^{n-k} a b^n$ lesen. Dieser Lauf existiert, denn $r_i = r_j$ und somit ist auch die Transition $(r_j, b, r_{j+1}) = (r_i, b, r_{j+1}) \in \Delta$. Alle anderen Transitionen sind ohnehin die gleichen wie in $\varrho$. Auch der Lauf $\varrho^\prime$ endet in $r_{2n+1} \in F$. Somit wird auch das Wort $w^\prime$ von $\mathcal{A}$ akzeptiert, aber $w^\prime \notin L$, da vor dem $a$ weniger $b$s gelesen werden als nach dem $a$. D.h. $\mathcal{A}$ erkennt eine andere Sprache als $L$. Da $\mathcal{A}$ beliebig gewählt war, kann also kein solcher NFA für $L$ existieren. Somit ist $L$ nicht regulär. In Abbildung~\ref{fig:pl} ist eine Skizze zu diesem Argument.
+Dieser entsteht, wenn wir die $j-i \eqqcolon k > 0$ vielen $b$s, die zwischen der Wiederholung gelesen werden, weglassen, also $w^\prime = b^i b^{n-j} a b^n = b^{n-k} a b^n$ lesen. Dieser Lauf existiert, denn $r_i = r_j$ und somit ist auch die Transition $(r_j, b, r_{j+1}) = (r_i, b, r_{j+1}) \in \Delta$. Alle anderen Transitionen sind ohnehin die gleichen wie in $\varrho$. Auch der Lauf $\varrho^\prime$ endet in $r_{2n+1} \in F$. Somit wird auch das Wort $w^\prime$ von $\mathcal{A}$ akzeptiert, aber $w^\prime \notin L$, da vor dem $a$ weniger $b$s gelesen werden als nach dem $a$. D.h. $\mathcal{A}$ erkennt eine andere Sprache als $L$. Da $\mathcal{A}$ beliebig gewählt war, kann also kein solcher NFA für $L$ existieren. Somit ist $L$ nicht regulär. In Abbildung~\ref{fig:pl} ist eine Skizze zu diesem Argument.
 \begin{figure}
 	\centering
 	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
@@ -92,7 +92,7 @@ Angenommen $L$ wäre regulär. Sei dann $n \in \mathbb{N}_+$ beliebig aber fest 
 \section*{Das Pumping-Lemma-Spiel}
 Es ist auch möglich, das Pumping-Lemma als Spiel aufzufassen. Das Vorgehen ist dabei identisch zu Model-Checking-Spielen für First Order Logic (\textit{Prädikatenlogik}), die man in der Vorlesung Mathematische Logik (normalerweise im 4. Semester) sieht. Wir beginnen mit den Spielern:
 \begin{description}
-	\item[Alice] versucht die Beweisführung der Nicht-Regualarität zu sabotieren,\\
+	\item[Alice] versucht die Beweisführung der Nicht-Regularität zu sabotieren,\\
 		\textit{(Verifiziererin, Defender)}
 	\item[Bob] möchte zeigen, dass eine Sprache nicht regulär ist.\\
 		\textit{(Falsifizierer, Attacker)}
