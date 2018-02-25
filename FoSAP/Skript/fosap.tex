@@ -132,7 +132,7 @@ Mengen selbst können auch wieder als Objekte aufgefasst werden, also Elemente a
 \end{definition}
 Wir kommen nun zum Mächtigkeitsbegriff der Mengenlehre, der für die Anzahl der Elemente einer Menge beschreibt.
 \begin{definition}
-	Sei $M$ eine Menge. $M$ heißt \textit{endlich}, wenn $M$ nur endlich viele Elemente besitzt, dann beschreibt $\left| M \right|$ die Anzahl der Elemente von $M$. Andernfalls heißt $M$ \textit{unendlich} und wir schreiben $\left| M \right| = \infty$. Man nennt $\left| M \right|$ die \textit{Mächtigkeit} von $M$.
+	Sei $M$ eine Menge. $M$ heißt \textit{endlich}, wenn $M$ nur endlich viele Elemente besitzt, dann beschreibt $|M|$ die Anzahl der Elemente von $M$. Andernfalls heißt $M$ \textit{unendlich} und wir schreiben $|M| = \infty$. Man nennt $|M|$ die \textit{Mächtigkeit} von $M$.
 \end{definition}
 Um eine konkrete Menge zu zu benennen gibt es im Wesentlichen vier verschiedene Möglichkeiten:
 \begin{enumerate}
@@ -170,9 +170,9 @@ $$
 $$
 als Menge aller Quadratzahlen von ungeraden natürlichen Zahlen. Man würde hier jedoch abkürzend schreiben:
 $$
-	\{ n^2 : n \in \mathbb{N} \text{ ungerade} \}
+	\{ n^2 : n \in \mathbb{N} \text{ ungerade} \}.
 $$
-oder auch
+Mit der Definition, dass eine Zahl $n$ ungerade ist, wenn ein $k$ existiert mit $2k+1 = n$ (und umgekehrt $n$ gerade, wenn ein $k$ exisitiert mit $n = 2k$) könnten wir auch schreiben:
 $$
 	\{ n^2 : n \in 2\mathbb{N}+1 \}.
 $$
@@ -523,38 +523,118 @@ Eine weitere wichtige Klasse von Strukturen sind Graphen. Dise werden häufig ge
 	Sei $G = (V, E)$ ein Graph, $v, w \in V$ und $e = (v, w) \in E$.
 	\begin{itemize}
 		\item $v, w$ heißen \textit{adjazent} (oder \textit{benachbart}) durch $e$.
+		\item $e$ ist \textit{inzident} zu $v$ und $w$.
+		\item Zwei Kanten heißen \textit{inzident}, wenn sie einen geimensamen Endknoten haben.
 		\item $e$ heißt \textit{Schleife} (oder \textit{Loop}), falls $v = w$.
 		\item Zwei Kanten $e, e^\prime$ heißen \textit{parallel}, falls $e = e^\prime$.
 		\item Ein Graph heißt \textit{einfach}, falls er keine parallelen Kanten enthält.
 		\item Ein Graph heißt \textit{ungerichtet}, falls $(v, w) \in E$ impliziert, dass $(w, v) \in E$, ansonsten \textit{gerichtet}. 
 	\end{itemize}
 \end{definition}
+Für einen ungerichteten Graphen können wir auch $e = \{v, w\}$ schreiben (statt zwei Kanten $(v, w), (w, v)$ zu betrachten. Für einen fixierten Knoten $v$ bezeichnet man die Menge aller Nachbarn von $v$ häufig mit $\Gamma(v)$.
 \begin{definition}
 	Sei $G = (V, E)$ ein Graph und $v \in V$. Der \textit{Knotengrad} von $v$ ist definiert durch
 	$$
-		\deg(v) = \left| \{ e \in E \,\vert\, e = (v, w), w \neq v \} \right|.
+		\deg(v) = \left| \{ e \in E \mid e = \{v, w\}, w \neq v \} \right|.
 	$$
+	Für gerichtete Graphen können wir auch vom \textit{Eingangs-} und \textit{Ausgangsgrad} sprechen:
+	\begin{align*}
+		\deg^-(v) &= \left| \{ e \in E \mid e = (v, w), w \neq v \} \right|,\\
+		\deg^+(v) &= \left| \{ e \in E \mid e = (w, v), w \neq v \} \right|.
+	\end{align*}
 \end{definition}
 \begin{definition}
 	Ein Graph $G = (V, E)$ heißt $k$-\textit{regulär}, falls für alle $v \in V$ gilt $\deg(v) = k$.
-	$G$ heißt \textit{vollständig}, falls für alle Knotenpaare $v \neq w \in V$ gilt: $(v, w) \in E$. Mit $K_n$ bezeichnen wir den vollständigen Graphen mit $n$ Knoten.
-	$G$ heißt \textit{bipartit}, falls sich $V$ als disjunkte Vereinigung aus $U, W$ darstellen lässt, sodass für alle $(u, v) \in E$ entweder $u \in U, v \in W$ oder $u \in W, v \in U$ gilt. Er heißt \textit{vollständig bipartit}, wenn zudem gilt, dass $E = \{ (u, w) \mid u \in U, w \in W \}$. Wir schreiben $K_{p,q}$ mit $p = \left| U \right|$ und $q = \left| W \right|$ für den vollständig bipartiten Graphen mit Knotenmenge $V = U \cup W, U \cap W = \emptyset$.
+	$G$ heißt \textit{vollständig}, falls für alle Knotenpaare $v \neq w \in V$ gilt: $(v, w) \in E$. Mit $K_n$ bezeichnen wir den vollständigen Graphen mit $n$ Knoten. Ist der Teilgraph $G[U]$ vollständig, so heißt $U \subseteq V$ \textit{Clique} in $G$.
+	$G$ heißt \textit{bipartit}, falls sich $V$ als disjunkte Vereinigung aus $U, W$ darstellen lässt, sodass für alle $(u, v) \in E$ entweder $u \in U, v \in W$ oder $u \in W, v \in U$ gilt. Er heißt \textit{vollständig bipartit}, wenn zudem gilt, dass $E = \{ (u, w) \mid u \in U, w \in W \}$. Wir schreiben $K_{p,q}$ mit $p = |U|$ und $q = |W|$ für den vollständig bipartiten Graphen mit Knotenmenge $V = U \cup W, U \cap W = \emptyset$.
 \end{definition}
 \begin{remark*}
-	Den Graphen $S_n = K_{1,n-1}$ nennt man auch \textit{Stern}.
+	Den Graphen $S_n \coloneqq K_{1,n-1}$ nennt man auch \textit{Stern}.
 \end{remark*}
 \begin{definition}
 	Sei $G = (V, E)$ ein Graph. Ein \textit{Teilgraph} von $G$ ist ein Graph $G^\prime = (V^\prime, E^\prime)$, wenn gilt $V^\prime \subseteq V$ und $E^\prime \subseteq E$. Ein \textit{induzierter Teilgraph} von $G$ ist ein ein Graph $G^\prime = (V^\prime, E^\prime)$, wenn gilt $V^\prime \subseteq V$ und $E^\prime = E \cap V^\prime \times V^\prime$. Wir schreiben für den durch $V^\prime$ induzierten Teilgraphen von $G$ auch $G[V^\prime]$.
 \end{definition}
-%TODO Pfade, Kreise, Cliquen, Zusammenhang
+\begin{definition}
+	Sei $G = (V, E)$ ein Graph.
+	\begin{itemize}
+		\item Ein \textit{Kantenzug} der Länge $\ell$ ist ein Tupel $(v_0, v_1, \ldots, v_\ell)$ von Knoten mit $(v_i, v_{i+1}) \in E$ für alle $i \in [\ell]$.
+		\item Ein Kantenzug $(v_0, \ldots, v_\ell)$ heißt \textit{Pfad}, falls die Knoten paarweise verschieden sind.
+		\item Ein \textit{Kreis} ist ein Kantenzug $(v_0, \ldots, v_\ell)$, falls $\ell \geq 3$, $(v_0, \ldots, v_{\ell-1})$ ein Pfad ist und $v_0 = v_\ell$.
+		\item Eine \textit{Tour} ist ein Kantenzug $(v_0, \ldots, v_\ell)$, falls die Kanten $(v_i, v_{i+1})$ für alle $i \in [\ell]$ paarweise verschieden sind und $v_0 = v_\ell$. 
+	\end{itemize}
+\end{definition}
+Wir nutzen selbsterklärende, abkürzende Schreibweisen, wie $(u, v)$-Kantenzug und Bezeichnungen wie Anfangs- oder Endknoten bzgl. Kantenzügen oder Pfaden.
+\begin{definition}
+	Sei $G = (V, E)$ ein Graph. $G$ heißt \textit{zusammenhängend}, falls für alle $u, v \in V$ gilt, dass es einen $(u, v)$-Kantenzug gibt. Ein zusammenhängender Teilgraph $G[U]$ heißt \textit{Zusammenhangskomponente} von $G$, falls für alle $v \notin U$ der Graph $G[U \cup \{v\}]$ nicht zusammenhängend ist.
+\end{definition}
+\begin{definition}
+	Ein kreisfreier Graph heißt \textit{Wald}. Ein zusammenhängender Wald heißt \textit{Baum}. Die Knoten eines Waldes mit $\deg(v) \leq 1$ heißen \textit{Blätter}. In einem gerichteten Baum heißt ein ausgezeichneter Knoten $r \in V$ \textit{Wurzel}, wenn $\deg^+(r) = 0$.
+\end{definition}
 
 
 \subsection{Beweismethoden}\label{sec:pre_proofs}
-%TODO Deduktion, Induktion, Widerspruchsbeweis, Kontraposition
+Wir sind fast am Ende des Einführungsabschnitts angekommen. Bekanntlich wollen wir in der Mathematik Sätze, d.h. mathematische Eigenschaften auf verschiedenen Strukturen beweisen. Ein Beweis ist dabei eine endliche Folge logischer Schlüsse. Die mathematische Logik gibt dazu genaue Einblicke wie Beweissysteme funktionieren. Im Wesentlichen geht es darum mit einer möglichst kleinen Menge von \textit{Axiomen} (das sind Aussagen, die als wahr angenommen werden, zum Beispiel fordert man, dass jede natürliche Zahl einen Nachfolger hat) Schritt für Schritt die Sätze herzuleiten. Genauer werden wir darauf aber nicht eingehen, wir verwenden vielmehr die Verfahren, die sich Logiker über die Jahrhunderte überlegt haben. Wir unterscheiden zwischen vier verschiedenen Beweisarten: Deduktion, Widerspruchsbeweis, Beweis der Kontraposition und Beweis durch vollständige Induktion. Dabei sei gesagt, dass diese Abgrenzung nicht immer eindeutig ist. Diese vier Methoden lassen sich (zum Beispiel in Beweisen größerer Theoreme) auch kombinieren. Gelegentlich liefern Beweise auch eine Konstruktion mit dem die Aussage klar wird.
+Wir starten mit der Deduktion oder dem direktem Beweis. Wir betrachten dafür Aussagen der Form: 
+\begin{center}
+	\textit{Wenn Aussagen A gilt, dann auch Aussage B.}
+\end{center}
+Zum Beweis solcher Aussagen nehmen wir an, dass $A$ tatsächlich wahr ist und verwenden sogenannte \textit{Schlussregeln}, dass dann auch $B$ wahr sein muss. Wir zeigen dies an einem Beispiel.
+\begin{theorem}
+	Seien $a, b \in \mathbb{Z}$ Falls $a$ gerade ist, so ist auch $b$ gerade.
+	\begin{proof}
+		Da $a$ gerade ist existiert ein $k \in \mathbb{Z}$ mit $2 \cdot k = a$. Dann ist aber $a \cdot b = (2 \cdot k) \cdot b = 2 \cdot \underbrace{(k \cdot b)}_{\in \mathbb{Z}}$ und somit ist $a \cdot b$ gerade.
+	\end{proof}
+\end{theorem}
+Der zweite Weg, der Widerspruchsbeweis, ist ein indirekter Beweis (wie auch die Kontraposition später). Das Schema diesmal ist
+\begin{center}
+	\textit{Angenommen Aussage A wäre falsch, dann folgt Unsinn.}
+\end{center}
+Im Lateinischen spricht man auch von \textit{reductio ad absurdum} (Zurückführung auf das Sinnlose). Man zeigt damit, dass wenn $A$ nicht gilt, dass dann eine bereits andere Aussage (von der man den Wahrheitsgehalt kennt) nicht stimmen könnte. Mit diesem Widerspruch kann man dann folgern, dass $A$ doch wahr ist. Wir machen wieder ein Beispiel.
 \begin{theorem}\label{thm:primes}
 	Es gibt unendlich viele Primzahlen.
 	\begin{proof}
-		TODO %TODO
+		Angenommen es gäbe nur endlich viele Primzahlen. Sei dann $P \coloneqq \{p_0, \ldots, p_\ell\}$ die Menge aller vielen Primzahlen, d.h. $\ell \in \mathbb{N}$. Wir definieren nun die Zahl 
+		$$
+			q \coloneqq 1 + \prod_{i=0}^\ell p_i.
+		$$
+		Wir untersuchen zwei Fälle:
+		\begin{itemize}
+			\item $q$ prim. Dann war $P$ jedoch noch nicht die Menge aller Primzahlen wie oben agenommen, denn $q > p$ für alle $p \in P$. $\lightning$
+			\item $q$ nicht prim. Dann existiert eine eindeutige Primfaktorzerlegung von $q$. Jedoch lässt jede Primzahl $p \in P$ einen Rest von $1$ bei ganzzahliger Division. Also muss es noch mehr Primzahlen geben als die in $P$. $\lightning$
+		\end{itemize}
+		In beiden Fällen erhalten wir also einen Widerspruch zur ursprünglichen Aussage, dass ein endliches $P$ alle Primzahlen enthalten würde. Also muss es unendlich viele Primzahlen geben.
+	\end{proof}
+\end{theorem}
+Eine weitere Form des indirekten Beweises ist es die \textit{Kontraposition} der Aussage zu zeigen. D.h. statt wie beim direkten Beweis aus Aussage $A$ Aussage $B$ zu folgern zeigt man, dass aus der Negation von $B$ die Negation von $A$ folgt.
+\begin{theorem}
+	Sei $a^2$ gerade, dann ist auch $a$ gerade.
+	\begin{proof}
+		Angenommen $a$ wäre ungerade, d.h. es gibt ein $k \in \mathbb{Z}$ mit $a = 2k + 1$. Betrachte dann
+		\begin{align*}
+			a^2 &= (2k + 1)^2\\
+			&= 4k^2 + 4k + 1\\
+			&= 2\underbrace{(2k^2 + 2k)}_{\in \mathbb{Z}} + 1.
+		\end{align*}
+		Also ist $a^2$ ebenfalls ungerade. Es folgt vermöge Kontraposition, dass für gerade $a^2$ auch $a$ gerade ist.
+	\end{proof}
+\end{theorem}
+Zuletzt betrachten wir das Beweisprinzip der vollständigen Induktion. Hiermit lassen sich leicht Aussagen für natürliche Zahlen zeigen. Man zeigt dafür zunächst, dass eine Aussage für einen Basisfall erfüllt ist (in dieser Vorlesung gewöhnlich für $n = 0$). Danach beweist man, dass die Aussage, sofern sie für ein $n \in \mathbb{N}$ erfüllt ist, dass sie dann auch für $n+1$ erfüllt ist. Dieses Beweisschema beruht auf dem Induktionsprinzip der natürlichen Zahlen, welches besagt: Für jede Teilmenge $M \subseteq \mathbb{N}$ gilt: Falls $0 \in M$ und für jedes $n \in M$ auch $n+1 \in M$, dann ist $M = \mathbb{N}$. Wollen wir also eine Aussage $A$ für alle $n \in \mathbb{N}$ beweisen, zeigen wir also lediglich, dass die Menge $M \coloneqq \{n \in \mathbb{N} \mid A \text{ ist wahr für } n\}$ glich $\mathbb{N}$ ist.
+\begin{theorem}
+	Für jede endliche Menge $M$ gilt $|2^M| = 2^{|M|}$.
+	\begin{proof}
+		Wir machen eine Induktion über die Größe von $M$.\\
+		Induktionsverankerung: $|M| = 0$, d.h. $M = \emptyset$. Es gilt $|2^M| = |2^\emptyset| = |\{\emptyset\}| = 1$. \checkmark\\
+		Induktionshypothese (IH): Angenommen die Aussage gelte für ein $M$ der Größe $n \in \mathbb{N}$.\\
+		Induktionsschritt: Sei $M^\prime \coloneqq M \cup \{a\}$ wobei $a$ ein beliebiges Element ist, welches nicht in $M$ vorkommt. Die Menge wird also um ein Element größer. Dann erhalten wir
+		\begin{align*}
+			\Big| 2^{M \cup \{a\}} \Big| &= \Big| \overbrace{2^M}^{\text{Teilmengen ohne } a} \cup \overbrace{\{A \cup \{a\} : A \subseteq M \}}^{\text{Teilmengen mit } a} \Big|\\
+			&= |2^M| + |\{A \cup \{a\} : A \in 2^M \}|\\
+			&= |2^M| + |2^M|\\
+			&= 2 \cdot |2^M|\\
+			&\overset{\text{IH}}{=} 2\cdot 2^{|M|}\\
+			&= 2^{|M|+1}\\
+			&= 2^{|M \cup \{a\}|}. \qedhere
+		\end{align*}
 	\end{proof}
 \end{theorem}
 
@@ -584,9 +664,7 @@ Alphabete werden durch griechische Großbuchstaben $\Sigma, \Gamma$ oder Variati
 	$$
 		w\colon [n] \to \Sigma.
 	$$
-	Für $n = 0$ ist $w\colon \emptyset \to \Sigma$ das \textit{leere Wort}, was wir als $\varepsilon$ bezeichnen.\\
-	Die \textit{Länge} des Wortes $w$ ist bezeichnet mit $\left| w \right| = n$.\\
-	$\left| w \right|_a \coloneqq \left| \{ i \in [n] \mid w(i) = a \} \right|$ ist die \textit{Häufigkeit des Symbols} $a$ im Wort $w$.
+	Für $n = 0$ ist $w\colon \emptyset \to \Sigma$ das \textit{leere Wort}, was wir als $\varepsilon$ bezeichnen.	Die \textit{Länge} des Wortes $w$ ist bezeichnet mit $|w| = n$. Mit $|w|_a \coloneqq \left| \{ i \in [n] \mid w(i) = a \} \right|$ bezeichnen wir die \textit{Häufigkeit des Symbols} $a$ im Wort $w$.
 \end{definition}
 Wie in Abschnitt~\ref{sec:pre_mappings} lässt sich $w$ auch als Tupel $(a_0, \ldots, a_{n-1})$ schreiben. Wir gehen hier sogar noch einen Schritt weiter und benutzen $a_0 a_1 \ldots a_{n-1}$ als Abkürzung für die langen Schreibweisen. Für Wörter verwenden wir in der Regel $u, v, w$ und Varianten als Bezeichner. In der Literatur sind auch kleine griechische Buchstaben $\alpha, \beta, \ldots$ gebräuchlich.
 \begin{definition}
@@ -616,7 +694,7 @@ Sprachen bezeichnen wir in der Regel mit $L, K, \ldots$ und Varianten.
 \subsection{Operationen und Relationen auf Wörtern und Sprachen}\label{sec:awl_wordops}
 Durch diese vorgegangen Definitionen haben wir das Fundament für die theoretische Informatik bereits definiert. Da dies nur mithilfe von Funktionen und Mengen  passiert ist lassen sich Beweismethoden und Ergebnisse aus der Mathematik einfach übertragen. Wir definieren nun noch ein paar Operationen auf Wörtern und erweitern diese Definitionen auf Sprachen.
 \begin{definition}
-	Seien $u, v \in \Sigma^\ast$ mit $m = \left| u \right|, n = \left| v \right|$. Die \textit{Konkatenation} (Verkettung) ist definiert als
+	Seien $u, v \in \Sigma^\ast$ mit $m = |u|, n = |v|$. Die \textit{Konkatenation} (Verkettung) ist definiert als
 	\begin{align*}
 		(u \cdot v)&\colon [m{+}n] \to \Sigma \text{ mit}\\
 		(u \cdot v)(i) &= \left\lbrace \begin{array}{ll}u(i), & i < m\\ v(i-m), & i \geq m. \end{array} \right.
@@ -883,7 +961,7 @@ Eine Beispielkonstruktion für einen Produktautomaten für den Schnitt zweier DF
 \begin{figure}
 	\centering
 	\input{figs/dfa_product}
-	\caption{Produktkonstruktion: Der Automat $\mathcal{A}$ erkennt die Sprache $\{ w \in \{a, b \}^\ast \mid \left| w \right|_a + \left| w \right|_b \text{ teilbar durch } 3 \}$, $\mathcal{B}$ erkennt die Sprache $\{ ua : u \in \{a, b\}^\ast \}$. Der Produktautomat erkennt den Schnitt.}
+	\caption{Produktkonstruktion: Der Automat $\mathcal{A}$ erkennt die Sprache $\{ w \in \{a, b \}^\ast \mid |w|_a + |w|_b \text{ teilbar durch } 3 \}$, $\mathcal{B}$ erkennt die Sprache $\{ ua : u \in \{a, b\}^\ast \}$. Der Produktautomat erkennt den Schnitt.}
 	\label{fig:dfa_product}
 \end{figure}
 Aus den Sätzen~\ref{thm:regular_complement} und~\ref{thm:regular_intersection} erhält man nun einfach alle übrigen Abschlusseigenschaften für die üblichen Mengenoperationen, aber auch mit der Produktkonstruktion lassen sich diese Eigenschaften zeigen.
@@ -922,7 +1000,7 @@ Die Produktkonstruktion ist eine sehr grundlegende Konstruktion, die in ähnlich
 		$$
 			\varrho = ((p_0, q_0, i_0), \ldots, (p_n, q_n, i_n))
 		$$
-		von $\mathcal{A}$ auf $w$ mit $p_n \in F_1, q_n \in F_2$ und $i_j = j \mod 2$ und $i_0 = i_n = 0$ (insbesondere ist $\left| w \right|$ gerade), wobei abwechselnd in jedem Schritt $j$ die $1 + i_j$te Komponenten gleich bleibt (s. Definition von $\delta$). Aus den geraden Positionen in $\varrho$ (die mit der dritten Komponente $0$) ergeben dann einen Lauf von $\mathcal{A}_1$ auf dem Wort $c_0 c_2 \ldots c_{n-2}$. Umgekehrt sind die ungeraden Positionen induziert durch den Lauf von $\mathcal{A}_2$ auf $c_1 c_3 \ldots c_{n-1}$. Wegen $p_n \in F_1$ und $i_n = 0$ ist $p_{n-1} = p_n \in F_1$ und somit akzeptiert $\mathcal{A}_1$ das Wort $c_0 c_2 \ldots c_{n-2}$. Analog für $\mathcal{A}_2$. Also ist $w \in L(\mathcal{A}_1) \shuffle L(\mathcal{A}_2)$.\\
+		von $\mathcal{A}$ auf $w$ mit $p_n \in F_1, q_n \in F_2$ und $i_j = j \mod 2$ und $i_0 = i_n = 0$ (insbesondere ist $|w|$ gerade), wobei abwechselnd in jedem Schritt $j$ die $1 + i_j$te Komponenten gleich bleibt (s. Definition von $\delta$). Aus den geraden Positionen in $\varrho$ (die mit der dritten Komponente $0$) ergeben dann einen Lauf von $\mathcal{A}_1$ auf dem Wort $c_0 c_2 \ldots c_{n-2}$. Umgekehrt sind die ungeraden Positionen induziert durch den Lauf von $\mathcal{A}_2$ auf $c_1 c_3 \ldots c_{n-1}$. Wegen $p_n \in F_1$ und $i_n = 0$ ist $p_{n-1} = p_n \in F_1$ und somit akzeptiert $\mathcal{A}_1$ das Wort $c_0 c_2 \ldots c_{n-2}$. Analog für $\mathcal{A}_2$. Also ist $w \in L(\mathcal{A}_1) \shuffle L(\mathcal{A}_2)$.\\
 		``$L(\mathcal{A}) \supseteq L_1 \shuffle L_2$``: Sei $w = a_0 b_0 \ldots a_{n-1} b_{n-1} \in L_1 \shuffle L_2$. Dann exitieren Läufe $\varrho_1 = (p_0, \ldots, p_n), \varrho_2 = (q_0, \ldots, q_n)$ mit $p_n \in F_1, q_n \in F_2$ von $\mathcal{A}_1, \mathcal{A}_2$. Nach Definition von $\delta$ ist der Lauf auf $\mathcal{A}$ dann
 		$$
 			((p_0, q_0, 0), (p_1, q_0, 1), \ldots, (p_n, q_{n-1}, 1), (p_n, q_n, 0))
@@ -1366,9 +1444,9 @@ Für unsere Analyse von regulären Sprachen benutzen wir nur reguläre Ausdrück
 \begin{example}
 	Wir betrachten das Alphabet $\Sigma = \{a, b\}$.
 	\begin{itemize}
-		\item $L(\bm{((a+b)(a+b))} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid \left| w \right| \text{ gerade} \}$.
-		\item $L(\bm{(a+b)(a+b)(a+b)} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid \left| w \right| \geq 2 \}$.
-		\item $L(\bm{a} \overset{\bm{\ast}}{} \bm{+ b} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid \left| w \right|_a = 0 \text{ oder } \left| w \right|_b = 0 \}$.
+		\item $L(\bm{((a+b)(a+b))} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid |w| \text{ gerade} \}$.
+		\item $L(\bm{(a+b)(a+b)(a+b)} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid |w| \geq 2 \}$.
+		\item $L(\bm{a} \overset{\bm{\ast}}{} \bm{+ b} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid |w|_a = 0 \text{ oder } |w|_b = 0 \}$.
 	\end{itemize}
 \end{example}
 Aus Gründen der Einfachheit werden wir von nun an bei der Notation von regulären Ausdrücken auf eine Unterscheidung zu Alphabetsymbolen, Kleene-Stern usw. verzichten, d.h. wir verwenden $\emptyset, \varepsilon, a, +, \cdot, ^\ast$ statt $\bm{\emptyset}, \bm{\varepsilon}, \bm{a}, \bm{+}, \bm{\cdot}, \overset{\bm{\ast}}{}$. Außerdem verwenden wir Shortcuts, z.B. $\sum_{a\in\Sigma} a = \Sigma^\ast$. Formal ist aber wichtig weiterhin eine Unterscheidung zwischen Sprachen und regulären Ausdrücken zu haben.
@@ -1627,7 +1705,7 @@ Wir betrachten nun eine weitere Abbildung:
 Beachte, dass $w^\mathcal{R}$ wohldefiniert ist für jedes $w \in \Sigma
 ^\ast$ da jedes $w$ eine eindeutige Darstellung besitzt im freien Monoid $(\Sigma^\ast, \cdot)$.
 \begin{remark*}
-	Die Reverse-Operation ist kein Homomorphismus für $\left| \Sigma \right| > 1$, denn es gilt für z.B: $abb = (bba)^\mathcal{R}$. Wäre $\cdot^\mathcal{R}$ Homomorphismus müsste aber gelten $(bba)^\mathcal{R} = b^\mathcal{R} b^\mathcal{R} a^\mathcal{R} = bba \neq abb$. Eine zeichenweise Anwendung von $\cdot^\mathcal{R}$ ist also nicht möglich.
+	Die Reverse-Operation ist kein Homomorphismus für $|\Sigma| > 1$, denn es gilt für z.B: $abb = (bba)^\mathcal{R}$. Wäre $\cdot^\mathcal{R}$ Homomorphismus müsste aber gelten $(bba)^\mathcal{R} = b^\mathcal{R} b^\mathcal{R} a^\mathcal{R} = bba \neq abb$. Eine zeichenweise Anwendung von $\cdot^\mathcal{R}$ ist also nicht möglich.
 \end{remark*}
 \begin{theorem}
 	Sei $L \subseteq \Sigma^\ast$ regulär. Dann ist auch $L^\mathcal{R}$ regulär.
@@ -1657,7 +1735,7 @@ Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das
 \begin{example}\label{exp:pumping1}
 	Die Sprache $L = \{a^n b^n : n \in \mathbb{N} \}$ ist nicht regulär.
 	\begin{proof}
-		Angenommen $L$ wäre regulär. Dann existiert ein endlicher Automat $\mathcal{A}$ mit $L(\mathcal{A}) = L$. Wir nehmen an, dass $\mathcal{A}$ $n$ Zustände besitzt. Betrachten wir nun das Wort $w = a^n b^n$ Offenbar ist $w \in L$, also gibt es einen akzeptierenden Lauf $\varrho = (r_0, \ldots, r_{2n})$. Das Wort hat die Länge $\left| w \right| = 2n \geq n$. Das heißt aber, dass spätestens nach Lesen des letzten $a$s sich im Lauf von $\mathcal{A}$ ein Zustand wiederholt haben muss. Dies folgt aus dem sogenannten \textit{pigeonhole principle} (oder deutsch: \textit{Schubfachprinzip}): Der Lauf auf den ersten $n$ Zeichen ist $(r_0, \ldots, r_n)$, d.h. er besteht aus $n+1$ Zuständen. Da $\mathcal{A}$ nur $n$ Zustände hat, muss mindestens einer doppelt im Lauf vorkommen. Wir nehmen an, dass $r_i = r_j$ mit oBdA $i < j$. Es ist auch klar, dass bis zu dieser Wiederholung im $j$-ten Schritt nur $a$s gelesen wurden, da die ersten $n$ Symbole von $w$ alle $a$ sind (d.h. $j \leq n$). Betrachten wir nun folgenden Lauf
+		Angenommen $L$ wäre regulär. Dann existiert ein endlicher Automat $\mathcal{A}$ mit $L(\mathcal{A}) = L$. Wir nehmen an, dass $\mathcal{A}$ $n$ Zustände besitzt. Betrachten wir nun das Wort $w = a^n b^n$ Offenbar ist $w \in L$, also gibt es einen akzeptierenden Lauf $\varrho = (r_0, \ldots, r_{2n})$. Das Wort hat die Länge $|w| = 2n \geq n$. Das heißt aber, dass spätestens nach Lesen des letzten $a$s sich im Lauf von $\mathcal{A}$ ein Zustand wiederholt haben muss. Dies folgt aus dem sogenannten \textit{pigeonhole principle} (oder deutsch: \textit{Schubfachprinzip}): Der Lauf auf den ersten $n$ Zeichen ist $(r_0, \ldots, r_n)$, d.h. er besteht aus $n+1$ Zuständen. Da $\mathcal{A}$ nur $n$ Zustände hat, muss mindestens einer doppelt im Lauf vorkommen. Wir nehmen an, dass $r_i = r_j$ mit oBdA $i < j$. Es ist auch klar, dass bis zu dieser Wiederholung im $j$-ten Schritt nur $a$s gelesen wurden, da die ersten $n$ Symbole von $w$ alle $a$ sind (d.h. $j \leq n$). Betrachten wir nun folgenden Lauf
 		$$
 			\varrho^\prime = (r_0, \ldots, r_i, r_{j+1}, \ldots, r_{2n})
 		$$
@@ -1673,16 +1751,16 @@ Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das
 \end{remark*}
 Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Überlegungen verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw. eine einzelne Sprache ab.
 \begin{lemma}[Pumping-Lemma]
-	Sei $L \subseteq \Sigma^\ast$ eine reguläre Sprache. Dann existiert ein $n \in \mathbb{N}_+$, sodass für alle $w \in L$ mit $\left| w \right| \geq n$ eine Zerlegung $w = xyz$ existiert mit den Eigenschaften:
+	Sei $L \subseteq \Sigma^\ast$ eine reguläre Sprache. Dann existiert ein $n \in \mathbb{N}_+$, sodass für alle $w \in L$ mit $|w| \geq n$ eine Zerlegung $w = xyz$ existiert mit den Eigenschaften:
 	\begin{enumerate}
-		\item $\left| xy \right| \leq n$,
+		\item $|xy| \leq n$,
 		\item $y \neq \varepsilon$,
 		\item $xy^iz \in L$ für alle $i \in \mathbb{N}$. 
 	\end{enumerate}
 	\begin{proof}
-		Sei $L \subseteq \Sigma^\ast$ eine beliebige reguläre Sprache und $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein NFA mit $L(\mathcal{A}) = L$. Wir setzen $n \coloneqq \left| Q \right|$. Betrachte nun ein belibiges Wort $w = a_0 \ldots a_{m-1} \in L$ mit Länge $\left| w \right| \eqqcolon m \geq n$. Falls kein solches Wort existiert sind wir bereits fertig. Ansonsten betrachten wir den Lauf $\varrho = (r_0, \ldots, r_m)$ von $\mathcal{A}$ auf $w$. Da $w \in L = L(\mathcal{A})$ ist $r_m \in F$. Wegen $m \leq n$ muss eine Zustandswiederholung in $\varrho$ vorkommen, spätestens nach Lesen des $n$-ten Zeichens. Seien also die Zustände $r_k$ und $r_j$ mit $0 \leq k < j \leq n$ gleich. Wir wählen die Zerlegung $x \coloneqq a_0 \ldots a_{k-1}, y \coloneqq a_k \ldots a_{j-1}, z \coloneqq a_j \ldots a_m$ und zeigen, dass diese die gewünschten Eigenschaften hat:
+		Sei $L \subseteq \Sigma^\ast$ eine beliebige reguläre Sprache und $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein NFA mit $L(\mathcal{A}) = L$. Wir setzen $n \coloneqq |Q|$. Betrachte nun ein belibiges Wort $w = a_0 \ldots a_{m-1} \in L$ mit Länge $|w| \eqqcolon m \geq n$. Falls kein solches Wort existiert sind wir bereits fertig. Ansonsten betrachten wir den Lauf $\varrho = (r_0, \ldots, r_m)$ von $\mathcal{A}$ auf $w$. Da $w \in L = L(\mathcal{A})$ ist $r_m \in F$. Wegen $m \leq n$ muss eine Zustandswiederholung in $\varrho$ vorkommen, spätestens nach Lesen des $n$-ten Zeichens. Seien also die Zustände $r_k$ und $r_j$ mit $0 \leq k < j \leq n$ gleich. Wir wählen die Zerlegung $x \coloneqq a_0 \ldots a_{k-1}, y \coloneqq a_k \ldots a_{j-1}, z \coloneqq a_j \ldots a_m$ und zeigen, dass diese die gewünschten Eigenschaften hat:
 		\begin{enumerate}
-			\item $\left| xy \right| = \left| a_0 \ldots a_{j-1} \right| = j \leq n$. \checkmark
+			\item $|xy| = |a_0 \ldots a_{j-1}| = j \leq n$. \checkmark
 			\item $y = a_k \ldots a_{j-1} \neq \varepsilon$, da nach Annahme $j-k > 0$. \checkmark
 			\item Die Aussage gilt offensichtlich für $i = 1$. Für $i = 0$ betrachten wir nun den Lauf für das Wort $xz = xy^0z$: $(r_0, \ldots, r_k, r_{j+1}, \ldots, r_m)$. Dieser Lauf ist tatsächlich korrekt, denn $r_k = r_j \eqqcolon r$ und somit gilt $(r_k, a_j, r_{j+1}) = (r_j, a_j, r_{j+1}) \in \Delta$ (alle anderen Transitionen sind nach Annahme trivialerweise ebenfalls in $\Delta$). Außerdem gilt weiterhin $r_m \in F$. Also akzeptiert $\mathcal{A}$ das Wort $xz$. Ansonsten haben wir, dass $r \reaches{y} r$ und somit auch $r \reaches{y^i} r$ für $i \geq 2$.\checkmark \qedhere
 		\end{enumerate}
@@ -1711,7 +1789,7 @@ Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese 
 	$$
 	aller Palindrome gerader Länge über $\Sigma = \{a, b\}$. $L$ ist nicht regulär.
 	\begin{proof}
-		Angenommen $L$ wäre regulär. Dann gilt das Pumping-Lemma. Sei also $n \in \mathbb{N}_+$ beliebig und wir betrachten das Wort $w = a^n bb a^n \in L$. Es hat die Länge $\left| w \right| = 2n+2 \geq n$. Wir betrachten nun Zerlegungen, die die Eigenschaften (i) und (ii) erfüllen und zeigen, dass (iii) dann nicht gelten kann. Wegen (i) ist $y = a^k$ für ein $k \leq n$ ($k = \left| y \right| \leq \left| xy \right| \leq n$, da die ersten $n$ Zeichen alle $a$ sind, kommt also auch kein $b$ in $y$ vor). Wegen (ii) gilt außerdem, dass $k > 0$. Betrachte nun das Wort $w^\prime \coloneqq xyyz = a^{n+k}bba^n$. Es liegt nicht in $L$, da $w^\prime$ kein Palindrom ist. Damit gilt die Eigenschaft (iii) für $i = 2$ nicht (gilt sogar für gar kein $i \neq 1$). Dies ist ein Widerspruch zum Pumping-Lemma, also kann $L$ nicht regulär sein. 
+		Angenommen $L$ wäre regulär. Dann gilt das Pumping-Lemma. Sei also $n \in \mathbb{N}_+$ beliebig und wir betrachten das Wort $w = a^n bb a^n \in L$. Es hat die Länge $|w| = 2n+2 \geq n$. Wir betrachten nun Zerlegungen, die die Eigenschaften (i) und (ii) erfüllen und zeigen, dass (iii) dann nicht gelten kann. Wegen (i) ist $y = a^k$ für ein $k \leq n$ ($k = |y| \leq |xy| \leq n$, da die ersten $n$ Zeichen alle $a$ sind, kommt also auch kein $b$ in $y$ vor). Wegen (ii) gilt außerdem, dass $k > 0$. Betrachte nun das Wort $w^\prime \coloneqq xyyz = a^{n+k}bba^n$. Es liegt nicht in $L$, da $w^\prime$ kein Palindrom ist. Damit gilt die Eigenschaft (iii) für $i = 2$ nicht (gilt sogar für gar kein $i \neq 1$). Dies ist ein Widerspruch zum Pumping-Lemma, also kann $L$ nicht regulär sein. 
 	\end{proof}
 \end{example}
 
@@ -1725,8 +1803,8 @@ Es ist auch möglich, das Pumping-Lemma als Spiel aufzufassen. Das Vorgehen ist 
 Die Spielregeln gehen wie folgt: Das ''Spielfeld`` ist die Sprache $L$.
 \begin{enumerate}[label=\arabic*)]
 	\item Alice wählt eine Zahl $n \in \mathbb{N}_+$.
-	\item Bob wählt ein Wort $w \in L$ mit $\left| w \right| \geq n$.
-	\item Alice wählt eine Zerlegung $xyz = w$, mit $\left| xy \right| \leq n$ und $y \neq \varepsilon$.
+	\item Bob wählt ein Wort $w \in L$ mit $|w| \geq n$.
+	\item Alice wählt eine Zerlegung $xyz = w$, mit $|xy| \leq n$ und $y \neq \varepsilon$.
 	\item Bob wählt eine Zahl $i \in \mathbb{N}$.
 \end{enumerate}
 Alice gewinnt, wenn $xy^iz \in L$ oder Bob in Schritt 2 nicht ziehen kann (das wäre der Fall wenn jedes Wort aus $L$ kürzer ist als das $n$, welches Alice vorgegeben hat -- die Sprache wäre dann endlich und somit regulär).\\
@@ -1743,13 +1821,13 @@ Bob gewinnt, wenn $xy^iz \notin L$.
 	\begin{enumerate}[label=\arabic*)]
 	\item Alice wählt eine Zahl $n \in \mathbb{N}_+$.
 	\item Bob wählt das Wort $a^q$ mit $q \geq n$ und $q \in \mathbb{P}$ (ein solches $q$ existiert wegen Satz~\ref{thm:primes}).
-	\item Alice wählt eine Zerlegung $xyz = a^q$, mit $\left| xy \right| \leq n$ und $y \neq \varepsilon$, d.h. $y = a^k$ für ein $0 < k \leq n$.
+	\item Alice wählt eine Zerlegung $xyz = a^q$, mit $|xy| \leq n$ und $y \neq \varepsilon$, d.h. $y = a^k$ für ein $0 < k \leq n$.
 	\item Bob wählt eine Zahl $i = q+1$.
 \end{enumerate}
 Wir zeigen, dass $xy^{q+1}z \notin L_\mathbb{P}$:
 \begin{align*}
-	\left| xy^{q+1}z \right| &= \left| xyz \right| + \left| y^q \right|\\
-	&= \left| a^q \right| + q \left| y \right|\\
+	|xy^{q+1}z| &= |xyz| + |y^q|\\
+	&= |a^q| + q |y|\\
 	&= q + qk\\
 	&= q(1 + k).
 \end{align*}
@@ -1884,11 +1962,11 @@ Als Eingabe erhalten wir also $w \in \Sigma^\ast$ und die regulären Ausdrücke 
 	\Comment{Löse nun das erweiterte Matching-Problem}	
 	Setze $\ell = 1, w_\ell = w$.\\
 	\While{$w_\ell \neq \varepsilon$}{
-		\texttt{A} = leeres Array der Länge $\left| w_\ell \right|$.\\
+		\texttt{A} = leeres Array der Länge $|w_\ell|$.\\
 		Simuliere $\mathcal{A}$ auf $w_\ell$, prüfe in jedem Schritt $j$, ob eine $i$-Transition in einen akzeptierenden Zustand möglich ist.
 		Falls ja, setze \texttt{A[$j$]} auf das kleinste mögliche $i$.\\
 		Nach der Simulation laufe \texttt{A} von hinten nach vorne durch bis wir den ersten nicht-leeren Eintrag an Stelle $h$ finden. Sollte es keinen geben gebe einen Error aus, ansonsten ist $u_\ell = w_{\ell_1} \ldots w_{\ell_h}$ und $i_\ell = \texttt{A[}h\texttt{]}$.\\
-		Setze $w_{\ell+1} = w_{\ell_h} \ldots w_{\ell_{\left| w_\ell \right|}}, \ell = \ell+1$.
+		Setze $w_{\ell+1} = w_{\ell_h} \ldots w_{\ell_{|w_\ell|}}, \ell = \ell+1$.
 	}
 	\Comment{Jetzt ist $w_\ell = \varepsilon$.}
 	Gebe $(u_1, \ldots, u_{\ell-1})$ und $(i_1, \ldots, i_{\ell-1})$ aus.
