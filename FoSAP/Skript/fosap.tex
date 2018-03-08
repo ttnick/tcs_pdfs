@@ -62,8 +62,10 @@
 \newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
 \newcommand{\reachess}[2]{\overset{#1}{\underset{#2}{\rightarrow}}}
 \DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\ind}{index}
 \DeclareMathOperator{\bin}{bin}
 \DeclareMathOperator{\xor}{xor}
+\DeclareMathOperator{\lex}{\prec_\text{lex}}
 \let\emptyset\varnothing
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
@@ -298,15 +300,32 @@ Wir klassifizieren außerdem 2-stellige Relationen, falls sie bestimmte Eigensch
 		\item Die Relation $\{(a, b) \in \mathbb{R}^2 \mid a^2 = b^2 \}$ ist eine Äquivalenzrelation auf $\mathbb{R}$.
 	\end{enumerate}
 \end{example*}
-
 \begin{definition}\label{def:equivalenceclass}
 	Sei $\sim$ eine Äquivalenzrelation auf einer Menge $M$. Für $x \in M$ heißt
 	$$
-		[x] \coloneqq [x]_\sim \coloneqq \{ y \in M \mid x \sim y \}
+		[x]_\sim \coloneqq x /_\sim \coloneqq \{ y \in M \mid x \sim y \}
 	$$
-	die \textit{Äquivalenzklasse} von $x$. Die Menge aller Äquivalenzklassen von $\sim$ wird notiert mit $M /_\sim \coloneqq \{ [x]_\sim : x \in M \}$.
+	die \textit{Äquivalenzklasse} von $x$. Die Menge aller Äquivalenzklassen von $\sim$ wird notiert mit $M /_\sim \coloneqq \{ [x]_\sim : x \in M \}$. Der \textit{Index} einer Äquivalenrelation ($\ind(\sim)$) ist die Anzahl ihrer Äquivalenzklassen (möglicherweise $\infty$).
 \end{definition}
-
+\begin{definition}
+	Sei $A$ eine Menge. Eine \textit{Partition} von $A$ ist eine Menge $\mathcal{P} \subset 2^A \setminus \{ \emptyset \}$, sodass
+	\begin{enumerate}
+		\item $P \cap Q = \emptyset$ für alle $P, Q \in \mathcal{P}$ mit $P \neq Q$,
+		\item $\bigcup_{P \in \mathcal{P}} P = A$.
+	\end{enumerate}
+	Die Mengen $P \in \mathcal{P}$ heißen \textit{Teile} oder \textit{Klassen} der Partition $\mathcal{P}$.
+\end{definition}
+\begin{remark*}
+	Sei $A$ eine Menge.
+	\begin{enumerate}
+		\item Ist $\sim$ eine Äquivalenzrelation auf $A$, so ist $\{[x]_\sim : x \in A\}$ eine Partition von $A$.
+		\item Ist $\mathcal{P}$ eine Partition auf $A$, so ist $\sim_\mathcal{P}$ mit
+			$$
+				x \sim_\mathcal{P} y \text{ g.d.w. } x, y \in P  \text{ für ein } P \in \mathcal{P}
+			$$
+			eine Äquivalenzrelation auf $A$ und es gilt $\mathcal{P} = \{[x]_{\sim_\mathcal{P}} : x \in A\}$.
+	\end{enumerate}
+\end{remark*}
 
 
 \subsection{Gesetze für Mengen}\label{sec:pre_setlaws}
@@ -580,7 +599,7 @@ Wir starten mit der Deduktion oder dem direktem Beweis. Wir betrachten dafür Au
 \end{center}
 Zum Beweis solcher Aussagen nehmen wir an, dass $A$ tatsächlich wahr ist und verwenden sogenannte \textit{Schlussregeln}, dass dann auch $B$ wahr sein muss. Wir zeigen dies an einem Beispiel.
 \begin{theorem}
-	Seien $a, b \in \mathbb{Z}$ Falls $a$ gerade ist, so ist auch $b$ gerade.
+	Seien $a, b \in \mathbb{Z}$ Falls $a$ gerade ist, so ist auch $ab$ gerade.
 	\begin{proof}
 		Da $a$ gerade ist existiert ein $k \in \mathbb{Z}$ mit $2 \cdot k = a$. Dann ist aber $a \cdot b = (2 \cdot k) \cdot b = 2 \cdot \underbrace{(k \cdot b)}_{\in \mathbb{Z}}$ und somit ist $a \cdot b$ gerade.
 	\end{proof}
@@ -730,6 +749,22 @@ Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhal
 		\item Die Infixe von $v$ sind alle Präfixe und Suffixe, sowie $ab, b$.
 	\end{itemize}
 \end{example}
+\begin{definition}
+	Sei $\Sigma$ ein durch $\prec$ geordnetes, endliches Alphabet. Die \textit{lexikographische Ordnung} $\lex$ auf Wörtern $u = a_0 \ldots a_{n-1}, v = b_0 \ldots b_{m-1}$, über $\Sigma$ ist definiert durch:
+	\begin{align*}
+		u \lex v &\text{ g.d.w. } u \sqsubseteq v\\
+		& \text{ oder es gibt ein } k, \text{ s.d. für alle } i < k \text{ gilt } a_i = b_i \text{ und } a_k \prec b_k.
+	\end{align*}
+\end{definition}
+Gewöhnlich betrachten wir ja eine Teilmenge des lateinischen Alphabets $\Sigma_\text{lat} = \{a, b, \ldots, z\}$. Wir nehmen im Folgenden immer die Ordnung $a \prec b \prec \ldots \prec z$ an.
+\begin{example}
+	Sei $\Sigma = \{a, b, c\}$.
+	\begin{enumerate}[label=\arabic*)]
+		\item $abc \lex abcc$,
+		\item $aaaa \lex ab$,
+		\item $\varepsilon \lex u$ für alle $u \in \Sigma^\ast$.
+	\end{enumerate}
+\end{example}
 
 
 \subsection{Gesetze für Wörter und Sprachen}\label{sec:awl_wordlaws}
@@ -745,11 +780,9 @@ In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung
 		\item Weil es häufig durcheinander gebracht wird: $\{ \varepsilon \} \neq \emptyset$.
 	\end{enumerate}
 \end{remark*}
-
 \begin{remark*}
 	Für Vereinigung, Schnitt, Differenz, \ldots von Sprachen gelten die selben Regeln (Assoziativ-, Kommutativ-, Distributivgesetze, deMorgan, Absorption, \ldots) wie für Mengen.
 \end{remark*}
-
 \begin{remark*}
 	Für jede Sprache $L$ gilt, dass $\emptyset L = L \emptyset = \emptyset$.
 	\begin{proof}
@@ -1800,19 +1833,15 @@ Es ist auch möglich, das Pumping-Lemma als Spiel aufzufassen. Das Vorgehen ist 
 	\item[Bob] möchte zeigen, dass eine Sprache nicht regulär ist.\\
 		\textit{(Falsifizierer, Attacker)}
 \end{description}
-Die Spielregeln gehen wie folgt: Das ''Spielfeld`` ist die Sprache $L$.
+Die Spielregeln gehen wie folgt:
 \begin{enumerate}[label=\arabic*)]
 	\item Alice wählt eine Zahl $n \in \mathbb{N}_+$.
 	\item Bob wählt ein Wort $w \in L$ mit $|w| \geq n$.
 	\item Alice wählt eine Zerlegung $xyz = w$, mit $|xy| \leq n$ und $y \neq \varepsilon$.
 	\item Bob wählt eine Zahl $i \in \mathbb{N}$.
 \end{enumerate}
-Alice gewinnt, wenn $xy^iz \in L$ oder Bob in Schritt 2 nicht ziehen kann (das wäre der Fall wenn jedes Wort aus $L$ kürzer ist als das $n$, welches Alice vorgegeben hat -- die Sprache wäre dann endlich und somit regulär).\\
-Bob gewinnt, wenn $xy^iz \notin L$.
-\begin{remark*}
-	Falls $L$ regulär ist, so hat Alice eine Gewinnstrategie, d.h. sie kann ein $n$ wählen, sodass sie für jedes Wort, mit dem Bob in Schritt 2 antworten könnte eine Zerlegung findet, die Bob in Schritt 4 nicht aus der Sprache rauspumpen kann.\\
-	Äquivalent dazu: Falls Bob eine Gewinnstrategie hat, so ist $L$ nicht regulär.
-\end{remark*}
+Alice gewinnt, wenn $xy^iz \in L$ oder Bob in Schritt 2 nicht ziehen kann (das wäre der Fall wenn jedes Wort aus $L$ kürzer ist als das $n$, welches Alice vorgegeben hat -- die Sprache wäre dann endlich und somit regulär). Bob gewinnt, wenn $xy^iz \notin L$.\\
+Falls $L$ regulär ist, so hat Alice eine Gewinnstrategie, d.h. sie kann ein $n$ wählen, sodass sie für jedes Wort, mit dem Bob in Schritt 2 antworten könnte eine Zerlegung findet, die Bob in Schritt 4 nicht aus der Sprache rauspumpen kann. Äquivalent dazu: Falls Bob eine Gewinnstrategie hat, so ist $L$ nicht regulär.
 \begin{remark*}
 	Beachte, dass in Schritt 3 \textit{Alice} diejenige ist, die eine Zerlegung wählt. Wenn wir zeigen wollen, dass Bob eine Gewinnstrategie hat, heißt das, dass wir für \textit{alles} was Alice wählen könnte im 4. Schritt noch aus der Sprache herausgepumpt werden kann. Es wäre keine Gewinnstrategie, wenn Bob nur auf manche Züge von Alice eine passende Antwort findet.
 \end{remark*}
@@ -1822,7 +1851,7 @@ Bob gewinnt, wenn $xy^iz \notin L$.
 	\item Alice wählt eine Zahl $n \in \mathbb{N}_+$.
 	\item Bob wählt das Wort $a^q$ mit $q \geq n$ und $q \in \mathbb{P}$ (ein solches $q$ existiert wegen Satz~\ref{thm:primes}).
 	\item Alice wählt eine Zerlegung $xyz = a^q$, mit $|xy| \leq n$ und $y \neq \varepsilon$, d.h. $y = a^k$ für ein $0 < k \leq n$.
-	\item Bob wählt eine Zahl $i = q+1$.
+	\item Bob wählt die Zahl $i = q+1$.
 \end{enumerate}
 Wir zeigen, dass $xy^{q+1}z \notin L_\mathbb{P}$:
 \begin{align*}
@@ -1836,14 +1865,10 @@ Da $k > 0$ ist $1+k > 1$ und somit $q(1+k)$ eine zusammengesetzte Zahl (d.h. nic
 %TODO Nicht-Regularität durch Abschlusseigenschaften zeigen.
 
 
-\subsection{Minimierung von DFAs}\label{sec:regular_minimization}
-folgt. %TODO
-
-
 \subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
-Bisher haben wir reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert. Nun wollen wir eine Eigenschaft finden, die reguläre Sprachen auf einer stark mathematisch-strukturellen Ebene charakterisiert. Dazu erinnern wir uns an unser freies Monoid $(\Sigma^\ast, \cdot, \varepsilon)$, welches bereits in Abschnitt~\ref{sec:regular_closure2} uns einmal angesehen haben. Im vorigen Abschnitt haben wir außerdem den Begriff der Zustandsäquivalenz definiert und festgestelt, dass der minimale DFA zu einer regulären Sprache bis auf Isomorphie eindeutig ist. Wir wollen nun diese Äquivalenz auf Wörter übertragen: Die ganze Idee dabei ist die Wörter die im minimalen DFA den selben Zustand vom Startzustand erreichen als äquivalent zu betrachten. Wir definieren also eine Äquivalenzrelation (siehe Definition~\ref{def:relations}). Tatsächlich definiert die gleich eingeführte Relation sogar noch etwas mehr, deshalb schieben wir eine weitere Definition hier ein.
+Bisher haben wir reguläre Sprachen durch Formalismen wie reguläre Ausdrücke und endliche Automaten charakterisiert. Nun wollen wir eine Eigenschaft finden, die reguläre Sprachen auf einer stark mathematisch-strukturellen Ebene charakterisiert. Dazu erinnern wir uns an unser freies Monoid $(\Sigma^\ast, \cdot, \varepsilon)$, welches bereits in Abschnitt~\ref{sec:regular_closure2} uns einmal angesehen haben. Wir definieren uns eine Äquivalenzrelation (siehe Definition~\ref{def:relations}), d.h. wir teilen zu einem Alphabet $\Sigma$ die Wörter aus $\Sigma^\ast$ in Äquivalenzklassen ein. Tatsächlich definiert die gleich eingeführte Relation sogar noch etwas mehr, deshalb schieben wir eine weitere Definition hier ein.
 \begin{definition}
-	Sei $A$ eine Menge und $\bullet$ eine zweistellige Funktion auf $A$. Eine Relation $\sim \subseteq A \times A$ heißt \textbf{rechtsseitige Kongruenz} (bezüglich $\bullet$), wenn
+	Sei $A$ eine Menge und $\bullet$ eine zweistellige Funktion auf $A$. Eine Relation $\sim \subseteq A \times A$ heißt \textit{rechtsseitige Kongruenz} (bezüglich $\bullet$), wenn
 	\begin{enumerate}
 		\item $\sim$ eine Äquivalenzrelation ist und
 		\item $\bullet$ diese Relation respektiert (d.h. für alle $a \sim b$ und alle $c \in A$ gilt $a \bullet c \sim b \bullet c$).
@@ -1851,35 +1876,92 @@ Bisher haben wir reguläre Sprachen durch Formalismen wie reguläre Ausdrücke u
 \end{definition}
 Wir definieren nun wie angekündigt unsere Äquivalenzrelation auf Wörtern.
 \begin{definition}
-	Sei $\Sigma$ ein Alphabet und $L \subseteq \Sigma^\ast$. Seien $u, v \in \Sigma^\ast$. $u$ und $v$ heißen \textbf{Myhill-Nerode-äquivalent bezüglich $L$} ($u \sim_L v$) genau dann, wenn für alle $w \in \Sigma^\ast$ gilt, dass $uw \in L$ g.d.w. $vw \in L$.
+	Sei $\Sigma$ ein Alphabet und $L \subseteq \Sigma^\ast$. Seien $u, v \in \Sigma^\ast$. $u$ und $v$ heißen \textit{Myhill-Nerode-äquivalent bezüglich $L$} ($u \sim_L v$) genau dann, wenn für alle $w \in \Sigma^\ast$ gilt, dass $uw \in L$ g.d.w. $vw \in L$.
 \end{definition}
-Diese Relation ist tatsächlich sogar nicht nur eine Äquivalenz sondern auch eine rechtsseitige Kongruenz, deswegen sind auch die Begriffe \textit{Myhill-Nerode-Rechtskongruenz} und -- nicht ganz korrekterweise -- \textit{Myhill-Nerode-Kongruenz} gebräuchlich. Dies wollen wir im folgenden zeigen.
+Diese Relation ist tatsächlich sogar nicht nur eine Äquivalenz sondern auch eine rechtsseitige Kongruenz bezüglich $\cdot$, deswegen sind auch die Begriffe \textit{Myhill-Nerode-Rechtskongruenz} und -- nicht ganz korrekterweise -- \textit{Myhill-Nerode-Kongruenz} gebräuchlich. Dies wollen wir im folgenden zeigen.
 Eine einfacher Folgerung aus der Definition ist
 \begin{lemma}\label{lem:mncongruence}
 	Sei $L \subseteq \Sigma^\ast$ eine Sprache. Für alle $u, v, w \in \Sigma^\ast$ mit $u \sim_L v$ gilt $uw \sim_L vw$.
 	\begin{proof}
-		folgt. %TODO
+		Wir zeigen zunächst, dass $\sim_L$ eine Äquivalenzrelation ist. Offensichtlich ist $\sim_L$ reflexiv und symmetrisch. Angenommen nun $u \sim_L v$ und $v \sim_L w$, aber $u \not\sim_L w$, d.h. es gibt ein trennendes Wort $x$ mit oBdA $u \cdot x \in L$ und $w \cdot x \notin L$. Dann ist $v \cdot x \notin L$ wegen $v \sim_L w$. Daraus folgt aber auch, dass $u \not\sim_L v \lightning$.\\
+		Sei nun $u \sim_L v$ und $w \in \Sigma^\ast$ beliebig. Angenommen $uw \not\sim_L vw$, d.h. es gibt ein trennendes Wort $x \in \Sigma^\ast$ mit oBdA $uw \cdot x \in L$ und $vw \cdot x \notin L$. Dann ist aber $wx$ ein trennendes Wort für $u$ und $v$ und somit $u \not\sim_L v \lightning$.\\
+		Ingesamt gilt also, dass $\sim_L$ rechtsseitige Kongruenzrelation bezüglich $\cdot$ ist.
 	\end{proof}
 \end{lemma}
-Wir können auch wie in Definition~\ref{def:equivalenceclass} die Myhill-Nerode-Äquivalenzklassen bestimmen. Man benennt Äquivalenzklassen auch durch einzelne Repräsentanten, z.B. mit $[u]_L$ für die Äquivalenzklasse in der alle Elemente enthalten sind, die zu $u$ Myhill-Nerode-äquivalent sind.
-Das Lemma~\ref{lem:mncongruence} kann dafür verwendet werden um Myhill-Nerode-Äquivalenzklassen zu finden. Wir gehen dabei wie folgt vor:
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Algo?
-Wir starten mit dem leeren Wort $\varepsilon$ und der zugehörigen Äquivalenzklasse $[\varepsilon]_L$. Danach wiederholen wir folgende Schritte bis keine neue Äquivalenzklassen mehr gefunden werden:\\
-Für jedes Symbol $a \in \Sigma$ und jede bisher gefundene Äquivalenzklasse $[u]_L$ betrachte die Äquivalenzklasse $[ua]_L$. Ist $[ua]_L = [v]_L$ für eine bereits gefundene Äquivalenzklasse, passiert nichts. Ist dies nicht der Fall, fügen wir $[ua]_L$ als neue Äquivalenzklasse hinzu.\par
-Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen (s. Satz~\ref{thm:nerode}).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Die Myhill-Nerode-Äquivalenz ist inhaltlich eines der schönsten Sachen in FoSAP, weil sie 1. eine notwendige und hinreichende Bedingung liefert, dass eine Sprache regulär ist und weil sie 2. auch einen direkten Weg zu einem minimalen deterministischen endlichen Automaten liefert.
+Wir verwenden etwas vereinfachte Schreibweisen für Myhill-Nerode-Äquivalenz: Statt $[w]_{\sim_L}$ schreiben wir nur $[w]_L$ und für $\Sigma^\ast /_{\sim_L}$ schreiben wir $\Sigma^\ast /_L$. Außerdem schreiben wir $\ind(L)$ für $\ind(\sim_L)$.
+\begin{example}\label{exp:ex4}
+	Wir bestimmen die Myhill-Nerode-Äquivalenzklassen und den Index der Sprache 
+	$$
+		L = \{w \in \{a, b\}^\ast \mid w \text{ hat Infix } ab\}.
+	$$
+	Wir betrachten $\sim_L$ und die Wörter über $\{a, b\}$:
+	\begin{itemize}
+		\item $\varepsilon \not\sim_L a$, denn $b$ ist trennendes Wort: $\varepsilon \cdot b = b \notin L$, aber $a \cdot b = ab \in L$.
+		\item $\varepsilon \sim_L b$, denn es gilt $\varepsilon \cdot w \in L$  g.d.w. $b \cdot w \in L$, nämlich genau dann, wenn $w$ das Infix $ab$ beinhaltet.
+		\item $a \sim_L aa$, denn es gilt $a \cdot w \in L$ g.d.w. $aa \cdot w \in L$, nämlich genau dann, wenn $w$ mit $b$ beginnt oder das Infix $ab$ beinhaltet.
+		\item $a \not\sim_L ab$, denn $\varepsilon$ ist trennendes Wort: $a \cdot \varepsilon = a \notin L$, aber $ab \cdot \varepsilon = ab \in L$.
+		\item $\varepsilon \not\sim_L ab$, denn $\varepsilon$ ist trennendes Wort: $\varepsilon \cdot \varepsilon = \varepsilon \notin L$, aber $ab \cdot \varepsilon = ab \in L$.
+	\end{itemize}
+	Wir behaupten nun, dass $[\varepsilon]_L, [a]_L, [ab]_L$ alle Myhill-Nerode-Äquivalenzklassen sind (und damit, dass $\ind(L) = 3$ ist).
+	\begin{proof}
+		Bereits gezeigt haben wir, dass diese drei Myhill-Nerode-Äquivalenzklassen jeweils verschieden sind. Es bleibt zu zeigen, dass $[\varepsilon]_L \cup [a]_L \cup [ab]_L = \{a, b\}^\ast$, also dass $\{[\varepsilon]_L, [a]_L, [ab]_L\}$ eine Partition von $\{a, b\}^\ast$ ist. Wir zeigen, dass für jedes Wort $v \in \{a, b\}^\ast$ eine der drei Möglichkeiten gilt $v \sim_L \varepsilon, v \sim_L a, v \sim_L ab$.
+		\begin{enumerate}[label=\arabic*)]
+			\item $v$ enthält $ab$ als Infix. Dann gilt $v \cdot x \in L$ für alle $x \in\{a, b\}^\ast$. Auch $ab \cdot x \in L$ gilt für alle $x \in \{a, b\}^\ast$, somit $v \sim_L ab$.
+			\item $v$ enthält $ab$ nicht als Infix und endet mit $a$. Dann $v \cdot x \in L$ g.d.w. $x$ mit $b$ beginnt oder $ab$ als Infix enthält. Für genau die selben $x$ gilt $a \cdot x \in L$. Also ist $v \sim_L a$.
+			\item Die oberen beiden Fälle treffen nicht zu, d.h. $v$ enthält $ab$ nicht als Infix und endet auch nicht mit $a$ (d.h. $v \in \llbracket b^\ast \rrbracket$). Dann ist $v \cdot x \in L$ g.d.w. $x$ das Infix $ab$ enthält. Offensichtlich sind das genau die selben $x$ mit denen man auch von $\varepsilon$ in $L$ landet, somit $v \sim_L \varepsilon$.
+		\end{enumerate}
+		Jedes Wort fällt in eines dieser drei Fälle, also haben wir die Behauptung gezeigt. Außerdem liefert uns diese Betrachtung eine Beschreibung der Äquivalenzklassen:
+		\begin{enumerate}[label=\arabic*)]
+			\item $[ab]_L = L = \llbracket (a+b)^\ast ab (a+b)^\ast \rrbracket$,
+			\item $[a]_L = \{w \mid w \text{ enthält kein } ab \text{ und endet auf } a\} = \llbracket b^\ast a^+ \rrbracket$,
+			\item $[\varepsilon]_L = \{w \mid w \text{ enthält kein } ab \text{ und endet nicht auf } a\} = \llbracket b^\ast \rrbracket$.
+		\end{enumerate}
+		Außerdem folgt natürlich, dass $\ind(L) = 3$.
+	\end{proof}
+\end{example}
+In dem Beispiel haben wir bereits auf eine sehr algorithmische Weise die Myhill-Nerode-Äquivalenzklassen bestimmt. Auch wenn wir nochmal bewiesen haben, dass die drei angegebenen Äquivalenzklassen tatsächlich die geforderte Partition bilden, so war dies nicht mehr wirklich nötig mit der vorangegangenen Betrachtung. Denn Lemma~\ref{lem:mncongruence} lieferte bereits die Aussage, dass es nicht mehr Äquivalenzklassen geben kann:
+\begin{itemize}
+	\item $\varepsilon \sim_L bb$, denn $\varepsilon \sim_L b$ und (wegen Lemma~\ref{lem:mncongruence}) $\varepsilon \cdot b \sim_L b \cdot b$. Mit Transitivität folgt auch $\varepsilon \sim_L bb$.
+	\item $\varepsilon \not\sim_L aa$, denn $aa \sim_L a \not\sim_L \varepsilon$. Aus Symmetriegründen folgt dann auch $aa \not\sim_L \varepsilon$.
+	\item $a \sim_L aaa$, denn $a \sim_L aa$ und damit auch $a \cdot a \sim_L aa \cdot a$. Mit Transitivität erhalten wir dann auch wieder $a \sim_L aaa$ und induktiv auch $a \sim_L a^k$ für beliebige $k \in \mathbb{N}_+$.
+\end{itemize}
+Das bedeutet, wenn man bereits für alle Wörter bis zu einer bestimmten Länge alle Myhill-Nerode-Äquivalenzklassen gefunden hat und für Wörter der nächstgrößeren Länge keine neuen mehr hinzugekommen sind, so hat man bereits alle Klassen gefunden. Alle noch längeren Wörter sind dann bereits ebenfalls äquivalent zu einem kürzeren Wort. 
+\begin{lemma}
+	Sei $L \subseteq \Sigma^\ast$ eine Sprache und $w \in \Sigma^\ast$. Falls $w$ kleinster Repräsentant (bzgl. $\lex$) einer Myhill-Nerode-Äquivalenzklasse $[w]_L$ ist, so ist bereits jedes Präfix von $w$ ebenfalls kleinster Repräsentant seiner Myhill-Nerode-Äquivalenzklasse.
+	\begin{proof}
+		Sei $u \sqsubseteq w$, d.h. es gibt ein $x \in \Sigma^\ast$ mit $ux = w$, sodass $u \in [v]_L$ für ein $v \lex u$. Dann ist aber $vx \in [w]_L$, aber $vx \lex ux = w \lightning$.
+	\end{proof}
+\end{lemma}
+\begin{corollary}
+	Sei $\mathcal{P}_L$ eine Menge von Myhill-Nerode-Äquivalenzklassen bzgl. einer Sprache $L \subseteq \Sigma^\ast$. Falls für alle $[u]_L \in \mathcal{P}_L$ und alle $a \in \Sigma$ gilt, dass $ua \sim_L w$ für ein $w \lex ua$ mit $[w]_L \in \mathcal{P}_L$, so gilt bereits für alle $v \in a\Sigma^+, a \in \Sigma$, dass $uv \sim_L w$ für ein $w \lex uv$ mit $[w]_L \in \mathcal{P}_L$. (Und somit gilt, dass $\bigcup_{w \in \mathcal{P}} [w]_L = \Sigma^\ast$.)
+	\begin{proof}
+		Angenommen für alle $[u]_L\in \mathcal{P}_L$ und alle $a \in \Sigma$ ist $ua$ bereits Myhill-Nerode-äquivalent zu einem kleineren Repräsentanten $w \in \mathcal{P}$, aber es gibt ein $v \in a\Sigma^+$ mit $uv \notin [w]_L$ für alle $[w]_L \in \mathcal{P}$. Wähle $v$ dabei minimal. $uv$ repräsentiert also eine neue Myhill-Nerode-Äquivalenzklasse, d.h. es gibt kein lexikographisch kleineres Wort, welches zu $[uv]_L$ gehört. Nach vorigem Lemma ist dann aber auch jedes Präfix von $uv$ kleinster Repräsentant einer Myhill-Nerode-Äquivalenzklasse. Insbesonder gilt das für $ua$. $\lightning$ zur Annahme, dass $[ua]_L$ einen kleineren Repräsentanten bereits hat.
+	\end{proof}
+\end{corollary}
+Dieses Korollar liefert intuitiv den Algorithmus~\ref{alg:mnc} zum Finden von Myhill-Nerode-Ä\-qui\-va\-lenz\-klas\-sen, denn wir wissen nun, dass wir alle Klassen gefunden haben, wenn ein Anhängen eines(!) beliebigen weiteren Symbols keine neue Klasse bringt.
+\begin{algorithm}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\underline{Myhill-Nerode-Klassifizierer}{$L$}\\
+	\Input{Sprache $L \subseteq \Sigma^\ast$}
+	\Output{Myhill-Nerode-Äquivalenzklassen $\mathcal{P} = \{[w]_L : w \in \Sigma^\ast\}$.}
+	$\mathcal{P} \coloneqq \{[\varepsilon]_L\}$\\
+	\For{$[u]_L \in \mathcal{P}$}{
+		\For{$a \in \Sigma$}{
+			\If{$ua \not\sim_L v$ für alle $[v]_L \in \mathcal{P}$}{
+				$\mathcal{P} \coloneqq \mathcal{P} \cup \{[ua]_L\}$\\
+			}
+		}
+	}
+	\caption{Induktives Finden von Myhill-Nerode-Äquivalenzklassen}
+	\label{alg:mnc}
+\end{algorithm}
+Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen. Dies ist ein sehr starkes Resultat, denn es gibt uns eine notwendige und hinreichende Bedingung für Regularität und ist neben dem Äquivalenzsatz von Kleene sicher das schönste Theorem in dieser Vorlesung. Die Details geben wir im folgenden Satz.
 \begin{theorem}[Satz von Nerode]\label{thm:nerode}
 	Eine Sprache ist genau dann regulär, wenn die Anzahl der Myhill-Nerode-Äquivalenzklassen endlich ist.
-	\begin{proof}
-		folgt. %TODO
-	\end{proof}
 \end{theorem}
-Man schreibt auch $index(\sim_L) < \infty$. Die Sprache $L$ im Beispiel hat $index(\sim_L) = 3 < \infty$ und ist somit regulär. Betrachte nun ein Standardbeispiel für eine nicht-reguläre Sprache 
-$$
-	K = \{ a^n b^n : n \in \mathbb{N} \}.
-$$
-$K$ ist nicht regulär. Betrachte die Wörter $u_i = a^i$ und $u_j = a^j$ mit $i \neq j$. Es gilt offensichtlich $u_i \not\sim_K u_j$, denn das Wort $b^i$ trennt die Wörter, weil $u_i b^i = a^i b^i \in K$, aber $u_j b^i = a^j b^i \notin K$. Da es unendlich viele $i, j \in \mathbb{N}$ mit $i \neq j$ gibt, gibt es auch unendlich viele Äquivalenzklassen. Also ist $K$ nach dem Satz von Nerode nicht regulär.
+Die Sprache $L$ im Beispiel~\ref{exp:ex4} hat $\ind(L) = 3 < \infty$ und ist somit regulär. Wir betrachten nun ein Beispiel für eine nicht-reguläre Sprache.
+%TODO Beispiel
 \begin{theorem}
 	Der minimale DFA zu einer reguläre Sprache $L$ ist isomorph zum Myhill-Nerode-DFA:
 	$$
@@ -1887,14 +1969,16 @@ $K$ ist nicht regulär. Betrachte die Wörter $u_i = a^i$ und $u_j = a^j$ mit $i
 	$$
 	mit $\delta([u]_L, a) = [ua]_L$.
 \end{theorem}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
 % Emptiness, Universality, Equivalence, Membership
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Minimierung von DFAs}\label{sec:regular_minimization}
+folgt. %TODO
+
+
 \subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
 Wir schauen uns hier einmal eine praktische Anwendung von regulären Ausdrücken und endlichen Automaten an. Bisher haben wir stets das \textit{einfache Matching-Problem} für reguläre Ausdrücke betrachtet. Dabei ging es darum zu prüfen, ob ein gegebenes Wort $w \in \Sigma^\ast$ zur Sprache eines regulären Ausdrucks $r \in \mathsf{RE}_\Sigma$ gehört. Dies ließ sich mit Hilfe der Thompson-Konstruktion einfach als das Wortproblem eines $\varepsilon$-NFA betrachten. In der Praxis ist das einfach Matching-Problem aber zu primitiv um echte Probleme lösen zu können. Vorallem im Compilerbau benötigen wir etwas mehr, wenn wir Programmcode in seine Bestandteile zerlegen wollen um später Syntax-Checks darauf durchführen zu können und schließlich eine Semantik für das Programm festzulegen. In der Fachsprache nennt man diesen Teil eines Compilers auch \textit{Scanner} oder \textit{Lexer} (siehe auch die Programme \texttt{lex}, \texttt{flex}).
 In diesem Dokument verwenden wir die Variablen $h, i, j, k, \ell$ stets als natürliche Zahlen aus einer Menge $[m] \coloneqq \{ 1, \ldots, m \}$. Manchmal ist die Notation etwas sloppy, aber hoffentlich verständlich genug.
