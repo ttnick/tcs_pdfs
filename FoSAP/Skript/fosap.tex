@@ -66,6 +66,7 @@
 \DeclareMathOperator{\bin}{bin}
 \DeclareMathOperator{\xor}{xor}
 \DeclareMathOperator{\lex}{\prec_\text{lex}}
+\DeclareMathOperator{\canon}{\prec_\text{cn}}
 \let\emptyset\varnothing
 
 \lstset{numbers=left, xleftmargin=.2\textwidth, xrightmargin=.2\textwidth, basicstyle=\ttfamily\bfseries}
@@ -672,7 +673,7 @@ Alphabete werden durch griechische Großbuchstaben $\Sigma, \Gamma$ oder Variati
 \begin{example}
 	\
 	\begin{enumerate}
-		\item Das \textit{Boole'sche Alphabet} $\{ 0, 1 \}$.
+		\item Das \textit{Boole'sche Alphabet} $\mathbb{B} \coloneqq \{ 0, 1 \}$.
 		\item Das \textit{Morsealphabet} $\{ \cdot, -, \,\,\, \}$.
 		\item Das \textit{ASCII-Alphabet} für zum Beispiel Textdateien.
 	\end{enumerate}
@@ -703,8 +704,8 @@ Sprachen bezeichnen wir in der Regel mit $L, K, \ldots$ und Varianten.
 	\
 	\begin{itemize}
 		\item Die leere Sprache $\emptyset$.
-		\item Die Sprache, die nur das leere Wort enthält $\{ \varepsilon \}$.
-		\item Die Sprache aller Binärdarstellungen von Primzahlen $\{ \bin(n) : n \in \mathbb{P} \}$.
+		\item Die Sprache, die nur das leere Wort enthält $\{\varepsilon\}$.
+		\item Die Sprache aller Binärdarstellungen von Primzahlen $\{\bin(n) : n \in \mathbb{P}\}$.
 		\item Die Menge aller grammatikalisch korrekten deutschen Sätze.
 	\end{itemize}
 \end{example}
@@ -720,7 +721,7 @@ Durch diese vorgegangen Definitionen haben wir das Fundament für die theoretisc
 	\end{align*}
 	Außerdem ist $u^0 \coloneqq \varepsilon$ und $u^n \coloneqq u \cdot u^{n-1}$.
 \end{definition}
-Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Für Sprachen erhalten wir noch die Definitionen.
+Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Wir schreiben ihn nur, wenn er der Übersicht dient. Für Sprachen erhalten wir noch die Definitionen.
 \begin{definition}
 	Seien $L, K \subseteq \Sigma^\ast$ Sprachen.
 	\begin{enumerate}
@@ -765,6 +766,35 @@ Gewöhnlich betrachten wir ja eine Teilmenge des lateinischen Alphabets $\Sigma_
 		\item $\varepsilon \lex u$ für alle $u \in \Sigma^\ast$.
 	\end{enumerate}
 \end{example}
+Eine weitere Ordnung auf $\Sigma^\ast$ wäre die folgende:
+\begin{definition}
+	Sei $\Sigma$ ein durch $\prec$ geordnetes, endliches Alphabet. Die \textit{kanonische Ordnung} $\canon$ auf Wörtern $u, v$, über $\Sigma$ ist definiert durch:
+	\begin{align*}
+		u \canon v &\text{ g.d.w. } |u| < |v|\\
+		&\text{ oder } |u| = |v| \text{ und } u \lex v.
+	\end{align*}
+\end{definition}
+Aufgezählt ist die kanonische Ordnung über $\{a, b, c\}^\ast$ einfach
+$$
+	\varepsilon \canon a \canon b \canon c \canon aa \canon ab \canon ac \canon ba \canon bb \canon \ldots \canon aaa \canon aab \canon \ldots	
+$$
+oder über $\mathbb{B}^\ast$
+$$
+	\varepsilon \canon 0 \canon 1 \canon 00 \canon 01 \canon 10 \canon 11 \canon 000 \canon 001 \canon \ldots
+$$
+\begin{lemma}
+	Seien $u, v \in \Sigma^\ast$ mit $u \canon v$. Dann gilt für alle $w \in \Sigma^\ast$
+	$$
+		uw \canon vw.
+	$$
+	\begin{proof}
+		Ist $|u| < |v|$, so ist auch $|uw| < |vw|$ und damit $uw \canon vw$. Sei also $|u| = |v|$. Dann existiert eine Position $k$ mit $u_k \prec v_k$ und für alle $i < k$ gilt $u_i = v_i$. Mit dem selben $k$ erhalten wir auch die Ordnung $uw \canon vw$.
+	\end{proof}
+\end{lemma}
+Man sagt auch, dass die Konkatenation $\cdot$ die Ordnung $\canon$ \textit{respektiert}.
+\begin{remark*}
+	Das letzte Lemma gilt nicht für $\lex$, denn $a \lex aa$, aber $a \cdot b \not\prec_\text{lex} aa \cdot b$.
+\end{remark*}
 
 
 \subsection{Gesetze für Wörter und Sprachen}\label{sec:awl_wordlaws}
@@ -1927,15 +1957,15 @@ In dem Beispiel haben wir bereits auf eine sehr algorithmische Weise die Myhill-
 \end{itemize}
 Das bedeutet, wenn man bereits für alle Wörter bis zu einer bestimmten Länge alle Myhill-Nerode-Äquivalenzklassen gefunden hat und für Wörter der nächstgrößeren Länge keine neuen mehr hinzugekommen sind, so hat man bereits alle Klassen gefunden. Alle noch längeren Wörter sind dann bereits ebenfalls äquivalent zu einem kürzeren Wort. 
 \begin{lemma}
-	Sei $L \subseteq \Sigma^\ast$ eine Sprache und $w \in \Sigma^\ast$. Falls $w$ kleinster Repräsentant (bzgl. $\lex$) einer Myhill-Nerode-Äquivalenzklasse $[w]_L$ ist, so ist bereits jedes Präfix von $w$ ebenfalls kleinster Repräsentant seiner Myhill-Nerode-Äquivalenzklasse.
+	Sei $L \subseteq \Sigma^\ast$ eine Sprache und $w \in \Sigma^\ast$. Falls $w$ kleinster Repräsentant (bzgl. $\canon$) einer Myhill-Nerode-Äquivalenzklasse $[w]_L$ ist, so ist bereits jedes Präfix von $w$ ebenfalls kleinster Repräsentant seiner Myhill-Nerode-Äquivalenzklasse.
 	\begin{proof}
-		Sei $u \sqsubseteq w$, d.h. es gibt ein $x \in \Sigma^\ast$ mit $ux = w$, sodass $u \in [v]_L$ für ein $v \lex u$. Dann ist aber $vx \in [w]_L$, aber $vx \lex ux = w \lightning$.
+		Sei $u \sqsubseteq w$, d.h. es gibt ein $x \in \Sigma^\ast$ mit $ux = w$, sodass $u \in [v]_L$ für ein $v \canon u$. Dann ist aber $vx \in [w]_L$, aber $vx \canon ux = w \lightning$.
 	\end{proof}
 \end{lemma}
 \begin{corollary}
-	Sei $\mathcal{P}_L$ eine Menge von Myhill-Nerode-Äquivalenzklassen bzgl. einer Sprache $L \subseteq \Sigma^\ast$. Falls für alle $[u]_L \in \mathcal{P}_L$ und alle $a \in \Sigma$ gilt, dass $ua \sim_L w$ für ein $w \lex ua$ mit $[w]_L \in \mathcal{P}_L$, so gilt bereits für alle $v \in a\Sigma^+, a \in \Sigma$, dass $uv \sim_L w$ für ein $w \lex uv$ mit $[w]_L \in \mathcal{P}_L$. (Und somit gilt, dass $\bigcup_{w \in \mathcal{P}} [w]_L = \Sigma^\ast$.)
+	Sei $\mathcal{P}_L$ eine Menge von Myhill-Nerode-Äquivalenzklassen bzgl. einer Sprache $L \subseteq \Sigma^\ast$. Falls für alle $[u]_L \in \mathcal{P}_L$ und alle $a \in \Sigma$ gilt, dass $ua \sim_L w$ für ein $w \canon ua$ mit $[w]_L \in \mathcal{P}_L$, so gilt bereits für alle $v \in a\Sigma^+, a \in \Sigma$, dass $uv \sim_L w$ für ein $w \canon uv$ mit $[w]_L \in \mathcal{P}_L$. (Und somit gilt, dass $\bigcup_{w \in \mathcal{P}} [w]_L = \Sigma^\ast$.)
 	\begin{proof}
-		Angenommen für alle $[u]_L\in \mathcal{P}_L$ und alle $a \in \Sigma$ ist $ua$ bereits Myhill-Nerode-äquivalent zu einem kleineren Repräsentanten $w \in \mathcal{P}$, aber es gibt ein $v \in a\Sigma^+$ mit $uv \notin [w]_L$ für alle $[w]_L \in \mathcal{P}$. Wähle $v$ dabei minimal. $uv$ repräsentiert also eine neue Myhill-Nerode-Äquivalenzklasse, d.h. es gibt kein lexikographisch kleineres Wort, welches zu $[uv]_L$ gehört. Nach vorigem Lemma ist dann aber auch jedes Präfix von $uv$ kleinster Repräsentant einer Myhill-Nerode-Äquivalenzklasse. Insbesonder gilt das für $ua$. $\lightning$ zur Annahme, dass $[ua]_L$ einen kleineren Repräsentanten bereits hat.
+		Angenommen für alle $[u]_L\in \mathcal{P}_L$ und alle $a \in \Sigma$ ist $ua$ bereits Myhill-Nerode-äquivalent zu einem kleineren Repräsentanten $w \in \mathcal{P}$, aber es gibt ein $v \in a\Sigma^+$ mit $uv \notin [w]_L$ für alle $[w]_L \in \mathcal{P}$. Wähle $v$ dabei minimal. $uv$ repräsentiert also eine neue Myhill-Nerode-Äquivalenzklasse, d.h. es gibt kein kanonisch kleineres Wort, welches zu $[uv]_L$ gehört. Nach vorigem Lemma ist dann aber auch jedes Präfix von $uv$ kleinster Repräsentant einer Myhill-Nerode-Äquivalenzklasse. Insbesonder gilt das für $ua$. $\lightning$ zur Annahme, dass $[ua]_L$ einen kleineren Repräsentanten bereits hat.
 	\end{proof}
 \end{corollary}
 Dieses Korollar liefert intuitiv den Algorithmus~\ref{alg:mnc} zum Finden von Myhill-Nerode-Ä\-qui\-va\-lenz\-klas\-sen, denn wir wissen nun, dass wir alle Klassen gefunden haben, wenn ein Anhängen eines(!) beliebigen weiteren Symbols keine neue Klasse bringt.
@@ -1961,22 +1991,58 @@ Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reg
 	Eine Sprache ist genau dann regulär, wenn die Anzahl der Myhill-Nerode-Äquivalenzklassen endlich ist.
 \end{theorem}
 Die Sprache $L$ im Beispiel~\ref{exp:ex4} hat $\ind(L) = 3 < \infty$ und ist somit regulär. Wir betrachten nun ein Beispiel für eine nicht-reguläre Sprache.
-%TODO Beispiel
-\begin{theorem}
-	Der minimale DFA zu einer reguläre Sprache $L$ ist isomorph zum Myhill-Nerode-DFA:
+\begin{example}
+	Sei $L = \{w \in \{(, )\} \mid w \text{ korrekt geklammert}\}$ Korrekt geklammert meint, dass $|w|_( = |w|_)$ und für jedes Präfix $u \sqsubseteq w$ gilt $|u|_( \geq |u|_)$. Wir zeigen, dass $L$ unendlich viele Myhill-Nerode-Äquivalenzklassen hat. Dann folgt mit dem Satz~\ref{thm:nerode}, dass $L$ nicht regulär ist.
+	Sei $u_k \coloneqq (^k$ und betrachte für zwei beliebige $i \neq j$ die Wörter $u_i, u_j$. Es gilt $u_i \not\sim_L u_j$, denn $v = )^i$ trennt die beiden Worte: $u_i \cdot v = (^i)^i \in L$, aber $u_j \cdot v = (^j)^i \notin L$. Also liegen $u_i$ und $u_j$ in zwei verschiedenen Myhill-Nerode-Äquivalenzklassen. Da es unendlich viele $i, j \in \mathbb{N}$ gibt mit $i \neq j$, gibt es demnach auch unendlich viele Myhill-Nerode-Äquivalenzklassen für $L$. Also ist $L$ nicht regulär.
+\end{example}
+Den Beweis von Satz~\ref{thm:nerode} teilen wir auf zwei Lemmata auf.
+\begin{lemma}
+	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA und $L = L(\mathcal{A})$. Dann gilt
 	$$
-		\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta, [\varepsilon]_L, \{[u]_L : u \in L \}),
+		\ind(L) \leq |Q|.
 	$$
-	mit $\delta([u]_L, a) = [ua]_L$.
-\end{theorem}
+	\begin{proof}
+		Für alle $v \in \Sigma^\ast$ sei $q_v \in Q$ der (eindeutige) Zustand mit $\mathcal{A}: q_0 \reaches{v} q_v$. Nun gilt für alle $v, w \in \Sigma^\ast$ mit $q_v = q_w$, dass $v \sim_L w$. Mit Kontraposition gilt äquivalent, dass wenn $v \not\sim_L w$, dann gilt $q_v \neq q_w$. Also folgt, dass es maximal so viele Myhill-Nerode-Äquivalenzklassen gibt wie Zustände in $\mathcal{A}$.
+	\end{proof}
+\end{lemma}
+\begin{corollary}\label{cor:reg2mnf}
+	Für jede reguläre Sprache $L$ gilt $\ind(L) < \infty$.
+\end{corollary}
+Wir müssen nun noch zeigen, dass ein endlicher Index zu einer Sprache impliziert, dass $L$ regulär ist.
+\begin{lemma}\label{lem:mnf2reg}
+	Sei $L \subseteq \Sigma^\ast$ eine Sprache mit $\ind(L) < \infty$. Dann gibt es einen DFA für $L$.
+	\begin{proof}
+		Wir geben den DFA (\textit{Myhill-Nerode-DFA}) explizit an:
+		$$
+			\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta, [\varepsilon]_L, \{[u]_L : u \in L\}),
+		$$
+		mit $\delta([u]_L, a) = [ua]_L$. Beachte, dass $\Sigma^\ast/_L$ wegen $\ind(L) < \infty$ endlich ist, aber nicht leer, da $\Sigma^\ast/_L$ eine Partition von $\Sigma^\ast$ ist. Außerdem ist $\Sigma$ selbst ebenfalls endlich und nicht leer. Zusätzlich gilt $[\varepsilon]_L \in \Sigma^\ast/_L$ und $\{[u]_L : u \in L\} \subseteq \Sigma^\ast/_L$. Zuletzt ist $\delta$ wohldefiniert wegen Lemma~\ref{lem:mncongruence}, denn 
+		$$
+			\delta([u]_L, a) = [ua]_L = [u^\prime a]_L = \delta([u^\prime]_L, a)
+		$$
+		für alle $u \sim_L u^\prime$ und alle $a \in \Sigma$. Also ist $\mathcal{A}_L$ wirklich ein DFA. Es bleibt zu zeigen, dass $L(\mathcal{A}_L) = L$.\\
+		Zunächst zeigen wir per Induktion, dass für alle $w \in \Sigma^\ast$ gilt: $\delta^\ast([\varepsilon]_, w) = [w]_L$.\\
+		Induktionsverankerung: Für $w = \varepsilon$ gilt offensichtlich $\delta^\ast([\varepsilon]_L, \varepsilon) = [\varepsilon]_L$. \checkmark\\
+		Induktionsschritt: Sei $[u]_L \in \Sigma^\ast/_L$, sodass $\delta^\ast([\varepsilon]_L, u) = [u]_L$. Nach Definition von $\delta$ gilt dann für alle $a \in \Sigma$, dass $\delta([u]_L, a) = [ua]_L$ und damit insgesamt
+		\begin{align*}
+			\delta^\ast([\varepsilon]_L, ua) &= \delta(\delta^\ast([\varepsilon]_L, u), a)\\
+			&\overset{\text{IH}}{=} \delta([u]_L, a)\\
+			&= [ua]_L.
+		\end{align*}
+		Also gilt die Aussage für alle $w \in \Sigma^\ast$. Nach Konstruktion des Myhill-Nerode-DFA ist außerdem $[w]_L$ akzeptierender Zustand g.d.w. $w \in L$. Beachte, dass in dem Fall auch kein $v \in [w]_L$ mit $v \notin L$ existiert, denn für $v, w$ wäre dann $\varepsilon$ ein trennendes Wort. Also akzeptiert $\mathcal{A}_L$ genau $L$.
+	\end{proof}
+\end{lemma}
+Die beiden Lemma~\ref{lem:mnf2reg} und Korollar~\ref{cor:reg2mnf} ergeben zusammen den Satz von Nerode (Satz~\ref{thm:nerode}). In Abbildung~\ref{fig:mndfa} sehen wir den Myhill-Nerode-DFA für die Sprache $L$ aus Beispiel~\ref{exp:ex4}.
+\begin{figure}
+	\centering
+	\input{figs/mndfa}
+	\caption{Myhill-Nerode-DFA für die Sprache aus Beispiel~\ref{exp:ex4}.}
+	\label{fig:mndfa}
+\end{figure}
 
 
-\subsection{Algorithmen für Reguläre Sprachen}\label{sec:regular_algorithms}
-% Emptiness, Universality, Equivalence, Membership
-
-
-\subsection{Minimierung von DFAs}\label{sec:regular_minimization}
-folgt. %TODO
+\subsection{Algorithmische Probleme für Reguläre Sprachen}\label{sec:regular_algorithms}
+% Minimization, Emptiness, Universality, Equivalence, Membership
 
 
 \subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}

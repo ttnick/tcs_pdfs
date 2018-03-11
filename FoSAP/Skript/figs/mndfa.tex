@@ -1,0 +1,11 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick, every state/.style={inner sep=0pt, minimum size=30pt}]
+	\node[initial, initial text=, state]	(0)	at (0, 0)	{$[\varepsilon]_L$};
+	\node[state]							(1) at (2.5, 0)	{$[a]_L$};
+	\node[state, accepting]				(2) at (5, 0)	{$[ab]_L$};
+
+	\path	(0) edge node {$a$} (1)
+			(0) edge[loop above] node {$b$} (0)
+			(1) edge[loop above] node {$a$} (1)
+			(1) edge node {$b$} (2)
+			(2) edge[loop above] node {$a, b$} (2);
+\end{tikzpicture}
