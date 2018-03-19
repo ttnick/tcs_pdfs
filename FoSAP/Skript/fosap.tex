@@ -24,6 +24,7 @@
 \usepackage[justification=centering]{caption}
 \usepackage{subcaption}
 \usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
+\usepackage{hyperref}
 
 % meta
 \clubpenalty = 10000
@@ -657,6 +658,52 @@ Zuletzt betrachten wir das Beweisprinzip der vollständigen Induktion. Hiermit l
 		\end{align*}
 	\end{proof}
 \end{theorem}
+
+
+\subsection{*Weitere Beweismethoden}
+Im letzten Abschnitt haben wir vier Standardbeweistechniken kennen gelernt. Zuletzt wollen wir noch auf neun weitere Methoden eingehen, die etwas involvierter sind und somit etwas Erfahrung mit wissenschaftlicher Arbeit voraussetzen.
+\begin{description}
+	\item[Beweis durch Einschüchterung] Man schreibt einfach der Beweis wäre \textit{trivial}. Im Idealfall kennt man ein paar Umschreibungen dieses Worts.
+		\begin{itemize}
+			\item Trivial / Obvious / Immediatley! 
+			\item As must be obvious to the meanest intellect...
+			\item The proof is remarkable but does not fit in this margin.
+			\item The result will be obvious if the reader is awake.
+			\item Left as an exercise.
+			\item It is obvious to the casual observer.
+			\item It makes my theory seem simplistic if I include every detail.
+			\item Think! / Trust me!
+			\item We hold the proofs to be self evident.
+			\item Proving this result would be an insult of the reader's and, what is even worse, my time.
+		\end{itemize}
+	\item[Beweis durch unverständliche Notation] Eine Erweiterung der ersten Methode ist es noch Hinweise dazuzugeben, warum der Beweis trivial ist, jedoch so, dass die Hinweise nicht mehr lesbar sind. Inspiration findet man beispielsweise auf \url{http://theproofistrivial.com}.
+		\begin{itemize}
+			\item The theorem follows immediately from the fact that $\left| \bigoplus_{k \in S} \left( \mathfrak{K}^{\mathbb{F}^\alpha(i)} \right)_{i \in \mathcal{U}_k} \right| \preccurlyeq \aleph_1$ when $[\mathfrak{H}]_\mathcal{W} \cap \mathbb{F}^\alpha(\omega) \neq \emptyset$.
+		\end{itemize}
+	\item[Beweis durch schlecht verfügbare Literatur] \ 
+		\begin{itemize}
+			\item The theorem is an easy corllary of a result proven in a hand-written note handed out during a lecture by the Yugoslavian Mathematical Society in 1973.
+			\item The proof is contained in a textbook which is available in French for \$179.99.
+		\end{itemize}
+	\item[Beweis durch Ghost Reference] \
+		\begin{itemize}
+			\item The proof can be found on page 478 in a textbook which turns out to have 396 pages.
+		\end{itemize}
+	\item[Beweis durch Autorität] Behaupten ein renommierter Wissenschaftler hätte den Satz längst bewiesen.
+		\begin{itemize}
+			\item My good colleague {Prof.} {em.} {Dr.} {rer.} {nat.} {Dr.} {h.c.} {mult.} Anderson stated he might have come up with a proof a few years ago.
+		\end{itemize}
+	\item[Internet-Quelle] \
+		\begin{itemize}
+			\item For those interested, the result is shown on the web page of this book. (The web page unfortunately does not exist any more)
+		\end{itemize}
+	\item[Beweis durch Verschieben] \
+		\begin{itemize}
+			\item Chapter 3: The proof of this is delayed until chapter 7 when we have developed the theory even further.\\
+				Chapter 7: To make things easy, we only prove it for the special case $z = 0$, but the general case is handled in Appendix C.\\
+				Appendix C: The formal proof is beyond the scope of this book, but should be obvious to the casual reader.
+		\end{itemize}
+\end{description}
 
 
 
@@ -2045,7 +2092,7 @@ Die beiden Lemma~\ref{lem:mnf2reg} und Korollar~\ref{cor:reg2mnf} ergeben zusamm
 % Minimization, Emptiness, Universality, Equivalence, Membership
 
 
-\subsection{Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
+\subsection{*Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
 Wir schauen uns hier einmal eine praktische Anwendung von regulären Ausdrücken und endlichen Automaten an. Bisher haben wir stets das \textit{einfache Matching-Problem} für reguläre Ausdrücke betrachtet. Dabei ging es darum zu prüfen, ob ein gegebenes Wort $w \in \Sigma^\ast$ zur Sprache eines regulären Ausdrucks $r \in \mathsf{RE}_\Sigma$ gehört. Dies ließ sich mit Hilfe der Thompson-Konstruktion einfach als das Wortproblem eines $\varepsilon$-NFA betrachten. In der Praxis ist das einfach Matching-Problem aber zu primitiv um echte Probleme lösen zu können. Vorallem im Compilerbau benötigen wir etwas mehr, wenn wir Programmcode in seine Bestandteile zerlegen wollen um später Syntax-Checks darauf durchführen zu können und schließlich eine Semantik für das Programm festzulegen. In der Fachsprache nennt man diesen Teil eines Compilers auch \textit{Scanner} oder \textit{Lexer} (siehe auch die Programme \texttt{lex}, \texttt{flex}).
 In diesem Dokument verwenden wir die Variablen $h, i, j, k, \ell$ stets als natürliche Zahlen aus einer Menge $[m] \coloneqq \{ 1, \ldots, m \}$. Manchmal ist die Notation etwas sloppy, aber hoffentlich verständlich genug.
 
