@@ -1,0 +1,7 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
+	\node[initial, initial text=, state]	(0)	at (0, 0)		{$q_0$};
+	\node[state, accepting]				(1) at (2, 0)		{$q_1$};
+
+	\path	(0) edge node {$a$} (1)
+			(1) edge[loop above] node {$a$} (1);
+\end{tikzpicture}
