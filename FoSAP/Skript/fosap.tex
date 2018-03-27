@@ -345,7 +345,7 @@ Das Beweisschema für solche Aufgaben ist stets das selbe und sollte deshalb auc
 \begin{center}
 	\textit{Definition anwenden -- triviale Umformung -- Definition anwenden -- Profit}.
 \end{center}
-\begin{remark*}
+\begin{theorem}[Distributivgesetz]
 	Für Mengen $A, B, C$ gilt:
 	\begin{enumerate}
 		\item $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$,
@@ -365,23 +365,28 @@ Das Beweisschema für solche Aufgaben ist stets das selbe und sollte deshalb auc
 		\end{itemize}
 		Wir haben also $A \cup (B \cap C) \subseteq (A \cup B) \cap (A \cup C)$ und $A \cup (B \cap C) \supseteq (A \cup B) \cap (A \cup C)$ gezeigt. Somit muss Gleichheit zwischen diesen beiden Mengen vorliegen.
 	\end{proof}
-\end{remark*}
+\end{theorem}
 Weiterhin nützlich sind noch folgende Bemerkungen.
-\begin{remark*}[DeMorgan'sche Gesetze]
+\begin{theorem}[DeMorgan'sche Gesetze]
 	Für Mengen $A, B$ gilt:
 	\begin{itemize}
 		\item $\comp{(A \cup B)} = \comp{A} \cap \comp{B}$,
 		\item $\comp{(A \cap B)} = \comp{A} \cup \comp{B}$.
 	\end{itemize}
-\end{remark*}
-\begin{remark*}[Absorptionsgesetz]
+	\begin{proof}
+		Jeder Mensch sollte mal einen solchen Beweis selbst geführt haben, deshalb bleibt dieser hier als Übung.
+	\end{proof}
+\end{theorem}
+\begin{theorem}[Absorptionsgesetz]
 	Für Mengen $A, B$ gilt:
 	\begin{itemize}
 		\item $A \cup (A \cap B) = A$,
 		\item $A \cap (A \cup B) = A$.
 	\end{itemize}
-\end{remark*}
-Die Beweise hierfür bleiben als Übung.
+	\begin{proof}
+		Wir überlassen diesen Beweis dem eifrigen Kopf, der dieses Skript liest.
+	\end{proof}
+\end{theorem}
 
 
 \subsection{Funktionen}\label{sec:pre_mappings}
@@ -437,7 +442,7 @@ Wir fügen nun noch ein paar nützliche Definitionen an um dieses Skript in sich
 
 
 \subsection{Strukturen}\label{sec:pre_structures}
-Wir haben Mengen, Relationen und Abbildungen jeweils eigenständig kennengelernt. Tatsächlich benutzen wir sie allerdings nur zusammen. Beispielsweise sind die natürlichen Zahlen für sich allein nicht sehr interessant, wenn man auf ihnen nicht addieren könnte. Umgekehrt sind auch Funktionsvorschriften wertlos, wenn sie nicht auf Elemente einer Menge angewendet werden kann. Wir fassen alles nun unter dem Begriff einer \textit{Struktur} zusammen.
+Wir haben Mengen, Relationen und Abbildungen jeweils eigenständig kennengelernt. Tat\-säch\-lich benutzen wir sie allerdings nur zusammen. Beispielsweise sind die natürlichen Zahlen für sich allein nicht sehr interessant, wenn man auf ihnen nicht addieren könnte. Umgekehrt sind auch Funktionsvorschriften wertlos, wenn sie nicht auf Elemente einer Menge angewendet werden kann. Wir fassen alles nun unter dem Begriff einer \textit{Struktur} zusammen.
 \begin{definition}
 	Sei $\tau = \{ R_1, \ldots, R_m, f_1, \ldots, f_n \}$ eine Menge von Relationssymbolen und Funktionssymbolen, eine sogenannte \textit{Signatur}. Eine \textit{$\tau$-Struktur} ist ein Paar $\mathfrak{A} = (A, \mathfrak{a})$, wobei $A$ eine nicht-leere Menge ist, die \textit{Universum} (oder \textit{Träger}) heißt und $\mathfrak{a}$ ist eine Funktion, die jedem $k$-stelligem Relationssymbol $R \in \tau$ eine $k$-stellige Relation und jedem $k$-stelligem Funktionssymbol $f \in \tau$ eine $k$-stellige Funktion zuordnet.
 \end{definition}
@@ -805,7 +810,7 @@ Aus Bequemlichkeitsgründen wird der Punkt auch weggelassen. Wir schreiben ihn n
 		& \text{ oder es gibt ein } k, \text{ s.d. für alle } i < k \text{ gilt } a_i = b_i \text{ und } a_k \prec b_k.
 	\end{align*}
 \end{definition}
-Gewöhnlich betrachten wir ja eine Teilmenge des lateinischen Alphabets $\Sigma_\text{lat} = \{a, b, \ldots, z\}$. Wir nehmen im Folgenden immer die Ordnung $a \prec b \prec \ldots \prec z$ an.
+Gewöhnlich betrachten wir ja eine Teilmenge des lateinischen Alphabets $\Sigma_\text{lat} = \{a, \ldots, z\}$. Wir nehmen im Folgenden immer die Ordnung $a \prec b \prec \ldots \prec z$ an.
 \begin{example}
 	Sei $\Sigma = \{a, b, c\}$.
 	\begin{enumerate}[label=\arabic*)]
@@ -846,7 +851,7 @@ Man sagt auch, dass die Konkatenation $\cdot$ die Ordnung $\canon$ \textit{respe
 
 
 \subsection{Gesetze für Wörter und Sprachen}\label{sec:awl_wordlaws}
-In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung von Operationen auf Wörtern und Sprachen gelten, herausarbeiten. Einige Eigenschaften übertragen sich sofort aus denen für Mengen aus Abschnitt~\ref{sec:pre_setlaws}. Bei anderen ist etwas mehr zu zeigen und bei wieder anderen gibt es vielleicht auch zunächst unintuitive Unterschiede.
+In diesem Abschnitt wollen wir einige Gesetzmäßigkeiten, die bei der Anwendung von Operationen auf Wörtern und Sprachen gelten, herausarbeiten. Einige Eigenschaften über\-tra\-gen sich sofort aus denen für Mengen aus Abschnitt~\ref{sec:pre_setlaws}. Bei anderen ist etwas mehr zu zeigen und bei wieder anderen gibt es vielleicht auch zunächst unintuitive Unterschiede.
 \begin{remark*}
 	Für das leere Wort $\varepsilon$ gilt:
 	\begin{enumerate}
@@ -925,7 +930,7 @@ Wir schauen uns nun das Verhalten eines DFA auf einem Wort an.
 	\end{enumerate}
 	Wir sagen ein Lauf ist \textit{akzeptierend}, wenn zusätzlich $r_n \in F$ gilt.
 \end{definition}
-Wir bezeichnen Läufe in der Regel mit $\varrho$ bzw. Variationen. Einen Lauf $(r_0, a_0, r_1, a_1, \ldots, a_{n-1}, r_n)$ kürzen wir gelegentlich durch $(r_0, r_1, \ldots, r_n)$ ab, wenn die Symbole nicht relevant für unsere Betrachtungen sind.
+Wir bezeichnen Läufe in der Regel mit $\varrho$ bzw. Variationen. Statt $(r_0, a_0, r_1, a_1, \ldots, a_{n-1}, r_n)$ schreiben wir auch verkürzend $(r_0, r_1, \ldots, r_n)$, wenn die Symbole nicht relevant für unsere Betrachtungen sind.
 \begin{remark*}
 	Zu jedem Wort $w \in \Sigma^\ast$ existiert genau ein Lauf von $\mathcal{A}$ auf $w$.
 \end{remark*}
@@ -1068,7 +1073,7 @@ Für den Abschluss unter Vereinigung ist etwas mehr Arbeit zu machen. Wir haben 
 		Wir zeigen die Kontraposition dieser Aussage. $\mathcal{A}_1$ oder $\mathcal{A}_2$ verwirft. Die Läufe von $\mathcal{A}_1, \mathcal{A}_2$ sind also $(r_0, \ldots, r_n)$ und $(p_0, \ldots, p_n)$ mit $r_n \notin F_1$ oder $p_n \notin F_2$. Wie oben ist $((r_0, p_0), \ldots, (r_n, p_n))$ der Lauf von $\mathcal{A}$ und es gilt $(r_n, p_n) \notin F_1 \times F_2 = F$. Somit verwirft auch $\mathcal{A}$ das Wort.
 	\end{proof}
 \end{theorem}
-Eine Beispielkonstruktion für einen Produktautomaten für den Schnitt zweier DFA-erkennbarer Sprachen befindet sich in Abbildung~\ref{fig:dfa_product}.
+Eine Beispielkonstruktion für einen Produktautomaten für den Schnitt zweier DFA-er\-kenn\-bar\-er Sprachen befindet sich in Abbildung~\ref{fig:dfa_product}.
 \begin{figure}
 	\centering
 	\input{figs/dfa_product}
@@ -1162,7 +1167,7 @@ Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 	Für NFAs müssen Läufe nicht mehr eindeutig sein. Es kann zu einem Wort mehrere Läufe geben oder auch gar keine Läufe, wenn entsprechende Transitionen fehlen.
 \end{remark*}
 \begin{remark*}
-	Produktkonstruktionen um zum Beispiel den Schnitt zweier NFA-erkennbaren Sprachen zu erkennen funktioniert für NFAs genauso wie für DFAs. Schwieriger ist es aber schon das Komplement zu erkennen -- ein einfaches vertauschen von akzeptierenden und nicht-akzeptierenden Zuständen genügt nicht, da weiterhin Wörter aus der Sprache rausgelassen werden für die kein Lauf existiert.
+	Produktkonstruktionen um zum Beispiel den Schnitt zweier NFA-er\-kenn\-bar\-en Sprachen zu erkennen funktioniert für NFAs genauso wie für DFAs. Schwieriger ist es aber schon das Komplement zu erkennen -- ein einfaches vertauschen von akzeptierenden und nicht-akzeptierenden Zuständen genügt nicht, da weiterhin Wörter aus der Sprache rausgelassen werden für die kein Lauf existiert.
 \end{remark*}
 \begin{definition}
 \
@@ -1272,7 +1277,7 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 \subsection{Äquivalenz von NFAs und DFAs}\label{regular_equivalence}
 Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können als DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:ex2} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
 \begin{definition}\label{def:fa_equivalence}
-	Seien $\mathcal{A}, \mathcal{B}$ zwei endliche Automaten (deterministisch oder nicht-deterministisch). $\mathcal{A}$ und $\mathcal{B}$ heißen \textit{äquivalent}, wenn $L(\mathcal{A}) = L(\mathcal{B})$.
+	Seien $\mathcal{A}, \mathcal{B}$ zwei endliche Automaten (deterministisch oder nicht-de\-ter\-mi\-nis\-tisch). $\mathcal{A}$ und $\mathcal{B}$ heißen \textit{äquivalent}, wenn $L(\mathcal{A}) = L(\mathcal{B})$.
 \end{definition}
 Eine Bemerkung aus dem vorigen Abschnitt greifen wir nochmal im folgendem Lemma auf.
 \begin{lemma}\label{lem:dfa2nfa}
@@ -1432,7 +1437,7 @@ Wir bezeichnen $\varepsilon$-NFAs wieder mit $\mathcal{A}, \mathcal{B}$ usw. Tra
 	\caption{$\varepsilon$-NFA, der die Sprache aus Beispiel~\ref{exp:ex3} erkennt.}
 	\label{fig:epsnfa_ex1}
 \end{figure}
-Für $\varepsilon$-NFAs zeigen wir wie im vorigen Abschnitt, dass auch sie die Klasse der FA-erkennbaren Sprachen nicht vergrößern. Der Äquivalenzbegriff aus Definition~\ref{def:fa_equivalence} überträgt sich natürlich auf $\varepsilon$-NFAs.
+Für $\varepsilon$-NFAs zeigen wir wie im vorigen Abschnitt zu NFAs, dass auch sie die Klasse der FA-erkennbaren Sprachen nicht vergrößern. Der Äquivalenzbegriff aus Definition~\ref{def:fa_equivalence} überträgt sich natürlich auf $\varepsilon$-NFAs.
 \begin{lemma}
 	Zu jedem NFA existiert ein äquivalenter $\varepsilon$-NFA.
 	\begin{proof}
@@ -1693,7 +1698,7 @@ Wir fahren nun fort mit dem zweiten Teil von Satz~\ref{thm:kleene_equivalence}. 
 \begin{lemma}\label{lem:nfa2regex}
 	Jede FA-erkennbare Sprache ist regulär.
 	\begin{proof}
-		Wir gehen von einem NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ aus und erzeugen einen äquivalenten regulären Ausdruck $r_\mathcal{A} \in \mathsf{RE}_\Sigma$. Die Idee des Verfahrens ist recht einfach. Wir suchen einen regulären Ausdruck der alle Wörter beschreibt mit denen man vom Startzustand $q_0$ zu einem der akzeptierenden Zustände $q \in F$ kommt ($\ast$). Wir benutzen nun folgende Notation: Für $P \subseteq Q$ und $p, q \in Q$ ist $r_P(p, q)$ der reguläre Ausdruck, der alle Wörter $w \in \Sigma^\ast$ beschreibt mit den man von $p$ nach $q$ kommt und dazwischen nur Zustände aus $P$ benutzt (für die Korrektheit später schreiben wir dafür $p \reachess{w}{P} q$). Anders gesagt ist $r_P(p, q)$ der reguläre Ausdruck zum Automaten $\mathcal{A} = (P, \Sigma, \Delta \cap ((P \cup \{p\}) \times \Sigma \times (P \cup \{q\})), p, \{q\})$. Bzgl. ($\ast$) suchen wir also den regulären Ausdruck
+		Wir gehen von einem NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ aus und erzeugen einen ä\-qui\-va\-len\-ten regulären Ausdruck $r_\mathcal{A} \in \mathsf{RE}_\Sigma$. Die Idee des Verfahrens ist recht einfach. Wir suchen einen regulären Ausdruck der alle Wörter beschreibt mit denen man vom Startzustand $q_0$ zu einem der akzeptierenden Zustände $q \in F$ kommt ($\ast$). Wir benutzen nun folgende Notation: Für $P \subseteq Q$ und $p, q \in Q$ ist $r_P(p, q)$ der reguläre Ausdruck, der alle Wörter $w \in \Sigma^\ast$ beschreibt mit den man von $p$ nach $q$ kommt und dazwischen nur Zustände aus $P$ benutzt (für die Korrektheit später schreiben wir dafür $p \reachess{w}{P} q$). Anders gesagt ist $r_P(p, q)$ der reguläre Ausdruck zum Automaten $\mathcal{A} = (P, \Sigma, \Delta \cap ((P \cup \{p\}) \times \Sigma \times (P \cup \{q\})), p, \{q\})$. Bzgl. ($\ast$) suchen wir also den regulären Ausdruck
 		$$
 			r_\mathcal{A} = \sum_{q \in F} r_Q(q_0, q).
 		$$
@@ -1775,7 +1780,7 @@ Wir werden nun anstelle von FA-erkennbaren Sprachen auch nur noch von regulären
 \subsection{Weitere Abschlusseigenschaften}\label{sec:regular_closure2}
 Wir haben bis hier hin reguläre Sprachen eine umfangreiche Charakterisierung gegeben, nämlich als Sprachen, die sich durch reguläre Ausdrücke oder Sprachen von endliche Automaten beschreiben lassen -- auf die Äquivalenz dieser Charakterisierungen haben wir lange hingearbeitet und mit dem Ä\-qui\-va\-lenz\-satz von Kleene einen schweren Brocken der theoretischen Informatik bewiesen. Dieser Abschnitt wird nun wieder deutlich einfacher. Wir haben bereits einige Abschlusseigenschaften regulärer Sprachen bewiesen: Schnitt, Vereinigung, Komplement, Konkatenation, Iteration usw., aber auch unter ''erfundenen`` Operatoren wie \textit{Perfect Shuffle}. Diese Abschlüsse allein zusammen mit dem Äquivalenzsatz von Kleene ergeben bereits genug Gründe um reguläre Sprachen als eine in wissenschaftlicher Hinsicht \textit{sinnvolle} Sprachklasse zu sehen. Wir werden in diesem Abschnitt nun ein paar weitere sinnvolle Abschlusseigenschaften beweisen.\par
 \begin{definition}\label{def:stringhomomorphism}
-	Seien $\Sigma, \Gamma$ Alphabete. Die  Abbildung $h\colon \Sigma^\ast \to \Gamma^\ast$ heißt \textit{(Wort-)Homomorphismus}, wenn für alle $a_0 \ldots a_{n-1} \in \Sigma^\ast$ gilt, dass
+	Seien $\Sigma, \Gamma$ Alphabete. Die  Abbildung $h\colon \Sigma^\ast \to \Gamma^\ast$ heißt \textit{(Wort-)Ho\-mo\-mor\-phis\-mus}, wenn für alle $a_0 \ldots a_{n-1} \in \Sigma^\ast$ gilt, dass
 	$$
 		h(a_0 \ldots a_{n-1}) = h(a_0) \ldots h(a_{n-1}).
 	$$
@@ -1831,9 +1836,9 @@ Bisher haben wir nur sehr einfache Sprachen betrachtet, die alle regulär waren.
 $$
 	L_\mathbb{P} \coloneqq \{ a^p : p \in \mathbb{P} \}.
 $$
-$L_\mathbb{P}$ ist die Sprache aller (mit $a$) unär codierten Primzahlen, d.h. $L_\mathbb{P} = \{ a^2, a^3, a^5, a^7, a^{11}, \ldots \}$. Dass $L_\mathbb{P}$ nicht regulär ist, ist auch nicht so schwer einzusehen: Intuitiv, wie würde ein regulärer Ausdruck aussehen? Natürlich könnten wir eine unendliche Vereinigung bilden (dies wäre jedoch nicht regulär, da reguläre Ausdrücke endlich sind):
+$L_\mathbb{P}$ ist die Sprache aller (mit $a$) unär codierten Primzahlen, d.h. $L_\mathbb{P} = \{a^2, a^3, a^5, a^7, \ldots\}$. Dass $L_\mathbb{P}$ nicht regulär ist, ist auch nicht so schwer einzusehen: Intuitiv, wie würde ein regulärer Ausdruck aussehen? Natürlich könnten wir eine unendliche Vereinigung bilden (dies wäre jedoch nicht regulär, da reguläre Ausdrücke endlich sind):
 $$
-	r_\mathbb{P} = \sum_{p \in \mathbb{P}} a^p = a^2 + a^3 + a^5 + a^7 + a^{11} + \ldots
+	r_\mathbb{P} = \sum_{p \in \mathbb{P}} a^p = a^2 + a^3 + a^5 + a^7 + \ldots
 $$
 Es erscheint klar, dass es jedoch keine Möglichkeit gibt diesen Ausdruck zu vereinfachen. In einem Automaten wird es noch deutlicher. Wenn wir mit endlich vielen Zuständen auskämen um genau alle unendlich vielen Primzahlcodierungen zu erkennen würden wir Kreise im Transitionsgraphen und somit eine gewisse Regelmäßigkeit in der Wiederholung von Primzahlen bekommen. Dies würde bedeuten, dass die Generierung neuer Primzahlen viel einfacher wäre als bisher angenommen, da wir ab einer bestimmten Primzahl einfach immer eine Konstante addieren könnten um die nächste zu bekommen. Das ist natürlich nicht der Fall. Eine schematische Erklärung dieses Arguments ist in Abbildung~\ref{fig:dfa_primes}. Egal an welcher und an wie vielen Stellen wir eine Zustandwiederholung zulassen (durch gestrichtelte Kante angedeutet), wir würden stets Codierungen akzeptieren, die nicht zu Primzahlen gehören können. In diesem Abschnitt werden wir uns ansehen, wie wir dieses Argument formalisieren und auf weitere nicht-reguläre Sprachen anwenden können.
 \begin{figure}
@@ -1860,7 +1865,7 @@ Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das
 	$$
 	betrachten zu dem Wort $w^{\prime\prime} = a^{n+hk}b^n$ für ein beliebiges $h > 0$.
 \end{remark*}
-Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Überlegungen verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw. eine einzelne Sprache ab.
+Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Ü\-ber\-le\-gung\-en verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw. eine einzelne Sprache ab.
 \begin{lemma}[Pumping-Lemma]
 	Sei $L \subseteq \Sigma^\ast$ eine reguläre Sprache. Dann existiert ein $n \in \mathbb{N}_+$, sodass für alle $w \in L$ mit $|w| \geq n$ eine Zerlegung $w = xyz$ existiert mit den Eigenschaften:
 	\begin{enumerate}
@@ -1966,7 +1971,7 @@ Eine einfacher Folgerung aus der Definition ist
 		Ingesamt gilt also, dass $\sim_L$ rechtsseitige Kongruenzrelation bezüglich $\cdot$ ist.
 	\end{proof}
 \end{lemma}
-Wir verwenden etwas vereinfachte Schreibweisen für Myhill-Nerode-Äquivalenz: Statt $[w]_{\sim_L}$ schreiben wir nur $[w]_L$ und für $\Sigma^\ast /_{\sim_L}$ schreiben wir $\Sigma^\ast /_L$. Außerdem schreiben wir $\ind(L)$ für $\ind(\sim_L)$.
+Wir verwenden etwas vereinfachte Schreibweisen für Myhill-Nerode-Äquivalenz: Anstatt $[w]_{\sim_L}$ schreiben wir nur $[w]_L$ und für $\Sigma^\ast /_{\sim_L}$ schreiben wir $\Sigma^\ast /_L$. Außerdem schreiben wir $\ind(L)$ für $\ind(\sim_L)$.
 \begin{example}\label{exp:ex4}
 	Wir bestimmen die Myhill-Nerode-Äquivalenzklassen und den Index der Sprache 
 	$$
@@ -2050,7 +2055,7 @@ Den Beweis von Satz~\ref{thm:nerode} teilen wir auf zwei Lemmata auf.
 		\ind(L) \leq |Q|.
 	$$
 	\begin{proof}
-		Für alle $v \in \Sigma^\ast$ sei $q_v \in Q$ der (eindeutige) Zustand mit $\mathcal{A}: q_0 \reaches{v} q_v$. Nun gilt für alle $v, w \in \Sigma^\ast$ mit $q_v = q_w$, dass $v \sim_L w$. Mit Kontraposition gilt äquivalent, dass wenn $v \not\sim_L w$, dann gilt $q_v \neq q_w$. Also folgt, dass es maximal so viele Myhill-Nerode-Äquivalenzklassen gibt wie Zustände in $\mathcal{A}$.
+		Für alle $v \in \Sigma^\ast$ sei $q_v \in Q$ der (eindeutige) Zustand mit $\mathcal{A}: q_0 \reaches{v} q_v$. Nun gilt für alle $v, w \in \Sigma^\ast$ mit $q_v = q_w$, dass $v \sim_L w$. Sonst existiert ein $x \in \Sigma^\ast$ mit oBdA $vx \in L$ und $wx \notin L$. Dann wäre aber $\mathcal{A}: q_0 \reaches{v} q_v \reaches{x} q \in F$ und $\mathcal{A}: q_0 \reaches{w} q_w = q_v \reaches{x} q \notin F \lightning$. Mit Kontraposition gilt äquivalent, dass wenn $v \not\sim_L w$, dann gilt $q_v \neq q_w$. Also folgt, dass es maximal so viele Myhill-Nerode-Äquivalenzklassen gibt wie Zustände in $\mathcal{A}$.
 	\end{proof}
 \end{lemma}
 \begin{corollary}\label{cor:reg2mnf}
@@ -2103,7 +2108,7 @@ Im folgenden verwenden wir für einen DFA $\mathcal{A} = (Q, \Sigma, \delta, q_0
 \begin{definition}
 	Ein DFA $\mathcal{A}$ heißt \textit{minimal}, wenn für alle $\mathcal{A}^\prime$ mit $L(\mathcal{A}) = L(\mathcal{A}^\prime)$ gilt $|\mathcal{A}| \leq |\mathcal{A}^\prime|$.
 \end{definition}
-\begin{theorem}
+\begin{theorem}\label{thm:mndfamin}
 	Der Myhill-Nerode-DFA aus Lemma~\ref{lem:mnf2reg} ist minimal.
 	\begin{proof}
 		Für den Myhill-Nerode-DFA $\mathcal{A}_L$ zu einer Sprache $L$ gilt $|\mathcal{A}_L| = \ind(L)$. Außerdem gilt $\ind(L) \leq |\mathcal{A}|$ für alle $\mathcal{A}$ mit $L(\mathcal{A}) = L$ nach Korollar~\ref{cor:reg2mnf}. Insgesamt also $|\mathcal{A}_L| = \ind(L) \leq |\mathcal{A}|$ für alle $\mathcal{A}$ mit $L(\mathcal{A}) = L = L(\mathcal{A}_L)$. Also ist $\mathcal{A}_L$ minimal für $L$.
@@ -2139,7 +2144,7 @@ Wenn zwei Automaten (oder auch zwei andere beliebige Strukturen) isomorph sind, 
 		f(q_0) = q_0^\prime, \quad f(q_1) = q_2^\prime, \quad f(q_2) = q_3^\prime, \quad f(q_3) = q_1^\prime.
 	$$
 \end{example}
-\begin{theorem}
+\begin{theorem}\label{thm:mindfaunique}
 	Sei $\mathcal{A}$ ein minimaler DFA für $L$. Dann ist $\mathcal{A} \cong \mathcal{A}_L$.
 	\begin{proof}
 		Sei $L \subseteq \Sigma^\ast$. Wir betrachten wieder den Myhill-Nerode-DFA aus Lemma~\ref{lem:mnf2reg} $\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta_L, [\varepsilon]_L, \{[u]_L : u \in L\})$. Sei außerdem $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein minimaler DFA für $L$. Wie im Beweis von Lemma~\ref{lem:dfa2mnf} sei für alle $v \in \Sigma^\ast$, $q_v \in Q$ der eindeutige Zustand mit $\mathcal{A}: q_0 \reaches{v} q_v$ (oder $\delta^\ast(q_0, v) = q_v$). Wir haben schon gezeigt, dass wenn $q_v = q_w$ für zwei $v, w \in \Sigma^\ast$, dass $v \sim_L w$ gilt. Beachte außerdem, dass für alle $q \in Q$ ein $v \in \Sigma^\ast$ mit $q_v = q$ existiert (wenn nicht, wäre dieses $q$ unerreichbar von $q_0$ aus -- dann wäre aber $\mathcal{A}$ nicht minimal, da man $q$ einfach weglassen könnte und einen kleineren, äquivalenten DFA erhalten würde). Also ist $Q = \{q_v : v \in \Sigma^\ast\}$. Wir definieren nun einen Isomorphismus von $\mathcal{A}$ auf $\mathcal{A}_L$ durch:
@@ -2197,16 +2202,61 @@ Wir haben bereits gesehen, dass Myhill-Nerode-Äquivalenz und Zustände in DFAs 
 	Sei $\sim$ eine Äquivalenzrelation über $A$. $\sim^\prime$ ist eine \textit{Verfeinerung} von $\sim$, wenn $\sim^\prime$ eine Äquivalenzrelation über $A$ ist und jede Äquivalenzklasse von $\sim$ eine Vereinigung von Äquivalenzklassen von $\sim^\prime$ ist.
 \end{definition}
 \begin{remark*}
+	%TODO Bezug zur Zustandsäquivalenz?
 	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA. Sei
 	$$
 		\Sigma^\ast_q \coloneqq \{w \in \Sigma^\ast \mid q_w = q\}.
 	$$
-	Dann ist $\{\Sigma^\ast_q : q \in Q\}$ eine Partition von $\Sigma^\ast$ und die dadurch induzierte Äquivalenzrelation 
+	Dann ist $\Sigma^\ast_Q \coloneqq \{\Sigma^\ast_q : q \in Q\}$ eine Partition von $\Sigma^\ast$ und die dadurch induzierte Ä\-qui\-va\-lenz\-re\-la\-tion 
 	$$
-		\sim_\mathcal{A} \,= \{(u, v) \in \Sigma^\ast \times \Sigma^\ast \mid u, v \in \Sigma^\ast_q \text{ für ein } q \in Q\}
+		\sim_{\Sigma^\ast_Q} \,= \{(u, v) \in \Sigma^\ast \times \Sigma^\ast \mid u, v \in \Sigma^\ast_q \text{ für ein } q \in Q\}
 	$$
-	ist eine Verfeinerung von $\sim_{L(\mathcal{A})}$. Intuitiv: Wörter die im selben Zustand landen sind äquivalent ($\sim_\mathcal{A}$).
+	ist eine Verfeinerung von $\sim_{L(\mathcal{A})}$.
 \end{remark*}
+\begin{definition}
+	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA. Zwei Zustände $p$ und $q$ sind \textit{äquivalent} (geschrieben $p \sim_\mathcal{A} q$), wenn für alle $w \in \Sigma^\ast$ gilt
+	$$
+		\delta^\ast(p, w) \in F \quad\text{ g.d.w. }\quad \delta^\ast(q, w) \in F.
+	$$
+\end{definition}
+\begin{lemma}
+	$\sim_{\Sigma^\ast_Q}$ und $\sim_\mathcal{A}$ sind rechtsseitige Kongruenzrelationen bzgl. Konkatenation sogar.
+	\begin{proof}
+		Das ist eine schöne Übung.
+	\end{proof}
+\end{lemma}
+\begin{example}
+	Wir betrachtenn den Automaten $\mathcal{A}$ in Abbildung~\ref{fig:state_equivalence}. Es gibt 6 Zustände in $\mathcal{A}$, aber nur 3 $\sim_\mathcal{A}$-Äquivalenzklassen: $\{q_0, q_1, q_5\}, \{q_2, q_3\}, \{q_4\}$.
+\end{example}
+\begin{figure}
+	\centering
+	\input{figs/state_equivalence}
+	\caption{Ein DFA $\mathcal{A}$ mit 6 Zuständen, aber nur 3 $\sim_\mathcal{A}$-Äquivalenzklassen.}
+	\label{fig:state_equivalence}
+\end{figure}
+Wir wissen bereits, dass Wörter, die im selben Zustand landen äquivalent sind (Lemma~\ref{lem:dfa2mnf}). Zusätzlich wissen wir nun, dass die $\sim_{\Sigma^\ast_Q}$-Äquivalenz, wie oben definiert, eine Verfeinerung der Myhill-Nerode-Äquivalenz $\sim_L \coloneqq \sim_{L(\mathcal{A})}$ ist und dass $\sim_L$ einen minimalen DFA induziert (Satz~\ref{thm:mndfamin}), der auch noch bis auf Umbenennung der Zustände eindeutig ist (Satz~\ref{thm:mindfaunique}). Wir müssen also nun nur noch einen Algorithmus angeben, der die Verfeinerung von $\sim_\mathcal{A}$ auflöst und uns wieder die Myhill-Nerode-Äquivalenz $\sim_L$ liefert.
+\begin{lemma}
+	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA und $L = L(\mathcal{A})$. Für alle $w \in \Sigma^\ast$ sei $q_w \in Q$ der eindeutige Zustand mit $\mathcal{A}: q_0 \reaches{w} q_w$. Dann gilt für alle $u, v \in \Sigma^\ast$:
+	$$
+		q_u \sim_\mathcal{A} q_v \quad\text{ g.d.w. }\quad u \sim_L v.
+	$$
+	\begin{proof}
+		Seien $u, v \in \Sigma^\ast$.
+		\begin{align*}
+			q_u \sim_\mathcal{A} q_v &\quad\text{ g.d.w. }\quad \text{f.a. } w \in \Sigma^\ast \text{ gilt } \delta^\ast(q_u, w) \in F \iff \delta^\ast(q_v, w) \in F\\
+			&\quad\text{ g.d.w. }\quad \text{f.a. } w \in \Sigma^\ast \text{ gilt } \delta^\ast(q_0, uw) \in F \iff \delta^\ast(q_0, vw) \in F\\
+			&\quad\text{ g.d.w. }\quad \text{f.a. } w \in \Sigma^\ast \text{ gilt } uw \in L \iff vw \in L\\
+			&\quad\text{ g.d.w. }\quad u \sim_L v.\qedhere
+		\end{align*}
+	\end{proof}
+\end{lemma}
+\begin{definition}
+	Sei $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein NFA und $\sim$ eine Äquivalenzrelation über $Q$. Der \textit{Quotientautomat} $\mathcal{A}/_\sim$ aus $\mathcal{A}$ und $\sim$ ist definiert als:
+	$$
+		\mathcal{A}/_\sim = (Q/_\sim, \Sigma, \Delta/_\sim, [q_0]_\sim, F/_\sim),
+	$$
+	wobei für $P, R \in Q/_\sim$ das Tripel $(P, a, R) \in \Delta/_\sim$, g.d.w. ein $p \in P$ und ein $q \in R$ existiert, sodass $(p, a, r) \in \Delta$ und $F/_\sim \coloneqq \{P \in Q/_\sim \mid P \cap F \neq \emptyset\}$. 
+\end{definition}
 % Minimization, Emptiness, Universality, Equivalence, Membership (Matching)
 
 
@@ -2216,7 +2266,7 @@ In diesem Dokument verwenden wir die Variablen $h, i, j, k, \ell$ stets als nat�
 
 
 %\subsection*{Problemstellung: Extended Matching Problem}
-Das \textit{erweiterte (extended) Matching-Problem} kommt direkt aus der Anwendung des Compilerbaus. Gegeben ist ein Wort $w \in \Sigma^\ast$ und eine Reihe von regulären Ausdrücken $r_1, \ldots, r_n \in \mathsf{RE}_\Sigma$. (\textit{Bemerkung:} In der Praxis ist die Annahme $\varepsilon \notin L(r_i) \neq \emptyset$ für alle $i$ sinnvoll). Gesucht ist nun eine Zerlegung des Wortes $w = u_1 \ldots u_k$, wobei für jedes $u_j$ ein $r_{i_j}$ existieren muss, sodass $u_j \in L(r_{i_j})$. Man nennt die Zerlegung in $(u_1, \ldots, u_k)$ auch \textit{Dekomposition} und die zugehörigen Indizes der regulären Ausdrücke $(i_1, \ldots, i_k)$ \textit{Analyse} von $w$ bezüglich $r_1, \ldots, r_n$.
+Das \textit{erweiterte (extended) Matching-Problem} kommt direkt aus der Anwendung des Compilerbaus. Gegeben ist ein Wort $w \in \Sigma^\ast$ und eine endliche Menge von regulären Ausdrücken $\{r_1, \ldots, r_n\} \subset \mathsf{RE}_\Sigma$. (\textit{Bemerkung:} In der Praxis ist die Annahme $\varepsilon \notin L(r_i) \neq \emptyset$ für alle $i$ sinnvoll). Gesucht ist nun eine Zerlegung des Wortes $w = u_1 \ldots u_k$, wobei für jedes $u_j$ ein $r_{i_j}$ existieren muss, sodass $u_j \in L(r_{i_j})$. Man nennt die Zerlegung in $(u_1, \ldots, u_k)$ auch \textit{Dekomposition} und die zugehörigen Indizes der regulären Ausdrücke $(i_1, \ldots, i_k)$ \textit{Analyse} von $w$ bezüglich $r_1, \ldots, r_n$.
 
 Wir sehen schnell, dass weder Dekomposition, noch Analyse eindeutig sein müssen (insbesondere dann, wenn wir $\varepsilon \in L(r_i)$ zulassen).
 \begin{example}
