@@ -1202,7 +1202,6 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\underline{NFA-Akzeptanz}{$(\mathcal{A}, w)$}\\
-	\Input{NFA $\mathcal{A}$, Wort $w$}
 	\Output{Ja {g.d.w.} $\mathcal{A}$ akzeptiert $w = a_0 \ldots a_{n-1}$.}	
 	$u \coloneqq \varepsilon$\\
 	$E(\mathcal{A}, u) \coloneqq \{ q_0 \}$\\	
@@ -1288,8 +1287,7 @@ Wir verwenden die Potenzmengenkonstruktion aus Lemma~\ref{lem:nfa2dfa} zur Deter
 \begin{algorithm}
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\underline{Potenzmengenkonstruktion}{$(\mathcal{A})$}\\
-	\Input{NFA $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$}
+	\underline{Potenzmengenkonstruktion}{$(\mathcal{A} = (Q, \Sigma, \Delta, q_0, F))$}\\
 	\Output{äquivalenter, reduzierter DFA $\mathcal{A}^\prime = (Q^\prime, \Sigma, \delta, q_0^\prime, F^\prime)$}	
 	$Q^\prime \coloneqq \{\{q_0\}\}$\\
 	$q_0^\prime \coloneqq \{q_0\}$\\
@@ -1980,8 +1978,7 @@ Dieses Korollar liefert intuitiv den Algorithmus~\ref{alg:mnc} zum Finden von My
 \begin{algorithm}
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\underline{Myhill-Nerode-Klassifizierer}{($L$)}\\
-	\Input{Sprache $L \subseteq \Sigma^\ast$}
+	\underline{Myhill-Nerode-Klassifizierer}{($L \subseteq \Sigma^\ast$)}\\
 	\Output{Myhill-Nerode-Äquivalenzklassen $\mathcal{P} = \{[w]_L : w \in \Sigma^\ast\}$.}
 	$\mathcal{P} \coloneqq \{[\varepsilon]_L\}$\\
 	\For{$[u]_L \in \mathcal{P}$}{
