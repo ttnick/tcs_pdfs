@@ -2385,11 +2385,11 @@ Es gibt viele Möglichkeiten eine FLM-Analyse durchzuführen. Die hier vorgestel
 	\Output{FLM-Analyse $(i_j)_{j=1}^k$ und LMD $(u_j)_{j=1}^k$}
 	\Comment{Vorbereitung}
 	Wandle alle $r_i$ mit Thompson-Konstruktion in $\varepsilon$-NFAs $\mathcal{A}_i = (Q_i, \Sigma, \delta_i, q_0^i, F_i)$ um.\\
-	Baue neuen $\varepsilon$-NFA $\mathcal{A} = (\biguplus_i Q_i \uplus \{q_0, q_f\}, \Sigma \uplus [n], \delta, q_0, \{q_f\})$ mit $\delta(p, a) = \delta_i(p, a)$ falls $p \in Q_i$ und $\delta(q_0, \varepsilon) = \{q_0^i \mid i \in [n]\}$ und $\delta(q, i) = \{q_f\}$, falls $q \in F_i$.\\
+	Baue neuen $\varepsilon$-NFA $\mathcal{A} = (\biguplus_i Q_i \uplus \{q_0, q_f\}, \Sigma \uplus \{1, \ldots, n\}, \delta, q_0, \{q_f\})$ mit $\delta(p, a) = \delta_i(p, a)$ falls $p \in Q_i$ und $\delta(q_0, \varepsilon) = \{q_0^i \mid i \in \{1, \ldots, n\}\}$ und $\delta(q, i) = \{q_f\}$, falls $q \in F_i$.\\
 	Eliminiere $\varepsilon$-Transitionen.\\
 	Determinisiere mit Potenzmengenkonstruktion.\\
 	Minimiere mit Markierungsalgorithmus.\\
-	\tcc{Wir haben jetzt einen DFA mit folgender Eigenschaft: Vom Zustand $\hat{\delta}(q_0, u)$ ist genau dann eine Transition mit $i \in [n]$ in einen Endzustand möglich, wenn $u \in L(r_i)$.}
+	\tcc{Wir haben jetzt einen DFA mit folgender Eigenschaft: Vom Zustand $\delta^\ast(q_0, u)$ ist genau dann eine Transition mit $i \in \{1, \ldots, n\}$ in einen Endzustand möglich, wenn $u \in \llbracket r_i \rrbracket$.}
 	\Comment{Löse nun das erweiterte Matching-Problem}	
 	Setze $\ell = 1, w_\ell = w$.\\
 	\While{$w_\ell \neq \varepsilon$}{
@@ -2399,7 +2399,6 @@ Es gibt viele Möglichkeiten eine FLM-Analyse durchzuführen. Die hier vorgestel
 		Nach der Simulation laufe \texttt{A} von hinten nach vorne durch bis wir den ersten nicht-leeren Eintrag an Stelle $h$ finden. Sollte es keinen geben gebe einen Error aus, ansonsten ist $u_\ell = w_{\ell_1} \ldots w_{\ell_h}$ und $i_\ell = \texttt{A[}h\texttt{]}$.\\
 		Setze $w_{\ell+1} = w_{\ell_h} \ldots w_{\ell_{|w_\ell|}}, \ell = \ell+1$.
 	}
-	\Comment{Jetzt ist $w_\ell = \varepsilon$.}
 	Gebe $(u_1, \ldots, u_{\ell-1})$ und $(i_1, \ldots, i_{\ell-1})$ aus.
 	\caption{First-Longest-Match-Analyse und Longest-Match-Dekomposition}
 	\label{alg:flmlmd}
