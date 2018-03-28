@@ -1,0 +1,12 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick, state/.style={draw, rectangle, rounded corners}]
+	\node[initial, initial text=, state, top color=green!50, bottom color=green!50]	(015)	at (0, 0)		{$\{q_0, q_1, q_5\}$};
+	\node[state, accepting, top color=cyan!50, bottom color=cyan!50]					(23) 	at (3, 0)		{$\{q_2, q_3\}$};
+	\node[state, top color=red!50, bottom color=red!50]								(4) 		at (1.5, -2)		{$\{q_4\}$};
+	\node															(dummy)	at (0, -2.95) {};
+
+	\path	(015) edge[loop above] node {$a$} (015)
+			(015) edge node {$b$} (23)
+			(23) edge[loop above] node {$a$} (23)
+			(23) edge node {$b$} (4)
+			(4) edge node {$a, b$} (015);
+\end{tikzpicture}

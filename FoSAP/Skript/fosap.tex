@@ -1,5 +1,6 @@
 \documentclass[11pt, a4paper]{article}
-\usepackage[left=3cm, right=3cm]{geometry}
+\usepackage[left=3cm, right=3cm, bottom=3cm]{geometry}
+\linespread{1.05}
 
 % packages
 \usepackage{natbib}
@@ -57,6 +58,7 @@
 \def\Rho{\mathrm{P}}
 
 \newenvironment{problem}[1]{\begin{tabular}{|p{.96\textwidth}|} \hline \textsc{#1}\\}{\\ \hline \end{tabular}}
+\newenvironment{subproof}[1][\proofname]{\renewcommand{\qedsymbol}{$\blacksquare$}\vspace{-3ex}\begin{proof}[#1]}{\end{proof}\vspace{-3ex}}
 \newcommand{\comp}[1]{\overline{#1}}
 \newcommand{\qedw}{\hfill$\square$}
 \newcommand{\qedb}{\hfill$\blacksquare$}
@@ -664,52 +666,6 @@ Zuletzt betrachten wir das Beweisprinzip der vollständigen Induktion. Hiermit l
 		\end{align*}
 	\end{proof}
 \end{theorem}
-
-
-\subsection{*Weitere Beweismethoden}
-Im letzten Abschnitt haben wir vier Standardbeweistechniken kennen gelernt. Zuletzt wollen wir noch auf neun weitere Methoden eingehen, die etwas involvierter sind und somit etwas Erfahrung mit wissenschaftlicher Arbeit voraussetzen.
-\begin{description}
-	\item[Beweis durch Einschüchterung] Man schreibt einfach der Beweis wäre \textit{trivial}. Im Idealfall kennt man ein paar Umschreibungen dieses Worts.
-		\begin{itemize}
-			\item Trivial / Obvious / Immediatley! 
-			\item As must be obvious to the meanest intellect...
-			\item The proof is remarkable but does not fit in this margin.
-			\item The result will be obvious if the reader is awake.
-			\item Left as an exercise.
-			\item It is obvious to the casual observer.
-			\item It makes my theory seem simplistic if I include every detail.
-			\item Think! / Trust me!
-			\item We hold the proofs to be self evident.
-			\item Proving this result would be an insult of the reader's and, what is even worse, my time.
-		\end{itemize}
-	\item[Beweis durch unverständliche Notation] Eine Erweiterung der ersten Methode ist es noch Hinweise dazuzugeben, warum der Beweis trivial ist, jedoch so, dass die Hinweise nicht mehr lesbar sind. Inspiration findet man beispielsweise auf \url{http://theproofistrivial.com}.
-		\begin{itemize}
-			\item The theorem follows immediately from the fact that $\left| \bigoplus_{k \in S} \left( \mathfrak{K}^{\mathbb{F}^\alpha(i)} \right)_{i \in \mathcal{U}_k} \right| \preccurlyeq \aleph_1$ when $[\mathfrak{H}]_\mathcal{W} \cap \mathbb{F}^\alpha(\omega) \neq \emptyset$.
-		\end{itemize}
-	\item[Beweis durch schlecht verfügbare Literatur] \ 
-		\begin{itemize}
-			\item The theorem is an easy corllary of a result proven in a hand-written note handed out during a lecture by the Yugoslavian Mathematical Society in 1973.
-			\item The proof is contained in a textbook which is available in French for \$179.99.
-		\end{itemize}
-	\item[Beweis durch Ghost Reference] \
-		\begin{itemize}
-			\item The proof can be found on page 478 in a textbook which turns out to have 396 pages.
-		\end{itemize}
-	\item[Beweis durch Autorität] Behaupten ein renommierter Wissenschaftler hätte den Satz längst bewiesen.
-		\begin{itemize}
-			\item My good colleague {Prof.} {em.} {Dr.} {rer.} {nat.} {Dr.} {h.c.} {mult.} Anderson stated he might have come up with a proof a few years ago.
-		\end{itemize}
-	\item[Internet-Quelle] \
-		\begin{itemize}
-			\item For those interested, the result is shown on the web page of this book. (The web page unfortunately does not exist any more)
-		\end{itemize}
-	\item[Beweis durch Verschieben] \
-		\begin{itemize}
-			\item Chapter 3: The proof of this is delayed until chapter 7 when we have developed the theory even further.\\
-				Chapter 7: To make things easy, we only prove it for the special case $z = 0$, but the general case is handled in Appendix C.\\
-				Appendix C: The formal proof is beyond the scope of this book, but should be obvious to the casual reader.
-		\end{itemize}
-\end{description}
 
 
 
@@ -1349,11 +1305,10 @@ Wir verwenden die Potenzmengenkonstruktion aus Lemma~\ref{lem:nfa2dfa} zur Deter
 		}
 	}
 	\For{$P \in Q^\prime$}{
-		\uIf{$P \cap F \neq \emptyset$}{
+		\If{$P \cap F \neq \emptyset$}{
 			$F^\prime \coloneqq F^\prime \cup \{ P \}$
 		}
 	}
-	
 	\caption{NFA-Determinisierung}
 	\label{alg:nfa2dfa}
 \end{algorithm}
@@ -1446,7 +1401,7 @@ Für $\varepsilon$-NFAs zeigen wir wie im vorigen Abschnitt zu NFAs, dass auch s
 \end{lemma}
 Bevor wir den anderen Teil der Äquivalenz zeigen fehlt uns eine Definition.
 \begin{definition}\label{def:eps_closure}
-	Sei $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein $\varepsilon$-NFA. Der \textit{$\varepsilon$-Abschluss} (auch $\varepsilon$-Hülle) eines Zustands $p \in Q$ ist
+	Sei $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein $\varepsilon$-NFA. Der \textit{$\varepsilon$-Abschluss} (auch \textit{$\varepsilon$-Hülle}) eines Zustands $p \in Q$ ist
 	$$
 		\comp{\varepsilon}(p) \coloneqq \{ q \in Q \mid \text{es ex. } p_1, \ldots, p_k \text{ mit } (p, \varepsilon, p_1), (p_i, \varepsilon, p_{i+1}), (p_k, \varepsilon, q) \in \Delta \}.
 	$$
@@ -1540,7 +1495,7 @@ Das ist bisher lediglich die Syntax der regulären Ausdrücke gewesen. Nun defin
 Wir erlauben in der Regel auch als Abkürzung die Ausdrücke $\bm{\varepsilon}$ für $\bm{\emptyset}\overset{\bm{\ast}}{}$ und $r \overset{\bm{+}}{}$ für $r \bm{\cdot} r \overset{\bm{\ast}}{}$. Außerdem lassen wir den Punkt ($\bm{\cdot}$) weg, es sei denn er dient der Lesbarkeit. Die Klammern können wir auch weglassen unter der Konvention, dass $\overset{\bm{\ast}}{}$ stärker bindet als $\bm{\cdot}$, was wiederum stärker bindet als $\bm{+}$. Statt $\llbracket r \rrbracket$ ist auch die Schreibweise $L(r)$ gebräuchlich.\par
 Reguläre Ausdrücke kennt man auch für Computerprogramme wie \texttt{grep}, \texttt{awk} oder \texttt{sed}. Diese sind syntaktisch etwas anders aufgebaut, jedoch lässt sich jeder POSIX-Ausdruck (das sind die regulären Ausdrücke für oben genannte Programme) auch als regulärer Ausdruck wie in Definition~\ref{def:regexsyntax} umschreiben.
 \begin{example}
-	Die POSIX-Syntax für reguläre Ausdrücke geht wie folgt.
+	Wir geben die wichtigsten Spezifikationen der POSIX-Ausdrücke an.
 	\begin{itemize}
 		\item $r$\verb$|$$r^\prime$ für $r \bm{+} r^\prime$,
 		\item Für $(\bm{a + b +} \ldots \bm{+ z})$ geht auch \verb$[a-z]$\\
@@ -1560,9 +1515,9 @@ Für unsere Analyse von regulären Sprachen benutzen wir nur reguläre Ausdrück
 \begin{example}
 	Wir betrachten das Alphabet $\Sigma = \{a, b\}$.
 	\begin{itemize}
-		\item $L(\bm{((a+b)(a+b))} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid |w| \text{ gerade} \}$.
-		\item $L(\bm{(a+b)(a+b)(a+b)} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid |w| \geq 2 \}$.
-		\item $L(\bm{a} \overset{\bm{\ast}}{} \bm{+ b} \overset{\bm{\ast}}{}) = \{ w \in \Sigma^\ast \mid |w|_a = 0 \text{ oder } |w|_b = 0 \}$.
+		\item $\llbracket \bm{((a+b)(a+b))} \overset{\bm{\ast}}{} \rrbracket = \{ w \in \Sigma^\ast \mid |w| \text{ gerade} \}$.
+		\item $\llbracket \bm{(a+b)(a+b)(a+b)} \overset{\bm{\ast}}{} \rrbracket = \{ w \in \Sigma^\ast \mid |w| \geq 2 \}$.
+		\item $\llbracket \bm{a} \overset{\bm{\ast}}{} \bm{+ b} \overset{\bm{\ast}}{} \rrbracket = \{ w \in \Sigma^\ast \mid |w|_a = 0 \text{ oder } |w|_b = 0 \}$.
 	\end{itemize}
 \end{example}
 Aus Gründen der Einfachheit werden wir von nun an bei der Notation von regulären Ausdrücken auf eine Unterscheidung zu Alphabetsymbolen, Kleene-Stern usw. verzichten, d.h. wir verwenden $\emptyset, \varepsilon, a, +, \cdot, ^\ast$ statt $\bm{\emptyset}, \bm{\varepsilon}, \bm{a}, \bm{+}, \bm{\cdot}, \overset{\bm{\ast}}{}$. Außerdem verwenden wir Shortcuts, z.B. $\sum_{a\in\Sigma} a = \Sigma^\ast$. Formal ist aber wichtig weiterhin eine Unterscheidung zwischen Sprachen und regulären Ausdrücken zu haben.
@@ -1722,7 +1677,7 @@ wobei $P^\prime \coloneqq P \setminus \{ s \}$. Auch dies einmal in einfache Wor
 			\caption{Rekursionsschritt um einen Zustand rauszuwerfen. Die blau getönte Fläche ist $P^\prime \coloneqq P \setminus \{ s \}$. Die größere Fläche ist $P$. Wichtig: Die Kanten in diesem Graphen sind keine Transitionen, sondern sind mit einem regulären Ausdruck beschriftet, der die Sprache zwischen den Knoten beschreibt mit Zuständen aus dem Index!}
 			\label{fig:state_elimination}
 		\end{figure}
-		%TODO Soundness Completeness
+		%TODO Soundness + Completeness
 	\end{proof}
 \end{lemma}
 \begin{remark*}
@@ -1826,7 +1781,7 @@ Beachte, dass $w^\mathcal{R}$ wohldefiniert ist für jedes $w \in \Sigma
 \begin{theorem}
 	Sei $L \subseteq \Sigma^\ast$ regulär. Dann ist auch $L^\mathcal{R}$ regulär.
 	\begin{proof}
-		Übung.
+		Das ist jedes Sommerstemester an der RWTH eine Übungsaufgabe.
 	\end{proof}
 \end{theorem}
 
@@ -2025,7 +1980,7 @@ Dieses Korollar liefert intuitiv den Algorithmus~\ref{alg:mnc} zum Finden von My
 \begin{algorithm}
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
-	\underline{Myhill-Nerode-Klassifizierer}{$L$}\\
+	\underline{Myhill-Nerode-Klassifizierer}{($L$)}\\
 	\Input{Sprache $L \subseteq \Sigma^\ast$}
 	\Output{Myhill-Nerode-Äquivalenzklassen $\mathcal{P} = \{[w]_L : w \in \Sigma^\ast\}$.}
 	$\mathcal{P} \coloneqq \{[\varepsilon]_L\}$\\
@@ -2095,8 +2050,7 @@ Die beiden Lemma~\ref{lem:mnf2reg} und Korollar~\ref{cor:reg2mnf} ergeben zusamm
 
 
 \subsection{Minimierung von Automaten}\label{sec:regular_minimization}
-Bisher haben wir uns die Theorie regulärer Sprachen und endlicher Automaten angesehen. In den übrigen Abschnitten dieses Kapitels kommen wir zu etwas angewandteren Themen. %TODO
-Wir beginnen mit einem effizientem Algorithmus zur Minimierung für DFAs.
+Bisher haben wir uns die Theorie regulärer Sprachen und endlicher Automaten angesehen. In den übrigen Abschnitten dieses Kapitels kommen wir zu etwas angewandteren Themen. Wir schauen uns also an, wozu die Theorie, die wir bisher gelernt haben nützlich ist. Einige Konzepte wie der Myhill-Nerode-DFA hat natürlich eine \textit{intrinsische} Anwendung in der Automatentheorie: Wir haben gesehen, dass es keine kleineren DFAs (bzgl. Anzahl der Zustände) als $\mathcal{A}_L$ gibt. Mit Blick auf Speichereffizienz ist es also in unserem Interesse zu jeder Sprache den Myhill-Nerode-DFA zu finden -- im Optimalfall mit einem effizientem Algorithmus. Dieser Abschnitt beschäftigt sich mit genau diesem Thema. \textit{Extrinsische} Anwendungen, d.h. wozu das ganze dann am Ende \textit{wirklich} zu gebrauchen ist, folgt im Abschnitt darauf.
 \begin{remark*}
 	Wir nennen einen Algorithmus \textit{effizient}, wenn seine Laufzeit höchstens polynomiell in der Länge der Eingabe wächst.
 \end{remark*}
@@ -2224,13 +2178,24 @@ Wir haben bereits gesehen, dass Myhill-Nerode-Äquivalenz und Zustände in DFAs 
 		Das ist eine schöne Übung.
 	\end{proof}
 \end{lemma}
-\begin{example}
-	Wir betrachtenn den Automaten $\mathcal{A}$ in Abbildung~\ref{fig:state_equivalence}. Es gibt 6 Zustände in $\mathcal{A}$, aber nur 3 $\sim_\mathcal{A}$-Äquivalenzklassen: $\{q_0, q_1, q_5\}, \{q_2, q_3\}, \{q_4\}$.
+\begin{example}\label{exp:state_equivalence}
+	Wir betrachtenn den Automaten $\mathcal{A}$ in Abbildung~\ref{fig:state_equivalence_o}. Es gibt 6 Zustände in $\mathcal{A}$, aber nur 3 $\sim_\mathcal{A}$-Äquivalenzklassen: $\{q_0, q_1, q_5\}, \{q_2, q_3\}, \{q_4\}$.
 \end{example}
 \begin{figure}
 	\centering
-	\input{figs/state_equivalence}
-	\caption{Ein DFA $\mathcal{A}$ mit 6 Zuständen, aber nur 3 $\sim_\mathcal{A}$-Äquivalenzklassen.}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/state_equivalence_o}
+		\caption{DFA $\mathcal{A}$}
+		\label{fig:state_equivalence_o}
+	\end{subfigure}
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/state_equivalence_q}
+		\caption{Quotientautomat $\mathcal{A}/_{\sim_\mathcal{A}}$}
+		\label{fig:state_equivalence_q}
+	\end{subfigure}
+	\caption{Ein DFA $\mathcal{A}$ mit 6 Zuständen, aber nur 3 $\sim_\mathcal{A}$-Äquivalenzklassen und der zugehörige Quotientautomat $\mathcal{A}/_{\sim_\mathcal{A}}$.}
 	\label{fig:state_equivalence}
 \end{figure}
 Wir wissen bereits, dass Wörter, die im selben Zustand landen äquivalent sind (Lemma~\ref{lem:dfa2mnf}). Zusätzlich wissen wir nun, dass die $\sim_{\Sigma^\ast_Q}$-Äquivalenz, wie oben definiert, eine Verfeinerung der Myhill-Nerode-Äquivalenz $\sim_L \coloneqq \sim_{L(\mathcal{A})}$ ist und dass $\sim_L$ einen minimalen DFA induziert (Satz~\ref{thm:mndfamin}), der auch noch bis auf Umbenennung der Zustände eindeutig ist (Satz~\ref{thm:mindfaunique}). Wir müssen also nun nur noch einen Algorithmus angeben, der die Verfeinerung von $\sim_\mathcal{A}$ auflöst und uns wieder die Myhill-Nerode-Äquivalenz $\sim_L$ liefert.
@@ -2249,13 +2214,6 @@ Wir wissen bereits, dass Wörter, die im selben Zustand landen äquivalent sind 
 		\end{align*}
 	\end{proof}
 \end{lemma}
-\begin{definition} %TODO weg?
-	Sei $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein NFA und $\sim$ eine Äquivalenzrelation über $Q$. Der \textit{Quotientautomat} $\mathcal{A}/_\sim$ aus $\mathcal{A}$ und $\sim$ ist definiert als:
-	$$
-		\mathcal{A}/_\sim = (Q/_\sim, \Sigma, \Delta/_\sim, [q_0]_\sim, F/_\sim),
-	$$
-	wobei für $P, R \in Q/_\sim$ das Tripel $(P, a, R) \in \Delta/_\sim$, g.d.w. ein $p \in P$ und ein $q \in R$ existiert, sodass $(p, a, r) \in \Delta$ und $F/_\sim \coloneqq \{P \in Q/_\sim \mid P \cap F \neq \emptyset\}$. 
-\end{definition}
 \begin{theorem}\label{thm:se2mindfa}
 	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA, $\sim \coloneqq \sim_\mathcal{A}$ seine zugehörige Zu\-stands\-ä\-qui\-va\-lenz\-re\-la\-tion, und $L = L(\mathcal{A})$. Sei
 	$$
@@ -2287,6 +2245,11 @@ Wir wissen bereits, dass Wörter, die im selben Zustand landen äquivalent sind 
 		\end{itemize}
 	\end{proof}
 \end{theorem}
+Den entstehenden Automaten $\mathcal{A}/_\sim$ wie im Satz nennen wir auch den \textit{Quotientautomaten} von $\mathcal{A}$ unter $\sim$. 
+\begin{remark*}
+	Das Konzept des Quotientautomaten existiert auch für NFAs und funktioniert auch für beliebige Äquivalenzrelationen. Beachte aber, dass im Allgemeinen dann nicht gilt, dass der entstehende Automat ein DFA ist (selbst wenn der ursprüngliche Automat deterministisch war). Außerdem ist die erkannte Sprache im Allemeinen nicht die selbe, sondern eine Obermenge.
+\end{remark*}
+In Abbildung~\ref{fig:state_equivalence_q} ist der Quotientautomat zum Automaten aus Beispiel~\ref{exp:state_equivalence}.
 \begin{corollary}
 	Der Quotientautomat $\mathcal{A}/_\sim = \mathcal{A}/_{\sim_\mathcal{A}}$ aus Satz~\ref{thm:se2mindfa} ist minimal.
 \end{corollary}
@@ -2314,79 +2277,112 @@ Wir haben nun alles nötige gesammelt für einen DFA-Minimierungsalgorithmus, de
 	}
 	\Comment{$\mathcal{P}$ enthält nun die $\sim_\mathcal{A}$-Äquivalenzklassen (Partition von $Q$)}
 	Konstruiere $\mathcal{A}/_{\sim_\mathcal{A}}$ gemäß Satz~\ref{thm:se2mindfa}.
-	\caption{DFA-Minimierungsalgorithmus (\textit{Blockrefinement})}
+	\caption{DFA-Minimierungsalgorithmus (\textit{Blockverfeinerung})}
 	\label{alg:dfaminimization}
 \end{algorithm}
 \begin{example}
-	Betrachte erneut den DFA aus Abbildung~\ref{fig:state_equivalence}. %TODO
+	Betrachte erneut den DFA $\mathcal{A}$ aus Abbildung~\ref{fig:state_equivalence_o}. Wir beschreiben die Ausführung des Algorithmus auf $\mathcal{A}$:
+	Zunächst sind alle Zustände erreichbar. Es muss also keine Reduktion auf erreichbare Zustände vorgenomnen werden. Wir initialisieren $\mathcal{P}$ indem wir $Q$ auf akzeptierende und nicht-akzeptierende Zustände aufteilen $P_1 = \{q_2, q_3\}$ und $P_2 = \{q_0, q_1, q_4, q_5\}$. Die Elemente von $\mathcal{P}$ bezeichnen wir als \textit{Blöcke} von $Q$. Wir sehen bei der Iteration über bestehende Blöcke und Alphabetsymbole, dass wir den Block $P_2$ aufteilen können mit Hilfe des Symbols $b$ und des Blocks $P_1$, denn $\delta(q_0, b) = q_3 \in P_1$, aber $\delta(q_4, b) = q_5 \notin P_1$. Dann kann $P_2$ aus $\mathcal{P}$ gelöscht und dafür die Blöcke $P_3 = \{q_0, q_1, q_5\}$ und $P_4 = \{q_4\}$ hinzugefügt werden. In einer weiteren Iteration über Blöcke und Alphabetsymbole finden wir keine weiteren Verfeinerungen. Damit ist $\sim_\mathcal{A}$ gefunden: Die Äquivalenzklassen sind die verbleibenden Mengen in $\mathcal{P}$. Wir können nun den Quotientenautomaten bauen und erhalten den DFA in Abbildung~\ref{fig:state_equivalence_q}. In Abbildung~\ref{fig:blockrefinement} befindet sich noch eine Veranschaulichung des Algorithmus als Baum. 
 \end{example}
-%TODO Korrektheit + Laufzeit
+\begin{figure}
+	\centering
+	\input{figs/blockrefinement}
+	\caption{Blockverfeinerungsalgorithmus als Baum visualiert. Die Äquivalenzklassen von $\sim_\mathcal{A}$ befinden sich an den Blättern des Baumes.}
+	\label{fig:blockrefinement}
+\end{figure}
+Wir zeigen nun noch, dass Algorithmus~\ref{alg:dfaminimization} auch wirklich das richtige macht und betrachten noch kurz die Laufzeit des Algorithmus.
+\begin{theorem}
+	Algorithmus~\ref{alg:dfaminimization} liefert zu jedem DFA den äquivalenten, minimalen DFA.
+	\begin{proof}
+		Das reduzieren auf erreichbare Zustände verändert die erkannte Sprache des Automaten nicht. Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ reduzierter DFA und $n \coloneqq |\mathcal{A}|$.
+		Wir teilen den Beweis auf 3 Behauptungen auf:
+		\begin{enumerate}
+			\item Der Algorithmus führt die Zeilen 4 bis 7 (Verfeinerung) maximal $n-2$ mal auf. 
+				\begin{subproof}
+					Wir starten die Verfeinerung mit zwei Blöcken. In jedem Durchlauf der Verfeinerung erhöht sich die Anzahl der Blöcke um 1. Da die Blöcke eine Partition von $Q$ bilden können wir höchstens $n$ Blöcke enthalten (dann, wenn $\mathcal{A}$ bereits minimal war). Insgesamt können wir also höchstens $n-2$ mal verfeinern.
+				\end{subproof}
+			\item Falls $p \in P_i$ und $q \in P_j$ mit $i \neq j$ (am Ende des Algorithmus), so ist $p \not\sim_\mathcal{A} q$.
+				\begin{subproof}
+					Wir machen eine Induktion über die Anzahl der Verfeinerungen $s$.\\
+					Induktionsverankerung: $s = 0$. Zustände $p \in F$ und $q \in Q \setminus F$ sind nicht äquivalent.\checkmark\\
+					Induktionsschritt: Wir betrachten den $s+1$. Verfeinerungsschritt von $P_i$ zu $P_{i_1}$ und $P_{i_2}$ vermöge Block $R$ und $a \in \Sigma$. Sei $p \in P_{i_1}$ und $q \in P_{i_2}$. Dann gilt $\delta(p, a) \in R$ und $\delta(q, a) \notin R$. Nach Induktionshypothese ($R$ entstand ja in einer früheren Verfeinerung oder ist initialer Block) ist damit $\delta(p, a) \not\sim_\mathcal{A} \delta(q, a)$ und dann folgt unmittelbar vermöge der Definition von $\sim_\mathcal{A}$, dass $p \not\sim_\mathcal{A} q$.
+				\end{subproof}
+			\item Falls $p, q \in P_i$ (am Ende des Algoritmus), so ist $p \sim_\mathcal{A} q$.
+				\begin{subproof}
+					Wir zeigen per Induktion über Wortlänge $m$, dass wenn ein $w \in \Sigma^\ast$ existiert, sodass $\delta^\ast(p, w) \in F$ und $\delta^\ast(q, w) \notin F$ (oder umgekehrt) mit $|w| = m$, so gilt $p \in P_i$ und $q \in P_j$ für $i \neq j$. Mittels Kontraposition erhalten wir dann die Aussage.\\
+					Induktionsverankerung: $m = 0$. Betrachte $w = \varepsilon$. Dann ist $p \in F$ und $q \notin F$ (oder umgekehrt). Also sind $p$ und $q$ schon bei der Initialisierung in verschiedenen Blöcken.\checkmark\\
+					Induktionsschritt: Sei $w \in \Sigma^{m+1}$, sodass $\delta^\ast(p, w) \in F$ und $\delta^\ast(q, w) \notin F$ (oder umgekehrt). Dann ist $w = av$ für ein $a \in \Sigma$ und $v \in \Sigma^m$. Dann ist aber $\delta^\ast(\delta(p, a), v) \in F$ und $\delta^\ast(\delta(q, a), v) \notin F$ (oder umgekehrt). Also sind $\delta(p, a)$ und $\delta(q, a)$ in verschiedenen Blöcken. Dann müssen auch $p$ und $q$ in verschiedenen Blöcken liegen, denn sonst ließe sich eine weitere Verfeinerung finden vermöge der Blöcke von $\delta(p, a)$ und $\delta(q, a)$ und $a$.
+				\end{subproof}
+		\end{enumerate}
+		Also berechnet die Blockverfeinerung $\sim_\mathcal{A}$. Mit Satz~\ref{thm:se2mindfa} folgern wir, dass der entstandene DFA minimal ist.
+	\end{proof}
+\end{theorem}
+\begin{theorem}
+	Algorithmus~\ref{alg:dfaminimization} hat bei Eingabe $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ mit $n \coloneqq |Q|$ und $m \coloneqq |\Sigma|$ eine Laufzeit von $\mathcal{O}(mn \log n)$.
+	\begin{proof}
+		Einer der Großmeister der Automatentheorie, John E. Hopcroft, sagt, es geht.
+	\end{proof}
+\end{theorem}
 
 
 \subsection{Weitere Algorithmische Probleme für reguläre Sprachen}\label{sec:regular_algorithms}
 %TODO
 Zuerst betrachten wir ein paar algorithmische Fragestellungen: Wie viele Zustände muss ein DFA mindestens haben um eine bestimmte Sprache zu erkennen? Wird ein Wort von einem bestimmten Automaten akzeptiert? Akzeptieren zwei Automaten die selbe Sprache?
 Die erste Frage haben wir bereits mit dem Satz von Nerode (\ref{thm:nerode}) beantworten können -- aber können wir auch ausgehend von einem DFA schnell einen kleinsten (oder den kleinsten?) finden? Die zweite Frage scheint recht einfach zu sein, die dritte hingegen wirkt nicht mehr ganz so trivial. In der theoretischen Informatik treten diverse Probleme auf, die womöglich gar nicht algorithmisch lösbar sind. Das heißt wir müssen womöglich auf solche destruktive Ergebnisse vorbereitet sein.
-% Emptiness, Universality, Equivalence, Membership (Matching)
+% Emptiness, Universality, Equivalence, Infinity, Membership (Matching)
 
 
 \subsection{*Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
-Wir schauen uns hier einmal eine praktische Anwendung von regulären Ausdrücken und endlichen Automaten an. Bisher haben wir stets das \textit{einfache Matching-Problem} für reguläre Ausdrücke betrachtet. Dabei ging es darum zu prüfen, ob ein gegebenes Wort $w \in \Sigma^\ast$ zur Sprache eines regulären Ausdrucks $r \in \mathsf{RE}_\Sigma$ gehört. Dies ließ sich mit Hilfe der Thompson-Konstruktion einfach als das Wortproblem eines $\varepsilon$-NFA betrachten. In der Praxis ist das einfach Matching-Problem aber zu primitiv um echte Probleme lösen zu können. Vorallem im Compilerbau benötigen wir etwas mehr, wenn wir Programmcode in seine Bestandteile zerlegen wollen um später Syntax-Checks darauf durchführen zu können und schließlich eine Semantik für das Programm festzulegen. In der Fachsprache nennt man diesen Teil eines Compilers auch \textit{Scanner} oder \textit{Lexer} (siehe auch die Programme \texttt{lex}, \texttt{flex}).
-In diesem Dokument verwenden wir die Variablen $h, i, j, k, \ell$ stets als natürliche Zahlen aus einer Menge $[m] \coloneqq \{1, \ldots, m\}$. Manchmal ist die Notation etwas sloppy, aber hoffentlich verständlich genug.
-
-
-%\subsection*{Problemstellung: Extended Matching Problem}
-Das \textit{erweiterte (extended) Matching-Problem} kommt direkt aus der Anwendung des Compilerbaus. Gegeben ist ein Wort $w \in \Sigma^\ast$ und eine endliche Menge von regulären Ausdrücken $\{r_1, \ldots, r_n\} \subset \mathsf{RE}_\Sigma$. (\textit{Bemerkung:} In der Praxis ist die Annahme $\varepsilon \notin L(r_i) \neq \emptyset$ für alle $i$ sinnvoll). Gesucht ist nun eine Zerlegung des Wortes $w = u_1 \ldots u_k$, wobei für jedes $u_j$ ein $r_{i_j}$ existieren muss, sodass $u_j \in L(r_{i_j})$. Man nennt die Zerlegung in $(u_1, \ldots, u_k)$ auch \textit{Dekomposition} und die zugehörigen Indizes der regulären Ausdrücke $(i_1, \ldots, i_k)$ \textit{Analyse} von $w$ bezüglich $r_1, \ldots, r_n$.
-
-Wir sehen schnell, dass weder Dekomposition, noch Analyse eindeutig sein müssen (insbesondere dann, wenn wir $\varepsilon \in L(r_i)$ zulassen).
+Wir schauen uns nun (endlich) eine praktische Anwendung von regulären Ausdrücken und endlichen Automaten an. Bisher haben wir stets das \textit{einfache Matching-Problem} für reguläre Ausdrücke betrachtet. Dabei ging es darum zu prüfen, ob ein gegebenes Wort $w \in \Sigma^\ast$ zur Sprache eines regulären Ausdrucks $r \in \mathsf{RE}_\Sigma$ gehört. Dies ließ sich mit Hilfe der Thompson-Konstruktion (Lemma~\ref{lem:regex2nfa}) einfach als das Wortproblem eines $\varepsilon$-NFA betrachten. In der Praxis ist das einfach Matching-Problem aber zu primitiv um echte Probleme lösen zu können. Vorallem im Compilerbau benötigen wir etwas mehr, wenn wir Programmcode in seine Bestandteile zerlegen wollen um später Syntax-Checks darauf durchführen zu können und schließlich eine Semantik für das Programm festzulegen. In der Fachsprache nennt man diesen Teil eines Compilers auch \textit{Scanner} oder \textit{Lexer} (siehe auch die Programme \texttt{lex}, \texttt{flex}).\par
+Das \textit{erweiterte (extended) Matching-Problem} kommt direkt aus der Anwendung des Compilerbaus. Gegeben ist ein Wort $w \in \Sigma^\ast$ und eine endliche Menge von regulären Ausdrücken $\{r_1, \ldots, r_n\} \subseteq \mathsf{RE}_\Sigma$. (In der Praxis ist die Annahme $\varepsilon \notin \llbracket r_i \rrbracket \neq \emptyset$ für alle $i$ sinnvoll). Gesucht ist nun eine Zerlegung des Wortes $w = u_1 \ldots u_k$, wobei für jedes $u_j$ ein $r_{i_j}$ existieren muss, sodass $u_j \in \llbracket r_{i_j} \rrbracket$. Man nennt die Zerlegung in $(u_1, \ldots, u_k)$ auch \textit{Dekomposition} und die zugehörigen Indizes der regulären Ausdrücke $(i_1, \ldots, i_k)$ \textit{Analyse} von $w$ bezüglich $r_1, \ldots, r_n$.\par
+Wie folgendes Beispiel zeigt, müssen weder Dekomposition noch Analyse eindeutig sein (insbesondere dann, wenn wir $\varepsilon \in \llbracket r_i \rrbracket$ zulassen).
 \begin{example}
-	\begin{enumerate}
+	Wir betrachten Wörter und reguläre Ausdrücke über dem Alphabet $\Sigma = \{a, b, c\}$.
+	\begin{enumerate}[label=\arabic*)]
 		\item $r_1 = a^+, w = aa$. Ergibt Dekompositionen $(aa)$ und $(a, a)$ mit zugehöriger (eindeutiger) Analyse $(1)$ bzw. $(1, 1)$.
 		\item $r_1 = a+b, r_2 = a+c, w = a$. Ergibt eindeutige Dekomposition $(a)$ mit zwei verschiedenen Analysen $(1)$ und $(2)$.	
 	\end{enumerate}
-	Im zweiten Fall stellen wir uns vor, dass $r_1$ mögliche Schlüsselwörter einer Programmiersprache (\texttt{while}, \texttt{true}, \texttt{if}) beschreibt und $r_2$ mögliche Variablennanem (Identifier), dann sieht man warum eine eindeutige Analyse wichtig ist. In diesem Anwendungsfall ist es natürlich zu sagen, dass der Ausdruck $r_1$ ''wichtiger`` ist als $r_2$ (deshalb verbieten die mesiten Programmiersprachen auch Schlüsselwörter als Identifier). Ähnliche Beispiele lassen sich auch für die Dekomposition finden.
+	Im zweiten Fall stellen wir uns vor, dass $r_1$ mögliche Schlüsselwörter einer Programmiersprache (\texttt{while}, \texttt{true}, \texttt{if}) beschreibt und $r_2$ mögliche Variablennanem (Identifier). In diesem Anwendungsfall ist es natürlich zu sagen, dass der Ausdruck $r_1$ \textit{wichtiger} ist als $r_2$ (deshalb verbieten die mesiten Programmiersprachen auch Schlüsselwörter als Identifier). Wir müssen also Analysen mit $1$ höher gewichten. Ähnliche Beispiele lassen sich auch für die Dekomposition finden.
 \end{example}
-
-Wir wollen nun sowohl, die Dekomposition, als auch die Analyse eindeutig machen. Ein erster Ansatz wäre zunächst das leere Wort zu verbieten und sicherzustellen, dass $L(r_i) \cap L(r_j) = \emptyset$ für alle $i \neq j$, indem wir den gemeinsamen Schnitt von zwei Ausdrücken aus dem ''unwichtigeren`` Ausdruck entfernen. Dadurch würde zumindest die Analyse eindeutig werden. Diese Idee ist jedoch nicht sinnvoll, u.a. deshalb, da das Entfernen des Schnittes -- also das Erkennen von $L(r_j^\prime) \coloneqq L(r_j) \setminus L(r_i)$ -- eine Produktkonstruktion erfordert und somit tendenziell teuer ist.
-
-
-%\subsection*{Eindeutigkeit durch First-Longest-Match}
-Der am meisten verbreitete Weg ist es folgende zwei Prinzipien zu implementieren:
+Das Ziel ist es nun also, Dekomposition und zugehörige Analyse eindeutig zu machen, um Konflikte wie oben zu vermeiden. Ein erster Ansatz wäre zunächst sicherzustellen, dass $\llbracket r_i \rrbracket \cap \llbracket r_j \rrbracket = \emptyset$ für alle $i \neq j$, indem wir den gemeinsamen Schnitt von zwei Ausdrücken aus dem weniger gewichteten Ausdruck entfernen. Dadurch würde zumindest die Analyse eindeutig werden. Diese Idee ist jedoch nicht sinnvoll, u.a. deshalb, da das Entfernen des Schnittes -- also das Erkennen von $\llbracket r_j^\prime \rrbracket = \llbracket r_j \rrbracket \setminus \llbracket r_i \rrbracket$ -- eine Produktkonstruktion erfordert und somit tendenziell teuer ist. Stattdessen werden wir folgende zwei Prinzipien implementieren:
 \begin{description}
 	\item[Longest Match] Mache jedes $u_i$ der Zerlegung so lang wie möglich.
-	\item[First Match] Wähle aus den matchenden regulären Ausdrücken den mit dem kleinesten Index.
+	\item[First Match] Wähle aus den matchenden regulären Ausdrücken denjenigen mit dem kleinesten Index.
 \end{description}
-
 \begin{definition}
-	Eine Dekomposition $(u_1, \ldots, u_k)$ von $w \in \Sigma^\ast$ bezüglich der regulären Ausdrücke $r_1, \ldots, r_n \in \mathsf{RE}_\Sigma$ heißt \textit{Longest-Match-Dekomposition} (LMD), wenn für jedes $i \in [k]$, $x \in \Sigma^+$, $y \in \Sigma^\ast$ mit $w = u_1 \ldots u_i x y$ gilt, dass kein $j \in [n]$ existiert, sodass $u_i x \in L(r_j)$. 
+	Eine Dekomposition $(u_1, \ldots, u_k)$ von $w \in \Sigma^\ast$ bezüglich der regulären Ausdrücke $r_1, \ldots, r_n \in \mathsf{RE}_\Sigma$ heißt \textit{Longest-Match-Dekomposition} (LMD), wenn für jedes $i \in \{1, \ldots, k\}$, $x \in \Sigma^+$, $y \in \Sigma^\ast$ mit $w = u_1 \ldots u_i x y$ gilt, dass kein $j \in \{1, \ldots, n\}$ existiert, sodass $u_i x \in \llbracket r_j \rrbracket$. 
 \end{definition}
-Umgangssprachlich bedeutet das, dass wir an einen Teil der Komposition $u_i$ kein nicht-leeres Wort mehr anhängen können, was noch nicht verarbeitet wurde.
-Es ist klar, dass eine LMD eindeutig ist, falls sie existiert. Sie muss jedoch nicht immer existieren:
-
+Umgangssprachlich bedeutet das: Wenn wir einen Teil der Komposition $u_i$ noch erweitern würden mit folgenden Symbolen aus $w$, so würde keiner der regulären Ausdrücke mehr matchen. $u_i$ ist also das länstmögliche Wort in Schritt $i$ mit dem sich das erweiterte Matching-Problem noch lösen lässt.
+\begin{theorem}
+	Sei $\{r_1, \ldots, r_n\} \subseteq \mathsf{RE}_\Sigma$ und $w \in \Sigma^\ast$. Falls eine LMD von $w$ bzgl. $r_1, \ldots, r_n$ existiert, so ist sie eindeutig.
+	\begin{proof}
+		Denk nach!
+	\end{proof}
+\end{theorem}
+Eine LMD muss nicht existieren wie folgendes Beispiel zeigt.
 \begin{example}
 	$r_1 = a^+, r_2 = ab, w = aab$ hat Dekomposition $(a, ab)$ aber keine LMD.
 \end{example}
-
 \begin{definition}
 	Sei $(u_1, \ldots, u_k)$ eine LMD von $w \in \Sigma^\ast$ bezüglich der regulären Ausdrücke $r_1, \ldots, r_n \in \mathsf{RE}_\Sigma$. Die zugehörige \textit{First-Longest-Match-Analyse} (FLM-Analyse) $(i_1, \ldots, i_k)$ ist gegeben durch
 	$$
 		i_j \coloneqq \min \{ \ell \mid u_j \in L(r_\ell) \}
 	$$
-	für jedes $j \in [k]$.
+	für jedes $j \in \{1, \ldots, k\}$.
 \end{definition}
-Auch hier ist klar, dass es höchstens eine FLM-Analyse gibt und sie existiert, wenn die LMD existiert.
-
-
-%\subsection*{Eine mögliche Implementierung}
-Es gibt viele Möglichkeiten eine FLM-Analyse durchzuführen. Die von mir hier vorgestellte Art ist nicht die von mir favorisierte, aber sie ist insofern intuitiv, als dass sie nur Konzepte aus der FoSAP-Vorlesung verwendet und ein wenig über Arrays.
-
-Als Eingabe erhalten wir also $w \in \Sigma^\ast$ und die regulären Ausdrücke $r_1, \ldots, r_n \in \mathsf{RE}_\Sigma$. Gesucht ist eine FLM-Analyse inklusive zugehöriger LMD oder ein Error, falls diese nicht existieren.
+\begin{theorem}
+	Eine FLM-Analyse ist eindeutig, sofern sie existiert. Sie existiert genau dann, wenn die zugehörige LMD existiert.
+	\begin{proof}
+		Der Beweis ist ziemlich offensichtlich, es sei denn, der Leser schläft.
+	\end{proof}
+\end{theorem}
+Es gibt viele Möglichkeiten eine FLM-Analyse durchzuführen. Die hier vorgestellte Art in Algorithmus~\ref{alg:flmlmd} ist nicht unbedingt die populärste (man würde sie vermutlich nicht so implementieren), aber sie ist insofern intuitiv, als dass sie nur Konzepte aus dieser Vorlesung verwendet.
 \begin{algorithm}
 	\SetKwInOut{Input}{Input}
 	\SetKwInOut{Output}{Output}
 	\SetKwComment{Comment}{\texttt{// }}{}
-	\underline{FLM}{($w, (r_i)_{i=1}^n$)}\\
-	\Output{FLM-Analyse $(i_j)_{j=1}^k$ und LMD $(u_j)_{j=1}^k$}	
+	\underline{FLM+LMD}{($w, (r_i)_{i=1}^n$)}\\
+	\Output{FLM-Analyse $(i_j)_{j=1}^k$ und LMD $(u_j)_{j=1}^k$}
 	\Comment{Vorbereitung}
 	Wandle alle $r_i$ mit Thompson-Konstruktion in $\varepsilon$-NFAs $\mathcal{A}_i = (Q_i, \Sigma, \delta_i, q_0^i, F_i)$ um.\\
 	Baue neuen $\varepsilon$-NFA $\mathcal{A} = (\biguplus_i Q_i \uplus \{q_0, q_f\}, \Sigma \uplus [n], \delta, q_0, \{q_f\})$ mit $\delta(p, a) = \delta_i(p, a)$ falls $p \in Q_i$ und $\delta(q_0, \varepsilon) = \{q_0^i \mid i \in [n]\}$ und $\delta(q, i) = \{q_f\}$, falls $q \in F_i$.\\
@@ -2405,49 +2401,16 @@ Als Eingabe erhalten wir also $w \in \Sigma^\ast$ und die regulären Ausdrücke 
 	}
 	\Comment{Jetzt ist $w_\ell = \varepsilon$.}
 	Gebe $(u_1, \ldots, u_{\ell-1})$ und $(i_1, \ldots, i_{\ell-1})$ aus.
-	\caption{First-Longest-Match-Analyse}
-	\label{alg:algorithm}
+	\caption{First-Longest-Match-Analyse und Longest-Match-Dekomposition}
+	\label{alg:flmlmd}
 \end{algorithm}
-In Abbildung~\ref{fig:nfa} seht ihr wie der $\varepsilon$-NFA der nach Zeile 3 entsteht aussieht.
-
+In Abbildung~\ref{fig:flmlmd} sehen wir wie der $\varepsilon$-NFA der nach Zeile 3 entsteht aussieht.
 \begin{figure}
 	\centering
-	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
-		\node[state, initial, initial text=] (0) at (0, 0) {$q_0$};
-		
-		\node at (1.7, 2.5) {$\mathcal{A}_1$};
-		\draw[black, rounded corners] (1.5, 2.3) rectangle (4.5, 1.3);
-		\node[state] (01) at (2, 1.8) {$q_0^1$};
-		\node[state] (f1) at (4, 1.8) {$q_f^1$};
-		\node (d1) at (3, 1.8) {$\cdots$};
-		
-		\node at (1.7, .8) {$\mathcal{A}_2$};
-		\draw[black, rounded corners] (1.5, .6) rectangle (4.5, -.4);
-		\node[state] (02) at (2, .1) {$q_0^2$};
-		\node[state] (f2) at (4, .1) {$q_f^2$};
-		\node (d2) at (3, .1) {$\cdots$};
-		
-		\node (dv) at (3, -1.1) {$\vdots$};		
-		
-		\node at (1.7, -1.6) {$\mathcal{A}_n$};
-		\draw[black, rounded corners] (1.5, -1.8) rectangle (4.5, -2.8);
-		\node[state] (0n) at (2, -2.3) {$q_0^n$};
-		\node[state] (fn) at (4, -2.3) {$q_f^n$};
-		\node (dn) at (3, -2.3) {$\cdots$};
-		
-		\node[state, accepting] (f) at (6, 0) {$q_f$};
-		
-		\path (0) edge node {$\varepsilon$} (01)
-			(0) edge node[below left] {$\varepsilon$} (02)
-			(0) edge node[below left] {$\varepsilon$} (0n)
-			(f1) edge node {$1$} (f)
-			(f2) edge node[below left] {$2$} (f)
-			(fn) edge node[below right] {$n$} (f);	
-	\end{tikzpicture}
-	\caption{Skizze des NFAs aus Algorithmus~\ref{alg:algorithm}.}
-	\label{fig:nfa}
+	\input{figs/flmlmd}
+	\caption{Skizze des NFAs aus Algorithmus~\ref{alg:flmlmd}.}
+	\label{fig:flmlmd}
 \end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 

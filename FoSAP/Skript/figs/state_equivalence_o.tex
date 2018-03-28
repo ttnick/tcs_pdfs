@@ -1,0 +1,20 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick, every state/.style={inner sep=0pt, minimum size=20pt}]
+	\node[initial, initial text=, state, top color=green!50, bottom color=green!50]	(0)	at (0, 0)		{$q_0$};
+	\node[state, top color=green!50, bottom color=green!50]						(1) at (2, 0)		{$q_1$};
+	\node[state, accepting, top color=cyan!50, bottom color=cyan!50]				(2) at (4, 0)		{$q_2$};
+	\node[state, accepting, top color=cyan!50, bottom color=cyan!50]				(3) at (6, 0)		{$q_3$};
+	\node[state, top color=red!50, bottom color=red!50]							(4) at (4, -2)		{$q_4$};
+	\node[state, top color=green!50, bottom color=green!50]						(5) at (2, -2)		{$q_5$};
+
+	\path	(0) edge[bend left] node {$a$} (1)
+			(0) edge[bend left=45] node {$b$} (3)
+			(1) edge[bend left] node {$a$} (0)
+			(1) edge node {$b$} (2)
+			(2) edge node {$a$} (3)
+			(2) edge node {$b$} (4)
+			(3) edge[loop right] node {$a$} (3)
+			(3) edge node {$b$} (4)
+			(4) edge node {$a, b$} (5)
+			(5) edge node {$a$} (0)
+			(5) edge node {$b$} (2);
+\end{tikzpicture}
