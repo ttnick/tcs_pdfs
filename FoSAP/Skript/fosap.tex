@@ -2015,7 +2015,7 @@ Das bedeutet, wenn man bereits für alle Wörter bis zu einer bestimmten Länge 
 		Sei $u \sqsubseteq w$, d.h. es gibt ein $x \in \Sigma^\ast$ mit $ux = w$, sodass $u \in [v]_L$ für ein $v \canon u$. Dann ist aber nach Lemma~\ref{lem:cn} $vx \in [w]_L$, aber $vx \canon ux = w \lightning$.
 	\end{proof}
 \end{lemma}
-\begin{corollary}
+\begin{corollary}\label{cor:mn_allfound}
 	Sei $\mathcal{P}_L$ eine Menge von Myhill-Nerode-Äquivalenzklassen bzgl. einer Sprache $L \subseteq \Sigma^\ast$. Falls für alle $[u]_L \in \mathcal{P}_L$ und alle $a \in \Sigma$ gilt, dass $ua \sim_L w$ für ein $w \canon ua$ mit $[w]_L \in \mathcal{P}_L$, so gilt bereits für alle $v \in a\Sigma^+, a \in \Sigma$, dass $uv \sim_L w$ für ein $w \canon uv$ mit $[w]_L \in \mathcal{P}_L$. (Und somit gilt, dass $\bigcup_{w \in \mathcal{P}} [w]_L = \Sigma^\ast$.)
 	\begin{proof}
 		Angenommen für alle $[u]_L\in \mathcal{P}_L$ und alle $a \in \Sigma$ ist $ua$ bereits Myhill-Nerode-äquivalent zu einem kleineren Repräsentanten $w \in \mathcal{P}$, aber es gibt ein $v \in a\Sigma^+$ mit $uv \notin [w]_L$ für alle $[w]_L \in \mathcal{P}$. Wähle $v$ dabei minimal. $uv$ repräsentiert also eine neue Myhill-Nerode-Äquivalenzklasse, d.h. es gibt kein kanonisch kleineres Wort, welches zu $[uv]_L$ gehört. Nach vorigem Lemma ist dann aber auch jedes Präfix von $uv$ kleinster Repräsentant einer Myhill-Nerode-Äquivalenzklasse. Insbesonder gilt das für $ua$. $\lightning$ zur Annahme, dass $[ua]_L$ einen kleineren Repräsentanten bereits hat.
@@ -2067,9 +2067,9 @@ Wir müssen nun noch zeigen, dass ein endlicher Index zu einer Sprache implizier
 	\begin{proof}
 		Wir geben den DFA (\textit{Myhill-Nerode-DFA}) explizit an:
 		$$
-			\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta_L, [\varepsilon]_L, \{[u]_L : u \in L\}),
+			\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta_L, [\varepsilon]_L, F_L),
 		$$
-		mit $\delta_L([u]_L, a) = [ua]_L$. Beachte, dass $\Sigma^\ast/_L$ wegen $\ind(L) < \infty$ endlich ist, aber nicht leer, da $\Sigma^\ast/_L$ eine Partition von $\Sigma^\ast$ ist. Außerdem ist $\Sigma$ selbst ebenfalls endlich und nicht leer. Zusätzlich gilt $[\varepsilon]_L \in \Sigma^\ast/_L$ und $\{[u]_L : u \in L\} \subseteq \Sigma^\ast/_L$. Zuletzt ist $\delta_L$ wohldefiniert wegen Lemma~\ref{lem:mncongruence}, denn 
+		mit $\delta_L([u]_L, a) = [ua]_L$ und $F_L = \{[u]_L : u \in L\}$. Beachte, dass $\Sigma^\ast/_L$ wegen $\ind(L) < \infty$ endlich ist, aber nicht leer, da $\Sigma^\ast/_L$ eine Partition von $\Sigma^\ast$ ist. Außerdem ist $\Sigma$ selbst ebenfalls endlich und nicht leer. Zusätzlich gilt $[\varepsilon]_L \in \Sigma^\ast/_L$ und $F_L \subseteq \Sigma^\ast/_L$. Zuletzt ist $\delta_L$ wohldefiniert wegen Lemma~\ref{lem:mncongruence}, denn 
 		$$
 			\delta_L([u]_L, a) = [ua]_L = [u^\prime a]_L = \delta([u^\prime]_L, a)
 		$$
@@ -2094,9 +2094,8 @@ Die beiden Lemma~\ref{lem:mnf2reg} und Korollar~\ref{cor:reg2mnf} ergeben zusamm
 \end{figure}
 
 
-\subsection{Algorithmische Probleme für Reguläre Sprachen}\label{sec:regular_algorithms}
-Bisher haben wir uns die Theorie regulärer Sprachen und endlicher Automaten angesehen. In den letzten beiden Abschnitten kommen wir zu etwas angewandteren Themen. Zuerst betrachten wir ein paar algorithmische Fragestellungen: Wie viele Zustände muss ein DFA mindestens haben um eine bestimmte Sprache zu erkennen? Wird ein Wort von einem bestimmten Automaten akzeptiert? Akzeptieren zwei Automaten die selbe Sprache?
-Die erste Frage haben wir bereits mit dem Satz von Nerode (\ref{thm:nerode}) beantworten können -- aber können wir auch ausgehend von einem DFA schnell einen kleinsten (oder den kleinsten?) finden? Die zweite Frage scheint recht einfach zu sein, die dritte hingegen wirkt nicht mehr ganz so trivial. In der theoretischen Informatik treten diverse Probleme auf, die womöglich gar nicht algorithmisch lösbar sind. Das heißt wir müssen womöglich auf solche destruktive Ergebnisse vorbereitet sein.\par
+\subsection{Minimierung von Automaten}\label{sec:regular_minimization}
+Bisher haben wir uns die Theorie regulärer Sprachen und endlicher Automaten angesehen. In den übrigen Abschnitten dieses Kapitels kommen wir zu etwas angewandteren Themen. %TODO
 Wir beginnen mit einem effizientem Algorithmus zur Minimierung für DFAs.
 \begin{remark*}
 	Wir nennen einen Algorithmus \textit{effizient}, wenn seine Laufzeit höchstens polynomiell in der Länge der Eingabe wächst.
@@ -2118,8 +2117,8 @@ Im einführenden Abschnitt~\ref{sec:regular_dfa} zur DFAs wurde bereits erwähnt
 \begin{definition}
 	Seien $\mathcal{A}_1 = (Q_1, \Sigma, \delta_1, q_0^1, F_1)$ und $\mathcal{A}_2 = (Q_2, \Sigma, \delta_2, q_0^2, F_2)$ zwei DFAs. Ein \textit{Isomorphismus} von $\mathcal{A}_1$ auf $\mathcal{A}_2$ ist eine bijektive Abbildung $f\colon Q_1 \to Q_2$ mit
 	\begin{itemize}
-		\item $f(q_0^1) = q_0^2$,
 		\item $f(\delta_1(q, a)) = \delta_2(f(q), a)$ für alle $q \in Q_1, a \in \Sigma$,
+		\item $f(q_0^1) = q_0^2$,
 		\item $f[F_1] = F_2$.
 	\end{itemize}
 	Man schreibt dann auch $f\colon \mathcal{A}_1 \cong \mathcal{A}_2$. Zwei DFAs $\mathcal{A}_1, \mathcal{A}_2$ heißen \textit{isomorph} ($\mathcal{A}_1 \cong \mathcal{A}_2$), wenn ein Isomorphismus zwischen ihnen existiert.
@@ -2147,7 +2146,7 @@ Wenn zwei Automaten (oder auch zwei andere beliebige Strukturen) isomorph sind, 
 \begin{theorem}\label{thm:mindfaunique}
 	Sei $\mathcal{A}$ ein minimaler DFA für $L$. Dann ist $\mathcal{A} \cong \mathcal{A}_L$.
 	\begin{proof}
-		Sei $L \subseteq \Sigma^\ast$. Wir betrachten wieder den Myhill-Nerode-DFA aus Lemma~\ref{lem:mnf2reg} $\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta_L, [\varepsilon]_L, \{[u]_L : u \in L\})$. Sei außerdem $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein minimaler DFA für $L$. Wie im Beweis von Lemma~\ref{lem:dfa2mnf} sei für alle $v \in \Sigma^\ast$, $q_v \in Q$ der eindeutige Zustand mit $\mathcal{A}: q_0 \reaches{v} q_v$ (oder $\delta^\ast(q_0, v) = q_v$). Wir haben schon gezeigt, dass wenn $q_v = q_w$ für zwei $v, w \in \Sigma^\ast$, dass $v \sim_L w$ gilt. Beachte außerdem, dass für alle $q \in Q$ ein $v \in \Sigma^\ast$ mit $q_v = q$ existiert (wenn nicht, wäre dieses $q$ unerreichbar von $q_0$ aus -- dann wäre aber $\mathcal{A}$ nicht minimal, da man $q$ einfach weglassen könnte und einen kleineren, äquivalenten DFA erhalten würde). Also ist $Q = \{q_v : v \in \Sigma^\ast\}$. Wir definieren nun einen Isomorphismus von $\mathcal{A}$ auf $\mathcal{A}_L$ durch:
+		Sei $L \subseteq \Sigma^\ast$. Wir betrachten wieder den Myhill-Nerode-DFA aus Lemma~\ref{lem:mnf2reg} $\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta_L, [\varepsilon]_L, F_L)$. Sei außerdem $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein minimaler DFA für $L$. Wie im Beweis von Lemma~\ref{lem:dfa2mnf} sei für alle $v \in \Sigma^\ast$, $q_v \in Q$ der eindeutige Zustand mit $\mathcal{A}: q_0 \reaches{v} q_v$ (oder $\delta^\ast(q_0, v) = q_v$). Wir haben schon gezeigt, dass wenn $q_v = q_w$ für zwei $v, w \in \Sigma^\ast$, dass $v \sim_L w$ gilt. Beachte außerdem, dass für alle $q \in Q$ ein $v \in \Sigma^\ast$ mit $q_v = q$ existiert (wenn nicht, wäre dieses $q$ unerreichbar von $q_0$ aus -- dann wäre aber $\mathcal{A}$ nicht minimal, da man $q$ einfach weglassen könnte und einen kleineren, äquivalenten DFA erhalten würde). Also ist $Q = \{q_v : v \in \Sigma^\ast\}$. Wir definieren nun einen Isomorphismus von $\mathcal{A}$ auf $\mathcal{A}_L$ durch:
 		$$
 			f\colon Q \to \Sigma^\ast/_L, \quad q_v \mapsto [v]_L.
 		$$
@@ -2158,7 +2157,6 @@ Wenn zwei Automaten (oder auch zwei andere beliebige Strukturen) isomorph sind, 
 					\item $f$ ist surjektiv, denn für alle $[v]_L \in \Sigma^\ast/_L$ ist $f(q_v) = [v]_L$.
 					\item $f$ is injektiv, weil $|Q| \leq |\Sigma^\ast/_L|$ (Zustandsmenge von $\mathcal{A}_L$), da $\mathcal{A}$ minimal für $L$ ist.
 				\end{itemize}
-			\item $f(q_0) = [\varepsilon]_L$ ist klar, denn $q_\varepsilon = q_0$ für jeden DFA.
 			\item $f(\delta(q, a)) = \delta_L(f(q), a)$ für alle $q \in Q, a\in \Sigma$: Sei $q \in Q$ und $a \in \Sigma$. Sei $v \in \Sigma^\ast$, sodass $q = q_v$. Dann ist $\delta(q, a) = q_{va}$, denn
 				$$
 					\mathcal{A}: q_0 \reaches{v} q_v = q \reaches{a} \delta(q, a), 
@@ -2167,7 +2165,8 @@ Wenn zwei Automaten (oder auch zwei andere beliebige Strukturen) isomorph sind, 
 				$$
 					f(\delta(q, a)) = f(q_{va}) = [va]_L = \delta([v]_L, a) = \delta_L(f(q_v), a).
 				$$
-			\item $f[F] = \{[u]_L : u \in L\}$: Für alle $w \in \Sigma^\ast$ ist $[w]_L$ ein akzeptierender Zustand in $\mathcal{A}_L$ g.d.w. $w \in L$. Außerdem ist $w \in L$ g.d.w. ein $q \in F$ existiert mit $\delta^\ast(q_0, w) = q$. Mit $q = q_w$ erhalten wir dann:
+			\item $f(q_0) = [\varepsilon]_L$ ist klar, denn $q_\varepsilon = q_0$ für jeden DFA.
+			\item $f[F] = F_L$: Für alle $w \in \Sigma^\ast$ ist $[w]_L$ ein akzeptierender Zustand in $\mathcal{A}_L$ g.d.w. $w \in L$. Außerdem ist $w \in L$ g.d.w. ein $q \in F$ existiert mit $\delta^\ast(q_0, w) = q$. Mit $q = q_w$ erhalten wir dann:
 				\begin{align*}
 					q \in F &\text{ g.d.w. } w \in L\\
 					&\text{ g.d.w. } f(q) = [w]_L \text{ mit } w \in L. \quad \text{(also } [w]_L \text{ akzeptierend in } \mathcal{A}_L \text{)}\qedhere
@@ -2219,8 +2218,8 @@ Wir haben bereits gesehen, dass Myhill-Nerode-Äquivalenz und Zustände in DFAs 
 		\delta^\ast(p, w) \in F \quad\text{ g.d.w. }\quad \delta^\ast(q, w) \in F.
 	$$
 \end{definition}
-\begin{lemma}
-	$\sim_{\Sigma^\ast_Q}$ und $\sim_\mathcal{A}$ sind rechtsseitige Kongruenzrelationen bzgl. Konkatenation sogar.
+\begin{lemma}\label{lem:state_equivalence}
+	$\sim_{\Sigma^\ast_Q}$ und $\sim_\mathcal{A}$ sind rechtsseitige Kongruenzrelationen bzgl. Konkatenation bzw $\delta(\cdot, a)$ für alle $a \in \Sigma$.
 	\begin{proof}
 		Das ist eine schöne Übung.
 	\end{proof}
@@ -2235,7 +2234,7 @@ Wir haben bereits gesehen, dass Myhill-Nerode-Äquivalenz und Zustände in DFAs 
 	\label{fig:state_equivalence}
 \end{figure}
 Wir wissen bereits, dass Wörter, die im selben Zustand landen äquivalent sind (Lemma~\ref{lem:dfa2mnf}). Zusätzlich wissen wir nun, dass die $\sim_{\Sigma^\ast_Q}$-Äquivalenz, wie oben definiert, eine Verfeinerung der Myhill-Nerode-Äquivalenz $\sim_L \coloneqq \sim_{L(\mathcal{A})}$ ist und dass $\sim_L$ einen minimalen DFA induziert (Satz~\ref{thm:mndfamin}), der auch noch bis auf Umbenennung der Zustände eindeutig ist (Satz~\ref{thm:mindfaunique}). Wir müssen also nun nur noch einen Algorithmus angeben, der die Verfeinerung von $\sim_\mathcal{A}$ auflöst und uns wieder die Myhill-Nerode-Äquivalenz $\sim_L$ liefert.
-\begin{lemma}
+\begin{lemma}\label{lem:mn_se}
 	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA und $L = L(\mathcal{A})$. Für alle $w \in \Sigma^\ast$ sei $q_w \in Q$ der eindeutige Zustand mit $\mathcal{A}: q_0 \reaches{w} q_w$. Dann gilt für alle $u, v \in \Sigma^\ast$:
 	$$
 		q_u \sim_\mathcal{A} q_v \quad\text{ g.d.w. }\quad u \sim_L v.
@@ -2250,14 +2249,85 @@ Wir wissen bereits, dass Wörter, die im selben Zustand landen äquivalent sind 
 		\end{align*}
 	\end{proof}
 \end{lemma}
-\begin{definition}
+\begin{definition} %TODO weg?
 	Sei $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein NFA und $\sim$ eine Äquivalenzrelation über $Q$. Der \textit{Quotientautomat} $\mathcal{A}/_\sim$ aus $\mathcal{A}$ und $\sim$ ist definiert als:
 	$$
 		\mathcal{A}/_\sim = (Q/_\sim, \Sigma, \Delta/_\sim, [q_0]_\sim, F/_\sim),
 	$$
 	wobei für $P, R \in Q/_\sim$ das Tripel $(P, a, R) \in \Delta/_\sim$, g.d.w. ein $p \in P$ und ein $q \in R$ existiert, sodass $(p, a, r) \in \Delta$ und $F/_\sim \coloneqq \{P \in Q/_\sim \mid P \cap F \neq \emptyset\}$. 
 \end{definition}
-% Minimization, Emptiness, Universality, Equivalence, Membership (Matching)
+\begin{theorem}\label{thm:se2mindfa}
+	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA, $\sim \coloneqq \sim_\mathcal{A}$ seine zugehörige Zu\-stands\-ä\-qui\-va\-lenz\-re\-la\-tion, und $L = L(\mathcal{A})$. Sei
+	$$
+		\mathcal{A}/_\sim \coloneqq (Q/_\sim, \Sigma, \delta_\sim, [q_0]_\sim, F_\sim)
+	$$
+	mit 
+	\begin{itemize}
+		\item $\delta_\sim([q]_\sim, a) = [\delta(q, a)]_\sim$,
+		\item $F_\sim = \{[q]_\sim \in Q/_\sim \mid [q]_\sim \cap F \neq \emptyset\}$.
+	\end{itemize}
+	Dann ist $\mathcal{A}/_\sim$ ein DFA und es gilt: $\mathcal{A}/_\sim \cong \mathcal{A}_L$.
+	\begin{proof}
+		$\mathcal{A}/_\sim$ ist ein DFA, denn $Q/_\sim$ und $\Sigma$ sind endlich und nicht leer. $\delta_\sim$ ist wohldefiniert, denn für alle $p, q \in Q$ mit $p \sim q$ ist nach Lemma~\ref{lem:state_equivalence} $[\delta(p, a)]_\sim = [\delta(q, a)]_\sim$. Außerdem ist $[q_0]_\sim \in Q/_\sim$ und $F_\sim \subseteq Q/_\sim$.
+		Nun geben wir einen Isomorphismus $f\colon \mathcal{A}/_\sim \cong \mathcal{A}_L$ an, wobei $\mathcal{A}_L = (\Sigma^\ast/_L, \Sigma, \delta_L, [\varepsilon]_L, F_L)$ wieder der Myhill-Nerode-DFA (Lemma~\ref{lem:mnf2reg}) ist. Dazu sei wieder $q_v$ der eindeutige Zustand mit $\delta(q_0, v) = q_v$ für alle $v \in \Sigma^\ast$. Wir setzen dann $f([q_v]_\sim) = [v]_L$. Nach Lemma~\ref{lem:mn_se} ist $f$ wohldefiniert und bijektiv. Es bleibt zu zeigen, dass $f$ wirklich ein isomorphismus ist:
+		\begin{itemize}
+			\item $f(\delta_\sim([q]_\sim, a)) = \delta_L(f([q]_\sim), a)$ für alle $q \in Q, a\in \Sigma$: Sei $q \in Q, a \in \Sigma$. Sei $v \in \Sigma^\ast$ mit $q = q_v$ (existiert, weil $\mathcal{A}$ reduziert auf die erreichbaren Zustände ist). Dann ist $\delta_\sim([q]_\sim, a) = [q_{va}]_\sim$, weil $\delta(q_v, a) =q_{va}$. Es folgt:
+				$$
+					f(\delta_\sim([q]_\sim, a)) = f([q_{va}]_\sim) = [va]_L = \delta_L([v]_L, a) = \delta_L(f([q_v]_\sim), a).
+				$$
+			\item $f([q_0]_\sim) = f([q_\varepsilon]_L) = [\varepsilon]_L$.
+			\item $f[F_\sim] = F_L$: Für $p, q \in Q$ impliziert $p \sim q$, dass $\delta^\ast(p, \varepsilon) \in F$ g.d.w. $\delta^\ast(q, \varepsilon) \in F$. Das ist genau dann der Fall, wenn $p \in F$ g.d.w. $q \in F$ gilt. Also gilt für alle $q \in Q$, dass $q \in F$ g.d.w. $[q]_\sim \in F_\sim$. Sei nun $w \in \Sigma^\ast$ beliebig. Dann gilt
+				$$
+					w \in L \quad\text{ g.d.w. }\quad q_w \in F \quad\text{ g.d.w. }\quad [q_w]_\sim \in F_\sim.
+				$$
+				Aus der Definition von $F_L$ ergibt sich außerdem $w \in L$ g.d.w. $[w]_L \in F_L$. Also insgesamt für $q = q_w$:
+				\[
+					[q]_\sim \in F_\sim \quad\text{ g.d.w. }\quad w \in L \quad\text{ g.d.w. }\quad f([q]_\sim) = [w]_L \in F_L.\qedhere
+				\]
+		\end{itemize}
+	\end{proof}
+\end{theorem}
+\begin{corollary}
+	Der Quotientautomat $\mathcal{A}/_\sim = \mathcal{A}/_{\sim_\mathcal{A}}$ aus Satz~\ref{thm:se2mindfa} ist minimal.
+\end{corollary}
+Ähnlich wie Korollar~\ref{cor:mn_allfound} uns ein Kriterium zum Suchen für Myhill-Nerode-Ä\-qui\-va\-lenz\-klas\-sen (siehe Algorithmus~\ref{alg:mnc}) liefert, hilft uns folgende Beobachtung beim Finden der $\sim_\mathcal{A}$-Klassen.
+\begin{remark*}
+	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA und seien $p, q \in Q$.
+	\begin{enumerate}[label=\arabic*)]
+		\item Wenn $p \in F$ und $q \notin F$, dann $p \not\sim_\mathcal{A} q$.
+		\item Wenn ein $a \in \Sigma$ existiert mit $\delta(p, a) \not\sim_\mathcal{A} \delta(q, a)$, dann $p \not\sim_\mathcal{A}$.
+	\end{enumerate}
+\end{remark*}
+Wir haben nun alles nötige gesammelt für einen DFA-Minimierungsalgorithmus, den wir in Algorithmus~\ref{alg:dfaminimization} aufschreiben.
+\begin{algorithm}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\SetKwComment{Comment}{\texttt{// }}{}
+	\underline{DFAMinimization}{($\mathcal{A}$)}\\
+	\Output{minimaler DFA $\mathcal{A}/_{\sim_\mathcal{A}}$}	
+	Berechne Menge der erreichbaren Zustände (z.B. mit DFS) und reduziere $\mathcal{A}$.\\
+	Setze $P_1 = F, P_2 = Q \setminus F$ und $\mathcal{P} = \{P_1, P_2\}$.\\
+	\While{ex. $P_i \in \mathcal{P}$, $p, q \in P_i$, $P_j \in \mathcal{P}$, $a \in \Sigma$ mit $\delta(p, a) \in P_j$ und $\delta(q, a) \notin P_j$}{
+		$P_{i_1} = \{r \in P_i \mid \delta(r, a) \in P_j\}$,\\
+		$P_{i_2} = \{r \in P_i \mid \delta(r, a) \notin P_j\}$,\\
+		$\mathcal{P} = (\mathcal{P} \setminus \{P_i\}) \cup \{P_{i_1}, P_{i_2}\}$.
+	}
+	\Comment{$\mathcal{P}$ enthält nun die $\sim_\mathcal{A}$-Äquivalenzklassen (Partition von $Q$)}
+	Konstruiere $\mathcal{A}/_{\sim_\mathcal{A}}$ gemäß Satz~\ref{thm:se2mindfa}.
+	\caption{DFA-Minimierungsalgorithmus (\textit{Blockrefinement})}
+	\label{alg:dfaminimization}
+\end{algorithm}
+\begin{example}
+	Betrachte erneut den DFA aus Abbildung~\ref{fig:state_equivalence}. %TODO
+\end{example}
+%TODO Korrektheit + Laufzeit
+
+
+\subsection{Weitere Algorithmische Probleme für reguläre Sprachen}\label{sec:regular_algorithms}
+%TODO
+Zuerst betrachten wir ein paar algorithmische Fragestellungen: Wie viele Zustände muss ein DFA mindestens haben um eine bestimmte Sprache zu erkennen? Wird ein Wort von einem bestimmten Automaten akzeptiert? Akzeptieren zwei Automaten die selbe Sprache?
+Die erste Frage haben wir bereits mit dem Satz von Nerode (\ref{thm:nerode}) beantworten können -- aber können wir auch ausgehend von einem DFA schnell einen kleinsten (oder den kleinsten?) finden? Die zweite Frage scheint recht einfach zu sein, die dritte hingegen wirkt nicht mehr ganz so trivial. In der theoretischen Informatik treten diverse Probleme auf, die womöglich gar nicht algorithmisch lösbar sind. Das heißt wir müssen womöglich auf solche destruktive Ergebnisse vorbereitet sein.
+% Emptiness, Universality, Equivalence, Membership (Matching)
 
 
 \subsection{*Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
@@ -2337,7 +2407,7 @@ Als Eingabe erhalten wir also $w \in \Sigma^\ast$ und die regulären Ausdrücke 
 	Gebe $(u_1, \ldots, u_{\ell-1})$ und $(i_1, \ldots, i_{\ell-1})$ aus.
 	\caption{First-Longest-Match-Analyse}
 	\label{alg:algorithm}
-\end{algorithm}\\
+\end{algorithm}
 In Abbildung~\ref{fig:nfa} seht ihr wie der $\varepsilon$-NFA der nach Zeile 3 entsteht aussieht.
 
 \begin{figure}
