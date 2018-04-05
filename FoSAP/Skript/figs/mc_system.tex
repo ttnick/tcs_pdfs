@@ -1,0 +1,16 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick]
+	\node[initial, initial text=, state]	(0)	at (0, 0)		{$q_0$};
+	\node[state, accepting]				(1) at (2.5, 1.5)	{$q_1$};
+	\node[state]							(2) at (2.5, -1.5)	{$q_2$};
+	\node[state, accepting]				(3) at (5, 0)		{$q_3$};
+
+	\path	(0) edge node {$a, b$} (1)
+			(0) edge node[below left] {$b, c$} (2)
+			(1) edge[loop above] node {$b$} (1)
+			(1) edge node[left] {$a, c$} (2)
+			(2) edge[loop below] node {$b, c$} (2)
+			(2) edge[bend left] node {$a$} (3)
+			(3) edge[loop right] node {$a$} (3)
+			(3) edge[bend left] node {$b$} (2)
+			(3) edge node[above right] {$b$} (1);
+\end{tikzpicture}

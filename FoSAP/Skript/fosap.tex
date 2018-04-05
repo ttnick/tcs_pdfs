@@ -1676,7 +1676,6 @@ wobei $P^\prime \coloneqq P \setminus \{ s \}$. Auch dies einmal in einfache Wor
 			\caption{Rekursionsschritt um einen Zustand rauszuwerfen. Die blau getönte Fläche ist $P^\prime \coloneqq P \setminus \{ s \}$. Die größere Fläche ist $P$. Wichtig: Die Kanten in diesem Graphen sind keine Transitionen, sondern sind mit einem regulären Ausdruck beschriftet, der die Sprache zwischen den Knoten beschreibt mit Zuständen aus dem Index!}
 			\label{fig:state_elimination}
 		\end{figure}
-		%TODO Soundness + Completeness
 	\end{proof}
 \end{lemma}
 \begin{remark*}
@@ -1899,7 +1898,10 @@ Wir zeigen, dass $xy^{q+1}z \notin L_\mathbb{P}$:
 \end{align*}
 Da $k > 0$ ist $1+k > 1$ und somit $q(1+k)$ eine zusammengesetzte Zahl (d.h. nicht prim). Also ist $xy^{q+1}z \notin L_\mathbb{P}$. Wir erhalten also eine Gewinnstrategie für Bob und somit ist $L_\mathbb{P}$ nicht regulär.
 \end{example*}
-%TODO Nicht-Regularität durch Abschlusseigenschaften zeigen.
+Eine weitere Möglichkeit um zu zeigen, dass eine Sprache nicht regulär ist, ist zu zeigen, dass man mit Operationen von denen man weiß, dass sie Regularität erhalten (z.B. Schnitt, Homomorphismen, usw.) aus einer Sprache $L$ eine Sprache $L^\prime$ zu konstruieren, von der man weiß, dass sie nicht regulär ist. Dann kann auch $L$ schon nicht regulär gewesen sein.
+\begin{example}
+	Wir wollen wissen, ob die Sprache $L = \{w \in \{a, b\}^\ast \mid |w|_a = |w|_b\}$ regulär ist. Wir verwenden als Hilfssprache $\llbracket a^\ast b^\ast \rrbracket$. Dann erhalten wir mit $L \cap \llbracket a^\ast b^\ast \rrbracket = \{a^n b^n : n \in \mathbb{N}\} \eqqcolon L^\prime$. Von $L^\prime$ wissen wir bereits aus Beispiel~\ref{exp:pumping1}, dass sie nicht regulär ist. Also ist auch $L$ nicht regulär, denn reguläre Sprachen sind unter Schnitt abgeschlossen (Satz~\ref{thm:regular_intersection}) und wir haben $L$ mit einer regulären Sprache geschnitten um $L^\prime$ zu erhalten.
+\end{example}
 
 
 \subsection{Myhill-Nerode-Äquivalenz}\label{sec:regular_myhill-nerode}
@@ -2153,7 +2155,6 @@ Wir haben bereits gesehen, dass Myhill-Nerode-Äquivalenz und Zustände in DFAs 
 	Sei $\sim$ eine Äquivalenzrelation über $A$. $\sim^\prime$ ist eine \textit{Verfeinerung} von $\sim$, wenn $\sim^\prime$ eine Äquivalenzrelation über $A$ ist und jede Äquivalenzklasse von $\sim$ eine Vereinigung von Äquivalenzklassen von $\sim^\prime$ ist.
 \end{definition}
 \begin{remark*}
-	%TODO Bezug zur Zustandsäquivalenz?
 	Sei $\mathcal{A} = (Q, \Sigma, \delta, q_0, F)$ ein DFA. Sei
 	$$
 		\Sigma^\ast_q \coloneqq \{w \in \Sigma^\ast \mid q_w = q\}.
@@ -2419,8 +2420,40 @@ Wir nehmen an, das $\mathcal{S}$ ein NFA ist und $\varphi$ ein regulärer Ausdru
 	\caption{Model-Checking-Algorithmus für System $\mathcal{S}$ (als NFA modelliert) und Spezifikation $\varphi$ (regulärer Ausdruck)}
 	\label{alg:model-checking}
 \end{algorithm}
+\begin{remark*}
+	Die Zeilen 2-4 in Algorithmus~\ref{alg:model-checking} beschreiben nur die Umwandlung von einem regulären Ausdruck $\varphi$ in einen DFA. Der Algorithmus funktioniert natürlich genauso, wenn man für $\varphi$ eine andere Formalisierung (z.B. in Logiken) wählt, die sich in Automaten umwandeln lässt. Dann ersetzt man einfach diese Zeilen 2-4 durch eine geeignete Transformation.
+\end{remark*}
+\begin{example}\label{exp:mc}
+	Wir betrachten den NFA $\mathcal{S}$ in Abbildung~\ref{fig:mc_system}, der einen System modelliert mit Aktionen $\{a, b, c\}$. Ein Wort entspricht also einer Aktionsfolge. Uns interssiert nun ob dieses System folgende \textit{Request-Response-Bedingung} $\varphi$ efüllt: 
+	\begin{center}
+		``Wenn die Aktion $c$ ausgeführt wird, wird später auch $a$ ausgeführt.``
+	\end{center}
+	Wir können $\varphi$ als regulären Ausdruck hinschreiben: $\varphi = ((a+b)^\ast c (b+c)^\ast a (a+b)^\ast)^\ast$. Ein einfacher DFA, der $\llbracket \varphi \rrbracket$ erkennt ist in Abbildung~\ref{fig:mc_spec}. In Abbildung~\ref{fig:mc_prod} ist der Produktautomat, der $L(\mathcal{S}) \cap \comp{\llbracket \varphi \rrbracket}$ erkennt. Die Zustände $(p_1, q_0), (p_1, q_1), (p_1, q_3)$ sind unerreichbar von $(p_0, q_0)$ aus, also ist kein akzeptierender Zustand erreichbar. Somit erfüllt $\mathcal{S}$ die Request-Response-Bedingung $\varphi$.
+\end{example}
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/mc_system}
+		\caption{System $\mathcal{S}$ als NFA.}
+		\label{fig:mc_system}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.49\textwidth}
+		\centering
+		\input{figs/mc_spec}
+		\caption{DFA $\mathcal{A}_\varphi$ zu Spezifikation $\varphi$.}
+		\label{fig:mc_spec}
+	\end{subfigure}\\
+	\begin{subfigure}[b]{.9\textwidth}
+		\centering
+		\input{figs/mc_prod}
+		\caption{Produkt-Automat aus $\mathcal{S}$ und $\comp{\mathcal{A}_\varphi}$.}
+		\label{fig:mc_prod}
+	\end{subfigure}
+	\caption{Die drei Automaten aus Beispiel~\ref{exp:mc}.}
+\end{figure}
 \begin{example}
-	Hier noch ein schönes Beispiel mit Bild.
+	Weitere geläufige Eigenschaften sind zum Beispiel: \textit{Liveness} ``Eine ge\-wünsch\-te Aktion wird irgendwann eintreten`` oder \textit{Safety} ``Ein bestimmte Aktionsfolge (ein Infix) kann nicht auftreten``. Als Übung zeige man, dass $\mathcal{S}$ aus Abbildung~\ref{fig:mc_system} die Liveness-Eigenschaft bzgl. $a$ hat, aber die Safety-Eigenschaft bzgl. $cc$ verletzt.
 \end{example}
 
 

@@ -1,0 +1,9 @@
+\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, node distance=2.8cm, semithick]
+	\node[initial, initial text=, state]	(0)	at (0, 0)	{$p_0$};
+	\node[state, accepting]				(1) at (3, 0)	{$p_1$};
+
+	\path	(0) edge[loop above] node {$a, b$} (0)
+			(0) edge[bend left] node {$c$} (1)
+			(1) edge[loop above] node {$b, c$} (1)
+			(1) edge[bend left] node {$a$} (0);
+\end{tikzpicture}
