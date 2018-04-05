@@ -869,7 +869,7 @@ Aus Gründen der Bequemlichkeit, lassen wir die Mengenklammern bei der Beschrift
 \begin{figure}
 	\centering
 	\input{figs/dfa_ex1}
-	\caption{DFA für die Sprache aus Beispiel~\ref{exp:ex1}.}
+	\caption{DFA für die Sprache aus Beispiel~\ref{exp:dfa_runs}.}
 	\label{fig:dfa_ex1}
 \end{figure}
 Wir werden die Begriffe Automat und Transitionsgraph gelegentlich synonym verwenden, da sich sowohl im Graphen als auch in der ursprünglichen Automatenstruktur alle Informationen befinden. Wir greifen dann auf den Begriff zurück, der für das aktuelle Thema die bequemere Anschauung hat.\\
@@ -902,7 +902,7 @@ Wir bezeichnen Läufe in der Regel mit $\varrho$ bzw. Variationen. Statt $(r_0, 
 		\item Eine Sprache $L$ heißt \textit{DFA-erkennbar}, wenn es einen DFA $\mathcal{A}$ gibt, sodass $L = L(\mathcal{A})$.
 	\end{enumerate}
 \end{definition}
-\begin{example}\label{exp:ex1}
+\begin{example}\label{exp:dfa_runs}
 	Betrachte erneut den Automaten $\mathcal{A}$ in Abbildung~\ref{fig:dfa_ex1}.
 	\begin{itemize}
 		\item Sei $w_1 = abaaba$. Der Lauf von $\mathcal{A}$ auf $w_1$ ist
@@ -924,7 +924,8 @@ Wir bezeichnen Läufe in der Regel mit $\varrho$ bzw. Variationen. Statt $(r_0, 
 	\begin{proof}
 		Wir zeigen die folgende Aussage:
 		\begin{center}
-			$\mathcal{A}$ akzeptiert das Wort $w$ {g.d.w.} $w$ beginnt und endet mit $a$.				\end{center}
+			$\mathcal{A}$ akzeptiert das Wort $w$ {g.d.w.} $w$ beginnt und endet mit $a$.
+		\end{center}
 		Beweis per vollständige Induktion über Wortlänge $n \in \mathbb{N}$. Ist $r = (r_0, \ldots, r_n)$ der Lauf auf dem Wort $w = a_0 \ldots a_{n-1}$, so ist
 		$$
 			r_n = \left\lbrace 
@@ -1137,7 +1138,7 @@ Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 		\item Eine Sprache $L$ heißt \textit{NFA-erkennbar}, wenn es einen NFA $\mathcal{A}$ gibt, sodass $L = L(\mathcal{A})$.
 	\end{enumerate}
 \end{definition}
-\begin{example}\label{exp:ex2}
+\begin{example}\label{exp:compare_dfa_nfa}
 	Wir betrachten die Sprache
 	$$
 		L = \{ w \in \{a, b\}^\ast \mid \text{das vorletzte Symbol in } w \text{ ist } a \}.
@@ -1158,7 +1159,7 @@ Bisher ist noch nicht klar, wie das Akzeptanzverhalten von NFAs sein soll.
 		\caption{NFA}
 		\label{fig:nfa_ex1nfa}
 	\end{subfigure}
-	\caption{Ein DFA und ein NFA für die Sprache aus Beispiel~\ref{exp:ex2}.}
+	\caption{Ein DFA und ein NFA für die Sprache aus Beispiel~\ref{exp:compare_dfa_nfa}.}
 	\label{fig:nfa_ex1}
 \end{figure}
 Für NFAs ist das \textit{Wortproblem}, das Problem ob ein Automat ein gegebenes Wort akzeptiert, nicht ganz so offensichtlich zu lösen wie für DFAs. Bei DFAs müssen wir lediglich die eindeutige Transitionsfolge anwenden und prüfen ob der letzte Zustand ein akzeptierender ist. Für NFAs können wir natürlich alle möglichen Läufe ausprobieren und prüfen, ob ein akzeptierender dabei ist. Doch es gieht effizienter mit der Erreichbarkeitsrelation.
@@ -1231,7 +1232,7 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 
 
 \subsection{Äquivalenz von NFAs und DFAs}\label{regular_equivalence}
-Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können als DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:ex2} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
+Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können als DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:compare_dfa_nfa} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
 \begin{definition}\label{def:fa_equivalence}
 	Seien $\mathcal{A}, \mathcal{B}$ zwei endliche Automaten (deterministisch oder nicht-de\-ter\-mi\-nis\-tisch). $\mathcal{A}$ und $\mathcal{B}$ heißen \textit{äquivalent}, wenn $L(\mathcal{A}) = L(\mathcal{B})$.
 \end{definition}
@@ -1382,13 +1383,13 @@ Wir bezeichnen $\varepsilon$-NFAs wieder mit $\mathcal{A}, \mathcal{B}$ usw. Tra
 		\item Eine Sprache $L$ heißt \textit{$\varepsilon$-NFA-erkennbar}, wenn es einen $\varepsilon$-NFA $\mathcal{A}$ gibt, sodass $L = L(\mathcal{A})$.
 	\end{enumerate}
 \end{definition}
-\begin{example}\label{exp:ex3}
+\begin{example}\label{exp:epsnfa}
 	Wir betrachten die Sprache $L = \{ a^n b^m : n, m \in \mathbb{N} \} \cup \{ a^n c^m : n, m \in \mathbb{N} \}$. Der $\varepsilon$-NFA in Abbildung~\ref{fig:epsnfa_ex1} erkennt die Sprache $L$ mit drei Zuständen.
 \end{example}
 \begin{figure}
 	\centering
 	\input{figs/epsnfa_ex1}
-	\caption{$\varepsilon$-NFA, der die Sprache aus Beispiel~\ref{exp:ex3} erkennt.}
+	\caption{$\varepsilon$-NFA, der die Sprache aus Beispiel~\ref{exp:epsnfa} erkennt.}
 	\label{fig:epsnfa_ex1}
 \end{figure}
 Für $\varepsilon$-NFAs zeigen wir wie im vorigen Abschnitt zu NFAs, dass auch sie die Klasse der FA-erkennbaren Sprachen nicht vergrößern. Der Äquivalenzbegriff aus Definition~\ref{def:fa_equivalence} überträgt sich natürlich auf $\varepsilon$-NFAs.
@@ -1928,7 +1929,7 @@ Eine einfacher Folgerung aus der Definition ist
 	\end{proof}
 \end{lemma}
 Wir verwenden etwas vereinfachte Schreibweisen für Myhill-Nerode-Äquivalenz: Anstatt $[w]_{\sim_L}$ schreiben wir nur $[w]_L$ und für $\Sigma^\ast /_{\sim_L}$ schreiben wir $\Sigma^\ast /_L$. Außerdem schreiben wir $\ind(L)$ für $\ind(\sim_L)$.
-\begin{example}\label{exp:ex4}
+\begin{example}\label{exp:mnf2reg}
 	Wir bestimmen die Myhill-Nerode-Äquivalenzklassen und den Index der Sprache 
 	$$
 		L = \{w \in \{a, b\}^\ast \mid w \text{ hat Infix } ab\}.
@@ -1998,7 +1999,7 @@ Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reg
 \begin{theorem}[Satz von Nerode]\label{thm:nerode}
 	Eine Sprache ist genau dann regulär, wenn die Anzahl der Myhill-Nerode-Äquivalenzklassen endlich ist.
 \end{theorem}
-Die Sprache $L$ im Beispiel~\ref{exp:ex4} hat $\ind(L) = 3 < \infty$ und ist somit regulär. Wir betrachten nun ein Beispiel für eine nicht-reguläre Sprache.
+Die Sprache $L$ im Beispiel~\ref{exp:mnf2reg} hat $\ind(L) = 3 < \infty$ und ist somit regulär. Wir betrachten nun ein Beispiel für eine nicht-reguläre Sprache.
 \begin{example}
 	Sei $L = \{w \in \{(, )\} \mid w \text{ korrekt geklammert}\}$ Korrekt geklammert meint, dass $|w|_( = |w|_)$ und für jedes Präfix $u \sqsubseteq w$ gilt $|u|_( \geq |u|_)$. Wir zeigen, dass $L$ unendlich viele Myhill-Nerode-Äquivalenzklassen hat. Dann folgt mit dem Satz~\ref{thm:nerode}, dass $L$ nicht regulär ist.
 	Sei $u_k \coloneqq (^k$ und betrachte für zwei beliebige $i \neq j$ die Wörter $u_i, u_j$. Es gilt $u_i \not\sim_L u_j$, denn $v = )^i$ trennt die beiden Worte: $u_i \cdot v = (^i)^i \in L$, aber $u_j \cdot v = (^j)^i \notin L$. Also liegen $u_i$ und $u_j$ in zwei verschiedenen Myhill-Nerode-Äquivalenzklassen. Da es unendlich viele $i, j \in \mathbb{N}$ gibt mit $i \neq j$, gibt es demnach auch unendlich viele Myhill-Nerode-Äquivalenzklassen für $L$. Also ist $L$ nicht regulär.
@@ -2040,11 +2041,11 @@ Wir müssen nun noch zeigen, dass ein endlicher Index zu einer Sprache implizier
 		Also gilt die Aussage für alle $w \in \Sigma^\ast$. Nach Konstruktion des Myhill-Nerode-DFA ist außerdem $[w]_L$ akzeptierender Zustand g.d.w. $w \in L$. Beachte, dass in dem Fall auch kein $v \in [w]_L$ mit $v \notin L$ existiert, denn für $v, w$ wäre dann $\varepsilon$ ein trennendes Wort. Also akzeptiert $\mathcal{A}_L$ genau $L$.
 	\end{proof}
 \end{lemma}
-Die beiden Lemma~\ref{lem:mnf2reg} und Korollar~\ref{cor:reg2mnf} ergeben zusammen den Satz von Nerode (Satz~\ref{thm:nerode}). Wir werden auch in Zukunft den Myhill-Nerode-DFA zu einer Sprache $L$ stets mit $\mathcal{A}_L$ bezeichnen. In Abbildung~\ref{fig:mndfa} sehen wir den Myhill-Nerode-DFA für die Sprache $L$ aus Beispiel~\ref{exp:ex4}.
+Die beiden Lemma~\ref{lem:mnf2reg} und Korollar~\ref{cor:reg2mnf} ergeben zusammen den Satz von Nerode (Satz~\ref{thm:nerode}). Wir werden auch in Zukunft den Myhill-Nerode-DFA zu einer Sprache $L$ stets mit $\mathcal{A}_L$ bezeichnen. In Abbildung~\ref{fig:mndfa} sehen wir den Myhill-Nerode-DFA für die Sprache $L$ aus Beispiel~\ref{exp:mnf2reg}.
 \begin{figure}
 	\centering
 	\input{figs/mndfa}
-	\caption{Myhill-Nerode-DFA für die Sprache aus Beispiel~\ref{exp:ex4}.}
+	\caption{Myhill-Nerode-DFA für die Sprache aus Beispiel~\ref{exp:mnf2reg}.}
 	\label{fig:mndfa}
 \end{figure}
 
