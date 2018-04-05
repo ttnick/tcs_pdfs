@@ -63,8 +63,9 @@
 \newcommand{\qedw}{\hfill$\square$}
 \newcommand{\qedb}{\hfill$\blacksquare$}
 \newcommand{\shuffle}{\mathrel{\shifttext{5pt}{$\equiv$}\shifttext{-5pt}{$=$}}}
-\newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
-\newcommand{\reachess}[2]{\overset{#1}{\underset{#2}{\rightarrow}}}
+%\newcommand{\reaches}[1]{\overset{#1}{\rightarrow}}
+\newcommand{\reaches}{\xrightarrow}
+\newcommand{\reachess}[2]{\overset{#1}{\underset{#2}{xrightarrow}}}
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\ind}{index}
 \DeclareMathOperator{\bin}{bin}
@@ -1168,7 +1169,7 @@ Für NFAs ist das \textit{Wortproblem}, das Problem ob ein Automat ein gegebenes
 		\item $(r_i, a_i, r_{i+1}) \in \Delta$ für alle $i \in [n]$.
 	\end{itemize}
 \end{definition}
-Diese Notation können wir auch selbstverständlich auf DFAs anwenden. Wir lassen gelegentlich, dass $\mathcal{A}$ weg, wenn der Automat aus dem Kontext klar ist.
+Diese Notation können wir auch selbstverständlich auf DFAs anwenden. Wir lassen gelegentlich, dass $\mathcal{A}$ weg, wenn der Automat aus dem Kontext klar ist. Wir schreiben außerdem verkürzend $\mathcal{A}: p \reaches{\ast} q$ und $\mathcal{A}: p \reaches{+} q$ falls Wörter $w \in \Sigma^\ast$ bzw. $\Sigma^+$ existieren mit $\mathcal{A}: p \reaches{w} q$. Für Teilmengen $P \subseteq Q$ gibt es auch die Schreibweise $\mathcal{A}: p \reaches{w} P$, wenn es ein $q \in P$ gibt mit $\mathcal{A}: p \reaches{w} q$.
 \begin{definition}
 	Sei $\mathcal{A} = (Q, \Sigma, \Delta, q_0, F)$ ein NFA und $w \in \Sigma^\ast$. Die \textit{Menge der in $\mathcal{A}$ über $w$ erreichbaren Zustände} ist definiert als
 	$$
@@ -1819,7 +1820,7 @@ Vorab: Mit diesem Abschnitt der Vorlesung haben viele Studenten Probleme, da das
 	betrachten zu dem Wort $w^{\prime\prime} = a^{n+hk}b^n$ für ein beliebiges $h > 0$.
 \end{remark*}
 Dieses Beispiel ist sehr ausführlich jetzt besprochen worden. Sobald man diese Ü\-ber\-le\-gung\-en verstanden hat, hat man diesen gesamten Abschnitt eigentlich auch schon verstanden und sollte auch beim folgendem Lemma nicht mehr allzu große Schwierigkeiten haben. Tatsächlich bildet das Beispiel den Beweis des Lemmas auf einen einzelnen Automaten bzw. eine einzelne Sprache ab.
-\begin{lemma}[Pumping-Lemma]
+\begin{lemma}[Pumping-Lemma]\label{lem:pumping-lemma}
 	Sei $L \subseteq \Sigma^\ast$ eine reguläre Sprache. Dann existiert ein $n \in \mathbb{N}_+$, sodass für alle $w \in L$ mit $|w| \geq n$ eine Zerlegung $w = xyz$ existiert mit den Eigenschaften:
 	\begin{enumerate}
 		\item $|xy| \leq n$,
@@ -2323,10 +2324,104 @@ Wir zeigen nun noch, dass Algorithmus~\ref{alg:dfaminimization} auch wirklich da
 
 
 \subsection{Weitere Algorithmische Probleme für reguläre Sprachen}\label{sec:regular_algorithms}
-%TODO
-Zuerst betrachten wir ein paar algorithmische Fragestellungen: Wie viele Zustände muss ein DFA mindestens haben um eine bestimmte Sprache zu erkennen? Wird ein Wort von einem bestimmten Automaten akzeptiert? Akzeptieren zwei Automaten die selbe Sprache?
-Die erste Frage haben wir bereits mit dem Satz von Nerode (\ref{thm:nerode}) beantworten können -- aber können wir auch ausgehend von einem DFA schnell einen kleinsten (oder den kleinsten?) finden? Die zweite Frage scheint recht einfach zu sein, die dritte hingegen wirkt nicht mehr ganz so trivial. In der theoretischen Informatik treten diverse Probleme auf, die womöglich gar nicht algorithmisch lösbar sind. Das heißt wir müssen womöglich auf solche destruktive Ergebnisse vorbereitet sein.
-% Emptiness, Universality, Equivalence, Infinity, Membership (Matching)
+Wir betrachten ein paar zusätzliche algorithmische Fragen: Wird ein Wort von einem bestimmten Automaten akzeptiert? Akzeptieren zwei Automaten die selbe Sprache? Ist die erkannte Sprache von einem Automaten unendlich? Die erste Frage scheint recht einfach zu sein, die anderen beiden hingegen wirken nicht mehr ganz so trivial. In der theoretischen Informatik treten diverse Probleme auf, die womöglich gar nicht algorithmisch lösbar sind. Das heißt wir müssen womöglich auf solche destruktive Ergebnisse vorbereitet sein (Spoiler: In diesem Kapitel noch nicht). Wir starten mit einer Übersicht über die Probleme, die wir in diesem Abschnitt betrachten. Danach beweisen wir einige Sätze zu diesen Problemen.
+\begin{description}
+	\item[Wortproblem (Matching)] Gegeben NFA $\mathcal{A}$, Wort $w$. Ist $w \in L(\mathcal{A})$?
+	\item[Leerheitsproblem (Emptiness)] Gegeben NFA $\mathcal{A}$. Ist $L(\mathcal{A}) = \emptyset$?
+	\item[Universalitätsproblem (Universality)] Gegeben NFA $\mathcal{A}$. Ist $L(\mathcal{A}) = \Sigma^\ast$?
+	\item[Unendlichkeitsproblem (Infinity)] Gegeben NFA $\mathcal{A}$. Ist $|L(\mathcal{A})| = \infty$?
+	\item[Inklusionsproblem (Inclusion)] Gegeben NFAs $\mathcal{A}, \mathcal{B}$. Ist $L(\mathcal{A}) \subseteq L(\mathcal{B})$?
+	\item[Äquivalenzprolem (Equivalence)] Gegeben NFAs $\mathcal{A}, \mathcal{B}$. Ist $L(\mathcal{A}) = L(\mathcal{B})$?
+\end{description}
+\begin{remark*}
+	Wir sagen ein Problem (formal ist ein Problem selbst eine Sprache) ist \textit{entscheidbar}, wenn es einen Algorithmus gibt, der zu jeder Eingabe die richtige Antwort ausgibt. Eine präzisere Definition gibt es in der Vorlesung Berechenbarkeit und Komplexitätstheorie.
+\end{remark*}
+\begin{theorem}\label{thm:nfa_matching}
+	Das Wortproblem für NFAs ist entscheidbar.
+	\begin{proof}
+		Für DFAs ist dies trivial: Wir müssen lediglich den Automaten über das Wort laufen lassen und antworten gemäß Zustand nach vollständigem Lesen des Wortes. Für NFAs haben wir mit Algorithmus~\ref{alg:nfaacc} ein Verfahren über die sukzessive Berechnung der Erreichbarkeitsmenge, was einer impliziten Potenzmengenkonstruktion (siehe Algorithmus~\ref{alg:nfa2dfa}) entspricht.
+	\end{proof}
+\end{theorem}
+\begin{theorem}\label{thm:nfa_emptiness}
+	Das Leerheitsproblem für NFAs ist entscheidbar.
+	\begin{proof}
+		Wir müssen nur überprüfen, ob es einen Zustand $q \in F$ gibt, der von $q_0$ aus erreichbar ist, zum Beispiel über Wort $w$. Dann gilt $\delta^\ast(q_0, w) = q \in F$ und somit $w \in L(\mathcal{A}) \neq \emptyset$. Existiert kein solcher Zustand, so ist $L(\mathcal{A})$ leer. Es genügt also eine einfache Tiefensuche im Transitionsgraphen von $\mathcal{A}$ nach akzeptierenden Zuständen.
+	\end{proof}
+\end{theorem}
+\begin{theorem}\label{thm:nfa_universality}
+	Das Universalitätsproblem für NFAs ist entscheidbar.
+	\begin{proof}
+		Bemerke zunächst, dass für DFAs gilt, dass $L(\mathcal{A}) = \Sigma^ast$ g.d.w. jeder (erreichbare) Zustand akzeptierend ist (für reduzierte Automaten gilt also $Q = F$). Für NFAs ist das nicht der Fall, da es beispielsweise Wörter $w \in \Sigma^\ast$ geben kann, sodass kein $q \in Q$ existiert mit $\mathcal{A}: q_0 \reaches{w} q$. Dann ist $w \notin L(\mathcal{A}) \neq \Sigma^\ast$. Auch möglich wärenWörter $w \in \Sigma^\ast$ und Zustände $q \in Q \setminus F$ mit $\mathcal{A}: q_0 \reaches{w} q$, aber für jedes dieser $w$ auch Zustände $q^\prime \in F$ mit $\mathcal{A}: q_0 \reaches{w} q^\prime$. Dann ist $L(\mathcal{A})$ doch $\Sigma^\ast$. Um das Universalitätsproblem für NFAs zu entscheiden wandeln wir den NFA mit Algorithmus~\ref{alg:nfa2dfa} zu einem DFA um und reduzieren diesen auf seine erreichbaren Zustände. Sind dann die verbleibenden Zustände alle akzeptierend, so war der ursprügliche NFA auch universal.
+	\end{proof}
+\end{theorem}
+\begin{remark*}
+	Beachte, dass $L = \Sigma^\ast$ g.d.w. $\comp{L} = \emptyset$. Wir können also auch das Leerheitsproblem auf dem NFA lösen und die Ausgabe des Verfahrens aus Satz~\ref{thm:nfa_emptiness} umkehren um das Universalitätsproblem zu lösen.
+\end{remark*}
+\begin{theorem}\label{thm:nfa_infinity}
+	Das Unendlichkeitsproblem für NFAs ist entscheidbar.
+	\begin{proof}
+		$L(\mathcal{A})$ ist unendlich g.d.w. ein $q \in Q$ existiert mit 
+		$$
+			\mathcal{A}: q_0 \reaches{\ast} q \reaches{+} q \reaches{\ast} q^\prime \in F.
+		$$
+		``wenn, dann``: Sei $L(\mathcal{A})$ unendlich. Dann gibt es ein Wort $w = a_0 \ldots a_{n-1} \in L(\mathcal{A})$ mit $|w| = n \geq |Q|$. Wir betrachten nun ein akzeptierenden Lauf auf $\mathcal{A}$:
+		$$
+			\varrho = (q_0, a_0, q_1, \ldots, a_{n-1}, q_n)
+		$$
+		Wegen $n \geq |Q|$ gibt es $0 \leq i < j \leq n$, sodass $q_i = q_j \eqqcolon q$ (vgl. Pumping-Lemma~\ref{lem:pumping-lemma}, pigeonhole principle), sodass
+		$$
+			\mathcal{A}: q_0 \reaches{a_0 \ldots a_{i-1}} q \reaches{a_i \ldots a_{j-1}} q \reaches{a_j \ldots a_{n-1}} q_n \in F
+		$$
+		und damit $\mathcal{A}: q_0 \reaches{\ast} q \reaches{+} q \reaches{\ast} q^\prime \in F$.\\
+		``nur wenn``: Es gelte $\mathcal{A}: q_0 \reaches{\ast} q \reaches{+} q \reaches{\ast} q^\prime \in F$. Seien $x, y, z \in \Sigma^\ast$ mit $y \neq \varepsilon$, sodass $\mathcal{A}: q_0 \reaches{x} q \reaches{y} q \reaches{z} q^\prime \in F$. Dann gilt $xy^iz \in L(\mathcal{A})$ für alle $i \in \mathbb{N}$ (vgl. wieder mit Pumping-Lemma). Also ist $|L(\mathcal{A})| = \infty$.\\
+		Beachte, dass für jeden Zustand $q \in Q$ die Probleme $\mathcal{A}: q_0 \reaches{\ast} q$, $\mathcal{A}: q \reaches{+} q$, $\mathcal{A}: q \reaches{\ast} q^\prime$ für ein $q^\prime \in F$ entscheidbar sind mit einer Tiefensuche im Transitionsgraphen von $\mathcal{A}$. Also ist auch das Unendlichkeitsproblem für NFAs entscheidbar.
+	\end{proof}
+\end{theorem}
+\begin{remark*}
+	Das Unendlichkeitsproblem für NFAs ist sogar in Polynomialzeit entscheidbar. Bei den anderen Problemen ist implizit immer eine Potenzmengenkonstruktion notwendig.
+\end{remark*}
+\begin{theorem}\label{thm:nfa_inclusion}
+	Das Inklusionsproblem für NFAs ist entscheidbar.
+	\begin{proof}
+		Wir benutzen folgende Hilfsaussage:
+		\begin{itemize}
+			\item[] Seien $L_1, L_2 \subseteq \Sigma^\ast$. Dann gilt $L_1 \subseteq L_2$ g.d.w. $L_1 \cap \comp{L_2} = \emptyset$.
+				\begin{subproof}
+					Dieses ganze Fach würde lächerlich aussehen, wenn wir hier jedes kleinste Detail beweisen würden. Aber eine ganz nette Übung.
+				\end{subproof}
+		\end{itemize}
+		Wir können also einfach bei Eingabe $\mathcal{A}, \mathcal{B}$ den NFA $\mathcal{B}$ erst in einen DFA umwandeln (Algorithmus~\ref{alg:nfa2dfa}) und dann die akzeptierenden Zustände nicht-akzeptierend machen und umgekehrt um das Komplement zu erkennen (Satz~\ref{thm:regular_complement}). Dann können wir mit der Produktkonstruktion (Satz~\ref{thm:regular_intersection}) den Schnitt von $L(\mathcal{A})$ und $\comp{L(\mathcal{B})}$ erkennen. Zuletzt wenden wir den Leerheitstest (Satz~\ref{thm:nfa_emptiness}) an und erhalten ein Verfahren für das Inklusionsproblem.
+	\end{proof}
+\end{theorem}
+\begin{theorem}\label{thm:nfa_equivalence}
+	Das Äquivalenzproblem für NFAs ist entscheidbar.
+	\begin{proof}
+		$L(\mathcal{A}) = L(\mathcal{B})$ g.d.w. $L(\mathcal{A}) \subseteq L(\mathcal{B})$ und $L(\mathcal{B}) \subseteq L(\mathcal{A})$. Also zwei Mal Satz~\ref{thm:nfa_inclusion} anwenden.
+	\end{proof}
+\end{theorem}
+
+
+\subsection{*Anwendung: Model-Checking}\label{sec:regular_model-checking}
+Ein wichtigese, sehr grundlegendes, algorithmisches Problem der Informatik ist das sogenannte \textit{Model-checking-Problem}. Es tritt überall auf, wo automatische Verfikation von Hard- oder Software benötigt wird. Wir betrachten ein System (oder eine Modellierung eines Systems, zum Beispiel durch einen endlichen Automaten). $\mathcal{S}$ und eine Spezifikation einer Systemeigenschaft $\varphi$. In der Praxis kann $\varphi$ eine Formel in Modallogik oder Monadic Second Order Logic sein, manchmal reicht auch schon ein regulärer Ausdruck. Das Problem ist nu zu entscheiden, ob $\mathcal{S}$ die Eigenschaft $\varphi$ besitzt.\par
+Wir nehmen an, das $\mathcal{S}$ ein NFA ist und $\varphi$ ein regulärer Ausdruck. Wir sagen das System $\mathcal{S}$ erfüllt die Spezifikation $\varphi$, wenn jeder akzeptierende Lauf von $\mathcal{S}$ die Eigenschaft, die durch $\varphi$ spezifiziert wird, besitzt. D.h. wir wollen prüfen ob $L(\mathcal{A}) \subseteq \llbracket \varphi \rrbracket$. In Algorithmus~\ref{alg:model-checking} beschreiben wir das Vorgehen um das Model-Checking-Problem, wie oben beschrieben, zu lösen.
+\begin{algorithm}
+	\SetKwInOut{Input}{Input}
+	\SetKwInOut{Output}{Output}
+	\SetKwComment{Comment}{\texttt{// }}{}
+	\underline{Model-Checking}{($\mathcal{S}, \varphi$)}\\
+	\Output{Ist $L(\mathcal{S}) \subseteq \llbracket \varphi \rrbracket$?}
+	Wandle alle $\varphi$ mit Thompson-Konstruktion in $\varepsilon$-NFA.\\
+	Eliminiere $\varepsilon$-Transitionen.\\
+	Determinisiere mit Potenzmengenkonstruktion und erhalte $\mathcal{A}_\varphi$.\\
+	Vertausche akzeptierende und nicht-akzeptierende Zustände in $\mathcal{A}_\varphi$ (erhalte $\comp{\mathcal{A}_\varphi}$).\\
+	Wende Produktkonstruktion auf $\mathcal{S}$ und $\comp{\mathcal{A}_\varphi}$ an.\\
+	Löse das Leerheitsproblem auf dem Produktautomaten, übernehme die Ausgabe.
+	\caption{Model-Checking-Algorithmus für System $\mathcal{S}$ (als NFA modelliert) und Spezifikation $\varphi$ (regulärer Ausdruck)}
+	\label{alg:model-checking}
+\end{algorithm}
+\begin{example}
+	Hier noch ein schönes Beispiel mit Bild.
+\end{example}
 
 
 \subsection{*Anwendung: First-Longest-Match-Analyse}\label{sec:regular_first-longest-match}
