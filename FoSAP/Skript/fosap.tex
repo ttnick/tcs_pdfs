@@ -839,17 +839,17 @@ Wir haben formale Sprachen eingeführt als Modellierung für Prozessabläufe auf
 \subsection{Deterministische Endliche Automaten}\label{sec:regular_dfa}
 Wir beginnen mit der Art Automaten, die ``die einfachste`` Klasse formaler Sprachen erkennen kann.
 \begin{definition}
-	Ein \textit{deterministischer endlicher Automat (DFA)} (von engl.: deterministic finite automaton) ist ein 5-Tupel
+	Ein \textit{deterministischer endlicher Automat (DFA)} (von engl.: deterministic finite automaton) ist ein Quintupel
 	$$
 		(Q, \Sigma, \delta, q_0, F),
 	$$
 	mit
 	\begin{itemize}
-		\item $Q$ eine nicht-leere, endliche Menge von \textit{Zuständen},
-		\item $\Sigma$ ein nicht-leeres, endliches \textit{Eingabealphabet},
-		\item $\delta\colon Q \times \Sigma \to Q$ die \textit{Transitionsfunktion},
-		\item $q_0 \in Q$ der \textit{Startzustand},
-		\item $F \subseteq Q$ die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
+		\item $Q$ einer nicht-leeren, endlichen Menge von \textit{Zuständen},
+		\item $\Sigma$ einem nicht-leeren, endlichen \textit{Eingabealphabet},
+		\item $\delta\colon Q \times \Sigma \to Q$ einer \textit{Transitionsfunktion},
+		\item $q_0 \in Q$ einem \textit{Startzustand},
+		\item $F \subseteq Q$ einer Menge von \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
 	\end{itemize}
 \end{definition}
 DFAs lassen sich auch problemlos als Strukturen wie in Abschnitt~\ref{sec:pre_structures} auffassen. Aus Gründen der Lesbarkeit verzichten wir jedoch darauf. Wir bezeichnen DFAs stets mit $\mathcal{A}, \mathcal{B}, \ldots$, Zustände mit $p, q, r, s$ und Variationen.\\
@@ -1087,17 +1087,17 @@ Die Produktkonstruktion ist eine sehr grundlegende Konstruktion, die in ähnlich
 \subsection{Nichtdeterministische Endliche Automaten}\label{sec:regular_nfa}
 Im letzten Abschnitt haben wir gesehen, dass unter einigen Operationen abgeschlossen sind. Die Mengenoperationen wirken dabei ohnehin von Vorteil für weitere Betrachtungen unter mathematischen Aspekten. Perfect Shuffle könnte man dagegen als eine Routine sehen, ob zum Beispiel ein Prozessor zwei Prozessen wirklich abwechselnd Berechnungszeit gibt. Wir würden gerne weitere Abschlusseigenschaften kennenlernen, besonders die Konkatenation unter der Kleene-Stern wären nun interessant. Eine simultane Ausführung zweier Automaten bringt hier jedoch nichts mehr, da beide Operationen eher von sequentieller Natur sind (Hintereinanderausführung, Wiederholung). DFAs sind für diese Aufgaben zunächst nicht sonderlich sinnvoll. Denkbar wäre ein Modell, dass nach Erreichen eines Endzustandes den nächsten Automaten (im Falle der Konkatenation) auf dem Rest des Wortes startet. Ein DFA weiß aber nicht ad hoc wie das Wort zerlegt ist, es kann also sein, dass nach Erreichen eines Endzustandes der erste Automat noch weiterlaufen soll und erst bei erneutem Besuch eines akzeptierenden Zustandes das zweite Wort losgeht. Zu diesem Zweck führen wir das Prinzip des Nichtdeterminismus ein. Ein Automat kann dann ``raten`` in welchen Zustand er wechseln soll (bzw. ob er ``den nächsten Automaten startet``). Dieses Konzept wirkt etwas unnatürlich, da es nicht von einem Computer simuliert werden kann (Zufall $\neq$ Nichtdeterminismus!), in unserem Modell rät der Automat stets ``richtig``.
 \begin{definition}
-	Ein \textit{nicht-deterministischer endlicher Automat (NFA)} (von engl.: non-deterministic finite automaton) ist ein 5-Tupel
+	Ein \textit{nicht-deterministischer endlicher Automat (NFA)} (von engl.: non-deterministic finite automaton) ist ein Quintupel
 	$$
 		(Q, \Sigma, \Delta, q_0, F),
 	$$
 	mit
 	\begin{itemize}
-		\item $Q$ eine nicht-leere, endliche Menge von \textit{Zuständen},
-		\item $\Sigma$ ein nicht-leeres, endliches \textit{Eingabealphabet},
-		\item $\Delta \subseteq Q \times \Sigma \times Q$ die \textit{Transitionsrelation},
-		\item $q_0 \in Q$ der \textit{Startzustand},
-		\item $F \subseteq Q$ die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
+		\item $Q$ einer nicht-leeren, endlichen Menge von \textit{Zuständen},
+		\item $\Sigma$ einem nicht-leeren, endlichen \textit{Eingabealphabet},
+		\item $\Delta \subseteq Q \times \Sigma \times Q$ einer \textit{Transitionsrelation},
+		\item $q_0 \in Q$ einem \textit{Startzustand},
+		\item $F \subseteq Q$ einer Menge von \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
 	\end{itemize}
 \end{definition}
 Wir bezeichnen NFAs genau wie DFAs mit $\mathcal{A}, \mathcal{B}$ usw. Die Transitionsgraphen sehen ebenfalls genauso aus, nur, dass nun Zustände mehrere Kanten haben können, die gleich beschriftet sind. Außerdem ist es erlaubt, dass Transitionen komplett fehlen.
@@ -1345,17 +1345,17 @@ In diesem Sinne ist es sinnvoll von nun an nur noch von FA-erkennbaren Sprachen 
 \subsection[NFAs mit $\varepsilon$-Transitionen]{NFAs mit $\bm{\varepsilon}$-Transitionen}
 Mit Blick auf spätere Abschnitte erweitern wir das Modell der NFAs um die Möglickeit den Zustand zu wechseln ohne ein Symbol dabei zu lesen.
 \begin{definition}
-	Ein \textit{nicht-deterministischer endlicher Automat mit} \textit{$\varepsilon$-Transitionen ($\varepsilon$-NFA)} ist ein 5-Tupel
+	Ein \textit{nicht-deterministischer endlicher Automat mit} \textit{$\varepsilon$-Transitionen ($\varepsilon$-NFA)} ist ein Quintupel
 	$$
 		(Q, \Sigma, \Delta, q_0, F),
 	$$
 	mit
 	\begin{itemize}
-		\item $Q$ eine nicht-leere, endliche Menge von \textit{Zuständen},
-		\item $\Sigma$ ein nicht-leeres, endliches \textit{Eingabealphabet},
-		\item $\Delta \subseteq Q \times (\Sigma \cup \{\varepsilon\}) \times Q$ die \textit{Transitionsrelation},
-		\item $q_0 \in Q$ der \textit{Startzustand},
-		\item $F \subseteq Q$ die Menge der \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
+		\item $Q$ einer nicht-leeren, endlichen Menge von \textit{Zuständen},
+		\item $\Sigma$ einem nicht-leeren, endlichen \textit{Eingabealphabet},
+		\item $\Delta \subseteq Q \times (\Sigma \cup \{\varepsilon\}) \times Q$ einer \textit{Transitionsrelation},
+		\item $q_0 \in Q$ einem \textit{Startzustand},
+		\item $F \subseteq Q$ einer Menge von \textit{akzeptierenden Zustände} (oder \textit{Endzustände}).
 	\end{itemize}
 \end{definition}
 Wir bezeichnen $\varepsilon$-NFAs wieder mit $\mathcal{A}, \mathcal{B}$ usw. Transitionsgraphen lassen sich ebenfalls analog zeichnen wie für NFAs und DFAs, wobei $\varepsilon$-Transitionen durch Kanten gekennzeichnet werden, die mit $\varepsilon$ beschriftet sind. Der Voll\-stän\-dig\-keit halber definieren wir auch wieder Läufe auf $\varepsilon$-NFAs und das Akzeptanzverhalten.
@@ -1743,12 +1743,12 @@ Insbesondere gilt bei einem Homomorphismus $h$, dass $h(uv) = h(u)h(v)$ und somi
 \begin{definition}
 	Sei $L \subseteq \Sigma^\ast$ eine Sprache und $h\colon \Sigma^\ast \to \Gamma^\ast$ ein Homomorphismus. Dann ist
 	$$
-		h(L) \coloneqq \{h(w) : w \in L\}
+		h[L] \coloneqq \{h(w) : w \in L\}
 	$$
 	die \textit{Sprache unter dem Homomorphismus} $h$ von $L$ (über $\Gamma$).
 \end{definition}
 \begin{theorem}
-	Sei $L \subseteq \Sigma^\ast$ eine reguläre Sprache und $h\colon \Sigma^\ast \to \Gamma^\ast$ ein Homomorphismus. Dann ist auch $h(L) \subseteq \Gamma^\ast$ regulär.
+	Sei $L \subseteq \Sigma^\ast$ eine reguläre Sprache und $h\colon \Sigma^\ast \to \Gamma^\ast$ ein Homomorphismus. Dann ist auch $h[L] \subseteq \Gamma^\ast$ regulär.
 	\begin{proof}
 		Sei $L \subseteq \Sigma^\ast$ regulär und $h$ Homomorphismus auf $\Sigma$. Da $L$ regulär existiert ein regulärer Ausdruck $e \in \mathsf{RE}_\Sigma$ mit $\llbracket e \rrbracket = L$. Wir können auf dem regulären Ausdruck den Homomorphismus anwenden, wobei wir Klammern, Punkte und Sterne ignorieren, dazu definieren wir die Erweiterung $\hat{h}$ von $h$ mit $\hat{h} \vert_\Sigma \equiv h$ und $\hat{h}(\sigma) = \sigma$ für $\sigma \in \{(,),\bm{+}, \bm{\cdot}, \overset{\bm{\ast}}{}\}$. Aus der Definition~\ref{def:stringhomomorphism} geht hervor, dass es genügt den Homomorphismus auf den einzelnen Symbolen $a \in \Sigma$ anzuwenden. Im Detail heißt das: 
 		\begin{itemize}
@@ -1758,7 +1758,7 @@ Insbesondere gilt bei einem Homomorphismus $h$, dass $h(uv) = h(u)h(v)$ und somi
 			\item $\hat{h}((r \bm{\cdot} r^\prime)) = ((\hat{h}(r)) \bm{\cdot} (\hat{h}(r^\prime)))$,
 			\item $\hat{h}((r)\overset{\bm{\ast}}{}) = (\hat{h}(r))\overset{\bm{\ast}}{}$.
 		\end{itemize} 
-		Es bleibt zu zeigen, dass $\llbracket \hat{h}(e) \rrbracket = h(L)$.
+		Es bleibt zu zeigen, dass $\llbracket \hat{h}(e) \rrbracket = h[L]$.
 	\end{proof}
 \end{theorem}
 Wir betrachten nun eine weitere Abbildung:
@@ -2541,6 +2541,46 @@ In Abbildung~\ref{fig:flmlmd} sehen wir wie der $\varepsilon$-NFA der nach Zeile
 
 \newpage
 \section{Kellerautomaten und Kontextfreie Sprachen}\label{sec:contextfree}
+Wir haben gesehen, dass reguläre Sprachen eine wichtige Rolle sowohl in der theoretischen als auch in der angewandten Infromatik spielen. Allerdings haben wir auch festgestellt, dass es Sprachen gibt, die nicht regulär sind. Es ist auch leider nicht so, dass man die Existenz nicht-regulärer Sprachen einfach ignorieren könnte, weil sie nicht wichtig wären oder nur eine mathematisch-informatische Spielerei sind. Wir haben beispielsweise gesehen, dass die Menge der unär codierten Primzahlen nicht regulär ist. Das Finden von immer neuen größeren Primzahlen ist bekanntlich ein viel betrachtetes Problem und -- mit Blick auf kryptographische Algorithmen wir \texttt{RSA} -- auch ein sehr wichtiges. Aber auch ein für die Informatik sehr grundlegendes Anwendungsgebiet, der Definition von Programmiersprachen, tauchen bereits nicht-reguläre Sprachen auf. Wir haben zum Beispiel die Sprache $L \coloneqq \{a^n b^n : n \in \mathbb{N}\}$ gesehen und festgestellt, dass sie nicht regulär ist. Identifiziert man nun das Symbol $a$ beispielsweise mit einer öffnenden Klammer '$($' und $b$ mit einer schließenden Klammer '$)$' (quasi durch den Homomorphismus $h\colon \{a, b\} \to \{(, )\}, a \mapsto (, b \mapsto )$, so erhalten wir die Sprache der Klammerausdrücke mit gleich vielen lffnenden wie schließenden Klammern $\{(^n)^n : n \in \mathbb{N}\}$. Eine Anwendung in der Informatik ist bei Ausdrücken wie \texttt{foo(bar(), (a+((b+c)*d)))}, die von einem Compiler korrekt aufgeschlüsselt werden müssen offensichtlich. In diesem Kapitel betrachten wir die Sprachen, die sich induktiv, d.h. mit einfachen Basisfällen und Rekursionsregeln, definieren lassen. Zum Beispiel lässt sich die eingangs besprochende nicht-reguläre Sprache $L$ induktiv definieren durch:
+\begin{description}
+	\item[Basisfall] $\varepsilon \in L$,
+	\item[rekursiver Fall] Falls $u \in L$, so ist auch $aub \in L$.
+\end{description}
+Solche induktiven Definitionen von Sprachen geben wir durch \textit{Grammatiken} an. In diesem Kapitel betrachten wir die sogenannten \textit{kontextfreien Grammatiken}, die zum Beispiel zur Beschreibung der Progarmmiersprache C ausreichen.
+
+\subsection{Kontextfreie Grammatiken}
+%TODO Einleitender Absatz
+\begin{definition}
+	Eine \textit{kontextfreie Grammatik} ist ein Quadrupel
+	$$
+		(N, \Sigma, P, S)
+	$$
+	mit
+	\begin{itemize}
+		\item $N$ einer nicht-leeren, endlichen Menge von \textit{Nichtterminalsymbolen},
+		\item $\Sigma$ einer nicht-leeren, endlichen Menge von \textit{Terminalsymbolen} (mit $N \cap \Sigma = \emptyset$),
+		\item $P$ einer eindlichen Menge von \textit{Produktionsregeln} der Form $A \to \alpha$ mit $A \in N, \alpha \in (N \cup \Sigma)^\ast$,
+		\item $S \in N$ einem \textit{Startsymbol}.
+	\end{itemize}
+\end{definition}
+Wir bezeichnen Grammatiken mit $\mathcal{G}, \mathcal{G}^\prime, \ldots$. Lateinische Großbuchstaben $A, B, \ldots$ stehen für Nichtterminale, lateinische Kleinbuchstaben $a, b, \ldots$ für Terminale bzw. $u, v, w, \ldots$ für \textit{Terminalwörter} (kurz: \textit{Wörter}). Griechische Kleinbuchstaben $\alpha, \beta, \ldots$ hingegen stehen für \textit{Satzformen}, das sind Wörter über $(N \cup \Sigma)^\ast$. Wenn nicht weiter benötigt, geben wir zu einer Grammatik $(N, \Sigma, P, S)$ nur die Produktionsregeln $P$ explizit an mit folgender Konvention:
+\begin{itemize}
+	\item Die zuerst gelistete Regel hat das Startysmbol auf der linken Regelseite,
+	\item Regeln mit gleicher linker Seite werden zusammengefasst, indem rechte Seiten durch $|$ getrennt werden,
+	\item gesunder Menschenverstand bei der Unterscheidung zwischen Terminal- und Nichtterminalsymbolen.
+\end{itemize}
+\begin{example}
+	Wir geben eine Grammatik an, die die Sprache der syntaktisch korrekt formulierten arithmetischen Terme mit $+, -, \ast$ über Binärzahlen $\mathcal{G}_\text{art} = (N, \Sigma, P, S)$ mit $N = \{S, B, B^\prime, O\}, \Sigma = \{0, 1, +, - ,\ast, (, )\}$ und
+	\begin{align*}
+		P = \{ & S \to B \mid -S \mid (SOS)\\
+		& B \to 0 \mid 1B^\prime\\
+		& B^\prime \to \varepsilon \mid 0B^\prime \mid 1B^\prime\\
+		& O \to + \mid - \mid \ast \}
+	\end{align*}
+	Was genau passiert hier? Mit $B$ und $B^\prime$ lassen sich Binärzahlen ohne führende $0$en erzeugen. $O$ lässt sich durch einen beliebigen Operator als Terminalsymbol ersetzen. Mit $S$ lässt sich eine Binärzahl (über $B, B^\prime$) erzeugen, oder induktiv ein $-$ vor einen Term setzen, oder zwei Terme mit einem Operator (über $O$) zu verbinden. Betrachten wir nur die Regeln mit $B$ und $B^\prime$ als linker Regelseite so bekommen wir eine Grammatik (mit Startsymbol $B$) für die Sprache aller Binärzahlen ohne führenden $0$en.
+\end{example}
+
+
 
 \newpage
 \section{Kontextsensitive Sprachen}\label{sec:contextsensitive}
