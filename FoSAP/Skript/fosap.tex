@@ -107,7 +107,9 @@
 % acknowledgements
 \vspace*{\fill}
 \section*{Hinweise}
-Dieses Skript entstand aus der Vorlesung Formale Systeme, Automaten, Prozesse an der RWTH Aachen von Prof. Dr. Wolfgang Thomas und Prof. Dr. Martin Grohe vom Lehrstuhl Informatik~7 in den Sommersemestern 2015 und 2016. Ein paar Notationen und Definitionen sind außerdem adaptiert aus dem Skript zu den Diskreten Strukturen und Lineare Algebra I für Informatiker von Dr. Timo Hanke und Prof. Dr. Gerhard Hiß vom Lehrstuhl~D für Mathematik.
+Dieses Skript entstand aus der Vorlesung Formale Systeme, Automaten, Prozesse an der RWTH Aachen von Prof. Dr. Wolfgang Thomas und Prof. Dr. Martin Grohe vom Lehrstuhl Informatik~7 in den Sommersemestern 2015 und 2016. Ein paar Notationen und Definitionen sind außerdem adaptiert aus dem Skript zu den Diskreten Strukturen und Lineare Algebra I für Informatiker von Dr. Timo Hanke und Prof. Dr. Gerhard Hiß vom Lehrstuhl~D für Mathematik.\\
+\ \\
+Falls inhaltliche oder sprachliche Fehler gefunden werden oder Unklarheiten aufkommen beim Lesen dieses Skripts, würde ich mich sehr über eine Mail an \href{mailto:niklas@fosap.de}{\texttt{niklas@fosap.de}} freuen.
 \vspace*{\fill}
 
 
@@ -648,7 +650,7 @@ Eine weitere Form des indirekten Beweises ist es die \textit{Kontraposition} der
 		Also ist $a^2$ ebenfalls ungerade. Es folgt vermöge Kontraposition, dass für gerade $a^2$ auch $a$ gerade ist.
 	\end{proof}
 \end{theorem}
-Zuletzt betrachten wir das Beweisprinzip der vollständigen Induktion. Hiermit lassen sich leicht Aussagen für natürliche Zahlen zeigen. Man zeigt dafür zunächst, dass eine Aussage für einen Basisfall erfüllt ist (in dieser Vorlesung gewöhnlich für $n = 0$). Danach beweist man, dass die Aussage, sofern sie für ein $n \in \mathbb{N}$ erfüllt ist, dass sie dann auch für $n+1$ erfüllt ist. Dieses Beweisschema beruht auf dem Induktionsprinzip der natürlichen Zahlen, welches besagt: Für jede Teilmenge $M \subseteq \mathbb{N}$ gilt: Falls $0 \in M$ und für jedes $n \in M$ auch $n+1 \in M$, dann ist $M = \mathbb{N}$. Wollen wir also eine Aussage $A$ für alle $n \in \mathbb{N}$ beweisen, zeigen wir also lediglich, dass die Menge $M \coloneqq \{n \in \mathbb{N} \mid A \text{ ist wahr für } n\}$ gleich $\mathbb{N}$ ist.
+Zuletzt betrachten wir das Beweisprinzip der vollständigen Induktion. Hiermit lassen sich leicht Aussagen für natürliche Zahlen zeigen. Man zeigt dafür zunächst, dass eine Aussage für einen Basisfall erfüllt ist (in dieser Vorlesung gewöhnlich für $n = 0$). Danach beweist man, dass die Aussage, sofern sie für ein $n \in \mathbb{N}$ erfüllt ist, dass sie dann auch für $n+1$ erfüllt ist. Dieses Beweisschema beruht auf dem Induktionsprinzip der natürlichen Zahlen, welches besagt: Für jede Teilmenge $M \subseteq \mathbb{N}$ gilt: Falls $0 \in M$ und für jedes $n \in M$ auch $n+1 \in M$, dann ist $M = \mathbb{N}$. Wollen wir also eine Aussage $A$ für alle $n \in \mathbb{N}$ beweisen, zeigen wir also lediglich, dass die Menge $M \coloneqq \{n \in \mathbb{N} \mid A \text{ ist wahr für } n\}$ gleich $\mathbb{N}$ ist. Wir starten jeweils mit einer \textit{Induktionsverankerung} (oder \textit{Induktionanfang}), die für einen Basisfall die Aussage $A$ beweist (z.B. für $A(0)$). Mit der \textit{Induktionshypothese} (oder \textit{Induktionannahme}, \textit{Induktionsvoraussetzung}) nehmen wir an, dass die Aussage $A(n)$ bereits gezeigt haben bis hin zu einem bestimmten $n \in \mathbb{N}$. Mit dem \textit{Induktionsschritt} (oder \textit{Induktionsschluss}) zeigen wir, dass aus er Gültigkeit von $A(k)$ für $k \leq n$ die Gültigkeit von $A(n+1)$ folgt.
 \begin{theorem}
 	Für jede endliche Menge $M$ gilt $|2^M| = 2^{|M|}$.
 	\begin{proof}
@@ -2541,7 +2543,7 @@ In Abbildung~\ref{fig:flmlmd} sehen wir wie der $\varepsilon$-NFA der nach Zeile
 
 \newpage
 \section{Kellerautomaten und Kontextfreie Sprachen}\label{sec:contextfree}
-Wir haben gesehen, dass reguläre Sprachen eine wichtige Rolle sowohl in der theoretischen als auch in der angewandten Infromatik spielen. Allerdings haben wir auch festgestellt, dass es Sprachen gibt, die nicht regulär sind. Es ist auch leider nicht so, dass man die Existenz nicht-regulärer Sprachen einfach ignorieren könnte, weil sie nicht wichtig wären oder nur eine mathematisch-informatische Spielerei sind. Wir haben beispielsweise gesehen, dass die Menge der unär codierten Primzahlen nicht regulär ist. Das Finden von immer neuen größeren Primzahlen ist bekanntlich ein viel betrachtetes Problem und -- mit Blick auf kryptographische Algorithmen wir \texttt{RSA} -- auch ein sehr wichtiges. Aber auch ein für die Informatik sehr grundlegendes Anwendungsgebiet, der Definition von Programmiersprachen, tauchen bereits nicht-reguläre Sprachen auf. Wir haben zum Beispiel die Sprache $L \coloneqq \{a^n b^n : n \in \mathbb{N}\}$ gesehen und festgestellt, dass sie nicht regulär ist. Identifiziert man nun das Symbol $a$ beispielsweise mit einer öffnenden Klammer '$($' und $b$ mit einer schließenden Klammer '$)$' (quasi durch den Homomorphismus $h\colon \{a, b\} \to \{(, )\}, a \mapsto (, b \mapsto )$, so erhalten wir die Sprache der Klammerausdrücke mit gleich vielen lffnenden wie schließenden Klammern $\{(^n)^n : n \in \mathbb{N}\}$. Eine Anwendung in der Informatik ist bei Ausdrücken wie \texttt{foo(bar(), (a+((b+c)*d)))}, die von einem Compiler korrekt aufgeschlüsselt werden müssen offensichtlich. In diesem Kapitel betrachten wir die Sprachen, die sich induktiv, d.h. mit einfachen Basisfällen und Rekursionsregeln, definieren lassen. Zum Beispiel lässt sich die eingangs besprochende nicht-reguläre Sprache $L$ induktiv definieren durch:
+Wir haben gesehen, dass reguläre Sprachen eine wichtige Rolle sowohl in der theoretischen als auch in der angewandten Infromatik spielen. Allerdings haben wir auch festgestellt, dass es Sprachen gibt, die nicht regulär sind. Es ist auch leider nicht so, dass man die Existenz nicht-regulärer Sprachen einfach ignorieren könnte, weil sie nicht wichtig wären oder nur eine mathematisch-informatische Spielerei sind. Wir haben beispielsweise gesehen, dass die Menge der unär codierten Primzahlen nicht regulär ist. Das Finden von immer neuen größeren Primzahlen ist bekanntlich ein viel betrachtetes Problem und -- mit Blick auf kryptographische Algorithmen wie \texttt{RSA} -- auch ein sehr wichtiges. Aber auch ein für die Informatik sehr grundlegendes Anwendungsgebiet, der Definition von Programmiersprachen, tauchen bereits nicht-reguläre Sprachen auf. Wir haben zum Beispiel die Sprache $L \coloneqq \{a^n b^n : n \in \mathbb{N}\}$ gesehen und festgestellt, dass sie nicht regulär ist. Identifiziert man nun das Symbol $a$ beispielsweise mit einer öffnenden Klammer '$($' und $b$ mit einer schließenden Klammer '$)$' (quasi durch den Homomorphismus $h\colon \{a, b\} \to \{(, )\}, a \mapsto (, b \mapsto )$, so erhalten wir die Sprache der Klammerausdrücke mit gleich vielen lffnenden wie schließenden Klammern $\{(^n)^n : n \in \mathbb{N}\}$. Eine Anwendung in der Informatik ist bei Ausdrücken wie \texttt{foo(bar(), (a+((b+c)*d)))}, die von einem Compiler korrekt aufgeschlüsselt werden müssen offensichtlich. In diesem Kapitel betrachten wir die Sprachen, die sich induktiv, d.h. mit einfachen Basisfällen und Rekursionsregeln, definieren lassen. Zum Beispiel lässt sich die eingangs besprochende nicht-reguläre Sprache $L$ induktiv definieren durch:
 \begin{description}
 	\item[Basisfall] $\varepsilon \in L$,
 	\item[rekursiver Fall] Falls $u \in L$, so ist auch $aub \in L$.
@@ -2581,16 +2583,88 @@ Wir bezeichnen Grammatiken mit $\mathcal{G}, \mathcal{G}^\prime, \ldots$. Latein
 \end{example}
 
 
+\subsection{Normalformen für kontextfreie Grammatiken}
+
+
+\subsection{Ableitungsbäume}
+
+
+\subsection{Abschlusseigenschaften kontextfreie Sprachen}
+
+
+\subsection{Nicht-kontextfreie Sprachen}
+
+
+\subsection{Kellerautomaten}
+
+
+\subsection{Deterministische Kellerautomaten}
+
+
+\subsection{Algorithmische Probleme für kontextfreie Sprachen}
+
+
+\subsection{*Anwendung: Parsing}
+
+
 
 \newpage
-\section{Kontextsensitive Sprachen}\label{sec:contextsensitive}
+\section{Allgemeine Grammatiken}\label{sec:contextsensitive}
+\subsection{Kontextsensitive Grammatiken}
+
+
+\subsection{Normalformen für kontextsensitive Grammatiken}
+
+
+\subsection{Linear-beschränkte Automaten}
+
+
+\subsection{Algorithmische Probleme für kontextsensitive Sprachen}
+
+
+\subsection{Phrasenstrukturgrammatiken}
+
+
+\subsection{Turingmaschinen}
+
+
+\subsection{Die Chomsky-Hierarchie}
+
+
 
 \newpage
 \section{Prozesskalküle und Petri-Netze}\label{sec:process}
+\subsection{Nebenläufige Systeme}
+
+
+\subsection{Synchronisierte und unsynchronsierte Produkte}
+
+
+\subsection{Algebraische Beschreibung von Transitionssystemen}
+
+
+\subsection{Petri-Netze}
+
+
+\subsection{*Anwendung: Mutual Exclusion}
+
+
 
 \newpage
-\bibliography{sources}\addcontentsline{toc}{section}{References}
+\bibliography{sources}\addcontentsline{toc}{section}{Literatur}
+\nocite{*}
 \bibliographystyle{alpha}
+
+
+
+\newpage
+\begin{appendix}
+\section{Englische Fachbegriffe}
+
+
+\newpage
+\section{Exkurs: Unentscheidbarkeit}
+\end{appendix}
 
 % eof
 \end{document}
