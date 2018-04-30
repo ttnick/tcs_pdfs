@@ -1,0 +1,97 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[left=2.5cm, right=2.5cm, top=1.5cm, bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage[justification=centering]{caption}
+\usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
+\parindent = 0pt
+\let\emptyset\varnothing
+\newcommand{\qedbox}{\hfill \ensuremath{\Box}}
+
+\author{Niklas Rieken\\ \href{mailto:niklas@fosap.de}{\texttt{niklas@fosap.de}}}
+\title{Induktion über Wortlänge}
+
+
+\begin{document}
+\maketitle
+
+In diesem Dokument zeigen wir, wie man beweist, dass ein gegebener DFA die richtige Sprache erkennt. Für die Automaten in dieser Vorlesung ist dies meist relativ offensichtlich, da sie wenige Zustände haben, aber die Beweistechnik solte trotzdem an einfachen Beispielen geübt werden. Wir verwenden den Automaten aus Tutoriumsaufgabe~5 von Übungsblatt~2 aus dem Sommersemester~2018 im Fach Formale Systeme, Automaten, Prozesse an der RWTH Aachen.
+
+\subsection*{Allgemeines zur vollständigen Induktion}
+Allgemein zeigt man mit der vollständigen Induktion Aussagen für \textit{induktive Mengen}, meistens $\mathbb{N} \coloneqq \{0, 1, 2, \ldots\}$. Für eine Aussageform $A$ zeigen wir, dass $A(n)$ für alle $n \in \mathbb{N}$ gilt. Klassische Beispiel für Aussagen, die man mit vollständiger Induktion zeigt sind die \textit{Gauss'sche Summenformel} oder die \textit{binomische Formel}. Wir verwenden die vollständige Induktion nun, um zu zeigen, dass ein DFA für jedes Wort \textit{das richtige tut}, d.h. jedes Wort, was zur Sprache gehört, wird akzeptiert, alle anderen werden verworfen. In Anlehnung an die Notation oben könnten wir die Aussageform $A(w)$ für ein $w \in \Sigma^\ast$ interpretieren durch ''$w$ wird akzeptiert g.d.w. $w \in L$``. Nun sind Wörter über einem Alphabet $\Sigma$ keine natürlichen Zahlen. Wir können allerdings statt dem Wort selber die Länge des Wortes betrachten und erhalten ein analoges Schema wie z.B. für den Beweis der Summenformel. Dann müssen wir im Induktionsschritt (von Wortlänge $n$ auf Wortlänge $n+1$) nur zeigen, dass die Transitionsfunktion für das angehängte Symbol das richtige tut, d.h. wenn für Wortlängen $n$ (für alle Wörter $w = a_1 \ldots a_n$) der Automat stets im richtigen Zustand endet, dann auch für das Wort $w a_{n+1}$ für alle $a_{n+1} \in \Sigma$. Der Induktionsschritt involviert dann lediglich eine Fallunterscheidung über das zuletzt gelesene Symbol. Intuitiv werden die Beweise, wenn man den Zuständen des Automaten eine gewisse \textit{Semantik} (eine Aufgabe) gibt, z.B. ist der Zustand $q_b$ in Abbildung~\ref{fig:ex} ein Zustand der auf das Symbol $a$ wartet, falls in den letzten beiden Symbolen kein $a$ zu finden ist. Genaueres jetzt in der Aufgabe. 
+
+
+\subsection*{Aufgabe}
+Wir betrachten den Automaten in Abbildung~\ref{fig:ex}.
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[->, >=stealth', shorten >=1pt, auto, semithick]
+		\node[state, initial, initial text=] (q_eps) at (0, 0) {$q_\varepsilon$};
+		\node[state] (q_a) at (3, 1.5) {$q_a$};
+		\node[state] (q_b) at (3, -1.5) {$q_b$};
+		\node[state, accepting] (q_aa) at (6, 1.5) {$q_{aa}$};
+		\node[state, accepting] (q_ab) at (6, -1.5) {$q_{ab}$};
+		
+		\path (q_eps) edge node {$a$} (q_a)
+			(q_eps) edge node[below left] {$b$} (q_b)
+			(q_a) edge node {$a$} (q_aa)
+			(q_a) edge[bend left=20] node {$b$} (q_ab)
+			(q_b) edge node {$a$} (q_a)
+			(q_b) edge[loop below] node {$b$} (q_b)
+			(q_aa) edge[loop above] node {$a$} (q_aa)
+			(q_aa) edge node {$b$} (q_ab)
+			(q_ab) edge[bend left=20] node {$a$} (q_a)
+			(q_ab) edge node {$b$} (q_b);
+	\end{tikzpicture}
+	\caption{Automat $\mathcal{A}$, der die Sprache $L = \{w \in \{a, b\}^\ast \mid \text{das vorletzte Zeichen von } w \text{ ist } a\}$ erkennt.} 
+	\label{fig:ex}
+\end{figure}
+Zu zeigen ist nun, dass 
+$$
+	L = \{w \in \{a, b\}^\ast \mid \text{das vorletzte Zeichen von } w \text{ ist } a\}
+$$
+die Sprache dieses Automaten ist. Wir zeigen folgende Aussage, welche die Korrektheit des Automaten induziert (denn $q_{aa}, q_{ab}$ sind genau die akzeptierenden Zustände von $\mathcal{A}$):
+\begin{center}
+	$S(n)$: Für jedes Wort $w = a_1 \ldots a_n \in \{a, b\}^\ast$ der Länge $n$ gilt für den Lauf $\varrho = (r_0, \ldots, r_n)$ des Automaten $\mathcal{A}$ aus Abbildung~\ref{fig:ex} auf $w$, dass
+	$$
+		r_n = \begin{cases}
+			q_\varepsilon, & w = \varepsilon\\
+			q_a, & a_n = a \text{ und } (a_{n-1} = b \text{ oder } n = 1)\\
+			q_b, & a_n = b \text{ und } (a_{n-1} = b \text{ oder } n = 1)\\
+			q_{aa}, & a_n = {\color{blue}a_{n-1} = a}\\
+			q_{ab}, & a_n = b \text{ und } {\color{blue}a_{n-1} = a}.
+		\end{cases}
+	$$
+\end{center}
+\textit{Behauptung:} $S(n)$ gilt für alle Wortlängen $n \in \mathbb{N}$. Dies beweisen wir vermöge einer vollständigen Induktion.\par
+\textit{Induktionsverankerung:} Sei $n = 0$, d.h. $w = \varepsilon$. Also hat $\mathcal{A}$ den Lauf $(q_\varepsilon)$ (nur Startzustand). Also ist $r_n = r_0 = q_\varepsilon$. Somit gilt $S(0)$. \checkmark\par
+\textit{Induktionsschritt:} Die Aussage $S(n)$ gelte für ein $n \in \mathbb{N}$ (Induktionshypothese (IH)). Wir folgern daraus, dass auch $S(n+1)$ gilt. Betrachte also das Wort $w = a_1 \ldots a_n a_{n+1}$. Wir machen eine Fallunterscheidung zum Lauf auf dem Wort $a_1 \ldots a_n$ (sic!).
+\begin{enumerate}
+	\item $a_1 \ldots a_n = \varepsilon$, d.h. $n+1 = 1$ und nach (IH) $r_n = q_\varepsilon$.
+		\begin{itemize}
+			\item Wenn $a_{n+1} = a$, dann $r_{n+1} = \delta(q_\varepsilon, a) = q_a$.
+			\item Wenn $a_{n+1} = b$, dann $r_{n+1} = \delta(q_\varepsilon, b) = q_b$.
+		\end{itemize}
+	\item $a_n = a$, d.h. nach (IH) $r_n \in \{q_a, q_{aa}\}$. Wir können diese beiden Fälle zusammenfassen, da uns bei Betrachtung des Wortes $a_1 \ldots a_{n+1}$ uns das Symbol $a_{n-1}$ nicht mehr interessiert, denn dies ist nun das drittletzte Symbol und spielt keine Rolle mehr für die weitere Berechnung.
+		\begin{itemize}
+			\item Wenn $a_{n+1} = a$, dann $r_{n+1} = \delta(q_a, a) = \delta(q_{aa}, a) = q_{aa}$.
+			\item Wenn $a_{n+1} = b$, dann $r_{n+1} = \delta(q_a, b) = \delta(q_{aa}, b) = q_{ab}$.
+		\end{itemize}
+	\item $a_n = b$, d.h. nach (IH) $r_n \in \{q_b, q_{ab}\}$. Wir können diese beiden Fälle wieder analog wie im zweiten Fall zusammenfassen.
+		\begin{itemize}
+			\item Wenn $a_{n+1} = a$, dann $r_{n+1} = \delta(q_b, a) = \delta(q_{ab}, a) = q_a$.
+			\item Wenn $a_{n+1} = b$, dann $r_{n+1} = \delta(q_b, b) = \delta(q_{ab}, b) = q_b$.
+		\end{itemize}
+\end{enumerate}
+Man sieht leicht, dass das Verhalten der Transitionsfunktion, wie in den sechs Bulletpoints beschrieben, das gewünschte Verhalten ist (überprüfe einfach mit den fünf Fällen für $r_n$ zur Aussage $S(n)$ mit $n+1$ anstelle von $n$). Nach dem Prinzip der vollständigen Induktion folgt die Aussage für alle $n \in \mathbb{N}$.\qedbox
+\end{document}
