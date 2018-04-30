@@ -1233,7 +1233,7 @@ Mit Hilfe der Erreichbarkeitsrelation und Lemmata~\ref{lem:reach1} und~\ref{lem:
 \end{example}
 
 
-\subsection{Äquivalenz von NFAs und DFAs}\label{regular_equivalence}
+\subsection{Äquivalenz von NFAs und DFAs}\label{sec:regular_equivalence}
 Auf den ersten Blick wirkt es vermutlich so, dass NFAs ``mehr`` können als DFAs, da NFAs durch das stets richtige Raten der Transition einen Blick in die Zukunft werfen können. Dieser Abschnitt widmet sich jedoch der Äquivalenz von NFAs und DFAs, d.h. auch wenn wie in Beispiel~\ref{exp:compare_dfa_nfa} NFAs mit weniger Zuständen die gleichen Sprachen erkennen können wie DFAs, so können auch DFAs jede NFA-erkennbare Sprache erkennen. Dies ist mit einer einfachen Überlegung auch gar nicht so unintuitiv: Die Erreichbarkeitsmenge für einen NFA und ein Wort ist stets endlich, da auch ein NFA lediglich endlich viele Zustände hat. In einer Simulation eines NFA in einem DFA könnte man also also einen Zustand durch die Menge der erreichbaren Zustände wählen und würde endlich bleiben. Details dazu folgen in diesem Abschnitt.
 \begin{definition}\label{def:fa_equivalence}
 	Seien $\mathcal{A}, \mathcal{B}$ zwei endliche Automaten (deterministisch oder nicht-de\-ter\-mi\-nis\-tisch). $\mathcal{A}$ und $\mathcal{B}$ heißen \textit{äquivalent}, wenn $L(\mathcal{A}) = L(\mathcal{B})$.
@@ -2550,10 +2550,10 @@ Wir haben gesehen, dass reguläre Sprachen eine wichtige Rolle sowohl in der the
 \end{description}
 Solche induktiven Definitionen von Sprachen geben wir durch \textit{Grammatiken} an. In diesem Kapitel betrachten wir die sogenannten \textit{kontextfreien Grammatiken}, die zum Beispiel zur Beschreibung der Progarmmiersprache C ausreichen.
 
-\subsection{Kontextfreie Grammatiken}
+\subsection{Kontextfreie Grammatiken}\label{sec:contextfree_grammars}
 %TODO Einleitender Absatz
 \begin{definition}
-	Eine \textit{kontextfreie Grammatik} ist ein Quadrupel
+	Eine \textit{kontextfreie Grammatik (CFG)} (von engl.: context-free grammar) ist ein Quadrupel
 	$$
 		(N, \Sigma, P, S)
 	$$
@@ -2571,7 +2571,7 @@ Wir bezeichnen Grammatiken mit $\mathcal{G}, \mathcal{G}^\prime, \ldots$. Latein
 	\item Regeln mit gleicher linker Seite werden zusammengefasst, indem rechte Seiten durch $|$ getrennt werden,
 	\item gesunder Menschenverstand bei der Unterscheidung zwischen Terminal- und Nichtterminalsymbolen.
 \end{itemize}
-\begin{example}
+\begin{example}\label{exp:cfg_art}
 	Wir geben eine Grammatik an, die die Sprache der syntaktisch korrekt formulierten arithmetischen Terme mit $+, -, \ast$ über Binärzahlen $\mathcal{G}_\text{art} = (N, \Sigma, P, S)$ mit $N = \{S, B, B^\prime, O\}, \Sigma = \{0, 1, +, - ,\ast, (, )\}$ und
 	\begin{align*}
 		P = \{ & S \to B \mid -S \mid (SOS)\\
@@ -2581,72 +2581,109 @@ Wir bezeichnen Grammatiken mit $\mathcal{G}, \mathcal{G}^\prime, \ldots$. Latein
 	\end{align*}
 	Was genau passiert hier? Mit $B$ und $B^\prime$ lassen sich Binärzahlen ohne führende $0$en erzeugen. $O$ lässt sich durch einen beliebigen Operator als Terminalsymbol ersetzen. Mit $S$ lässt sich eine Binärzahl (über $B, B^\prime$) erzeugen, oder induktiv ein $-$ vor einen Term setzen, oder zwei Terme mit einem Operator (über $O$) zu verbinden. Betrachten wir nur die Regeln mit $B$ und $B^\prime$ als linker Regelseite so bekommen wir eine Grammatik (mit Startsymbol $B$) für die Sprache aller Binärzahlen ohne führenden $0$en.
 \end{example}
+Nun haben wir bereits eine kontextfreie Grammatik einmal angegeben und sie mit einer Sprache assoziiert. Allerdings haben wir bisher noch gar nicht erklärt, wie genau eine Grammatik eine Sprache definiert -- wir müssen noch einen Formalismus finden, der zu einer kontextfreien Grammatik eine Semantik festlegt, ähnlich wie in Abschnitt~\ref{sec:regular_regexp} für die regulären Ausdrücke.
+\begin{definition}
+	Sei $\mathcal{G} = (N, \Sigma, P, S)$ eine kontextfreie Grammatik und seien $\alpha, \beta \in (N \cup \Sigma)^\ast$ Satzformen.
+	\begin{itemize}
+		\item $\beta$ ist \textit{direkt ableitbar} aus $\alpha$ in $\mathcal{G}$ ($\alpha \to_\mathcal{G} \beta$), wenn eine Regel $A \to \delta \in P$ gibt und Satzformen $\gamma_1, \gamma_2 \in (N \cup \Sigma)^\ast$ sodass
+			$$
+				\alpha = \gamma_1 A \gamma_2 \quad\text{ und }\quad \beta = \gamma_1 \delta \gamma_2. 
+			$$
+		\item Eine \textit{Ableitung von $\beta$ aus $\alpha$} ist eine Folge $(\alpha_0, \ldots, \alpha_n)$ von Satzformen mit $\alpha_0 = \alpha, \alpha_n = \beta$, wobei für alle $i \in [n]$ gilt, dass $\alpha_i \to_\mathcal{G} \alpha_{i+1}$.
+		\item Eine \textit{Ableitung von $\beta$} ist eine Ableitung von $\beta$ aus $S$.
+		\item $\beta$ ist \textit{ableitbar aus $\alpha$ in $\mathcal{G}$} ($\alpha \to_\mathcal{G}^\ast \beta$), wenn eine Ableitung von $\beta$ aus $\alpha$ existiert.
+		\item $\beta$ ist \textit{ableitbar}, wenn eine Ableitung von $\beta$ existiert.
+	\end{itemize}
+\end{definition}
+\begin{definition}
+	Sei $\mathcal{G} = (N, \Sigma, P, S)$ eine kontextfreie Grammatik. Die von $\mathcal{G}$ \textit{erzeugte Sprache} ist
+	$$
+		L(\mathcal{G}) \coloneqq \{w \in \Sigma^\ast \mid S \to_\mathcal{G}^\ast w\},
+	$$
+	also die Menge ableitbarer Terminalwörter in $\mathcal{G}$.
+\end{definition}
+Falls wir auf die Länge von Ableitungen eingehen mösten, schreiben wir $\alpha \to_\mathcal{G}^n \beta$ bzw. $\alpha \to_\mathcal{G}^{[n+1]} \beta$ für ableitbar in $n$ bzw. höchstens $n$ Schritten. Wir lassen den Index $\mathcal{G}$ weg, wenn die Grammatik aus dem Kontext klar ist.
+\begin{definition}
+	Eine Sprache heißt \textit{kontextfrei}, wenn es eine kontextfreie Grammatik git, die sie erzeugt.
+\end{definition}
+\begin{example}
+	Wir betrachten die Sprache $L = \{a^n b^n : n \in \mathbb{N}\}$ (vgl. Beispiel~\ref{exp:pumping1}). Folgende kontextfreie Grammatik erzeugt $L$:
+	\begin{align*}
+		S \to aSb \mid \varepsilon.
+	\end{align*}
+	Wir leiten einige Wörter aus $L$ ab:
+	\begin{itemize}
+		\item $S \to \varepsilon$,
+		\item $S \to aSb \to a \varepsilon b = ab$,
+		\item $S \to aSb \to aaSbb \to^{n-2} a^nSb^n \to a^n b^n$.
+	\end{itemize}
+\end{example}
 
 
-\subsection{Normalformen für kontextfreie Grammatiken}
+\subsection{Normalformen für kontextfreie Grammatiken}\label{sec:contextfree_normalforms}
 
 
-\subsection{Ableitungsbäume}
+\subsection{Ableitungsbäume}\label{sec:contextfree_derivationtrees}
 
 
-\subsection{Abschlusseigenschaften kontextfreie Sprachen}
+\subsection{Abschlusseigenschaften kontextfreie Sprachen}\label{sec:contextfree_closure}
 
 
-\subsection{Nicht-kontextfreie Sprachen}
+\subsection{Nicht-kontextfreie Sprachen}\label{sec:contextfree_noncontextfree}
 
 
-\subsection{Kellerautomaten}
+\subsection{Kellerautomaten}\label{sec:contextfree_pda}
 
 
-\subsection{Deterministische Kellerautomaten}
+\subsection{Deterministische Kellerautomaten}\label{sec:contextfree_dpda}
 
 
-\subsection{Algorithmische Probleme für kontextfreie Sprachen}
+\subsection{Algorithmische Probleme für kontextfreie Sprachen}\label{sec:contextfree_algorithms}
 
 
-\subsection{*Anwendung: Parsing}
+\subsection{*Anwendung: Parsing}\label{sec:contextfree_parsing}
 
 
 
 \newpage
-\section{Allgemeine Grammatiken}\label{sec:contextsensitive}
-\subsection{Kontextsensitive Grammatiken}
+\section{Allgemeine Grammatiken}\label{sec:grammars}
+\subsection{Kontextsensitive Grammatiken}\label{sec:grammars_csg}
 
 
-\subsection{Normalformen für kontextsensitive Grammatiken}
+\subsection{Normalformen für kontextsensitive Grammatiken}\label{sec:grammars_normalforms}
 
 
-\subsection{Linear-beschränkte Automaten}
+\subsection{Linear-beschränkte Automaten}\label{sec:grammars_lba} % or rational graphs?
 
 
-\subsection{Algorithmische Probleme für kontextsensitive Sprachen}
+\subsection{Algorithmische Probleme für kontextsensitive Sprachen}\label{sec:grammars_algorithms}
 
 
-\subsection{Phrasenstrukturgrammatiken}
+\subsection{Phrasenstrukturgrammatiken}\label{sec:grammars_unrestricted}
 
 
-\subsection{Turingmaschinen}
+\subsection{Turingmaschinen}\label{sec:grammars_tm}
 
 
-\subsection{Die Chomsky-Hierarchie}
+\subsection{Die Chomsky-Hierarchie}\label{sec:grammars_chomsky}
 
 
 
 \newpage
 \section{Prozesskalküle und Petri-Netze}\label{sec:process}
-\subsection{Nebenläufige Systeme}
+\subsection{Nebenläufige Systeme}\label{sec:process_concurring}
 
 
-\subsection{Synchronisierte und unsynchronsierte Produkte}
+\subsection{Synchronisierte und unsynchronsierte Produkte}\label{sec:process_products}
 
 
-\subsection{Algebraische Beschreibung von Transitionssystemen}
+\subsection{Algebraische Beschreibung von Transitionssystemen}\label{sec:process_algebraic}
 
 
-\subsection{Petri-Netze}
+\subsection{Petri-Netze}\label{sec:process_petrinets}
 
 
-\subsection{*Anwendung: Mutual Exclusion}
+\subsection{*Anwendung: Mutual Exclusion}\label{sec:process_peterson}
 
 
 
