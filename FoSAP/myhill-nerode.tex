@@ -62,25 +62,25 @@ Da die Myhill-Nerode-Relation eigentlich sogar etwas mehr ist, hier noch eine we
 
 Die Myhill-Nerode-Äquivalenz ist definiert durch:
 \begin{definition}
-	Sei \( \Sigma \) ein Alphabet und \( L \subseteq \Sigma^\ast \). Seien \( u, v \in \Sigma^\ast \). \( u \) und \( v \) heißen \textbf{Myhill-Nerode-äquivalent} (\( u \equiv_L v \)) genau dann, wenn für alle \( w \in \Sigma^\ast \) gilt, dass \( uw \in L \) g.d.w. \( vw \in L \).
+	Sei \( \Sigma \) ein Alphabet und \( L \subseteq \Sigma^\ast \). Seien \( u, v \in \Sigma^\ast \). \( u \) und \( v \) heißen \textbf{Myhill-Nerode-äquivalent} (\( u \sim_L v \)) genau dann, wenn für alle \( w \in \Sigma^\ast \) gilt, dass \( uw \in L \) g.d.w. \( vw \in L \).
 \end{definition}
 
 Diese Relation ist streng genommen nicht nur eine Äquivalenz sondern auch eine rechtsseitige (!) Kongruenz, deswegen sind auch die Begriffe \textit{Myhill-Nerode-Rechtskongruenz} und -- nicht ganz korrekterweise -- \textit{Myhill-Nerode-Kongruenz} gebräuchlich.
 
 Eine einfacher Folgerung aus der Definition ist
 \begin{lemma}\label{kongruenzlemma}
-	Sei \( L \subseteq \Sigma^\ast \) eine Sprache. Für alle \( u, v, w \in \Sigma^\ast \) mit \( u \equiv_L v \) gilt
+	Sei \( L \subseteq \Sigma^\ast \) eine Sprache. Für alle \( u, v, w \in \Sigma^\ast \) mit \( u \sim_L v \) gilt
 	\[
-		uw \equiv_L vw.
+		uw \sim_L vw.
 	\]
 \end{lemma}
 
 Zuletzt der Begriff der Äquivalenzklasse:
 \begin{definition}
-	Sei \( A \) eine Menge und \( \equiv \subseteq A \times A \) eine Äquivalenzrelation. Eine Menge \( A^\prime \subseteq A \) heißt \textbf{Äquivalenzklasse}, wenn
+	Sei \( A \) eine Menge und \( \sim \subseteq A \times A \) eine Äquivalenzrelation. Eine Menge \( A^\prime \subseteq A \) heißt \textbf{Äquivalenzklasse}, wenn
 	\begin{enumerate}
-		\item Wenn \( a \in A^\prime \) und \( b \equiv a \), dann ist auch \( b \in A^\prime \),
-		\item Für alle \( a, b \in A^\prime \) gilt \( a \equiv b \).
+		\item Wenn \( a \in A^\prime \) und \( b \sim a \), dann ist auch \( b \in A^\prime \),
+		\item Für alle \( a, b \in A^\prime \) gilt \( a \sim b \).
 	\end{enumerate}
 \end{definition}
 
@@ -88,7 +88,7 @@ Man benennt Äquivalenzklassen auch durch einzelne Repräsentanten, z.B. mit \( 
 Die Vereinigung aller Äquivalenzklassen zu einer Äquivalenz über einer Menge \( A \) bildet stets eine Partition von \( A \).
 
 \subsection*{Finden der Äquivalenzklassen}
-Lemma~\ref{kongruenzlemma} kann dafür verwendet werden um Äquivalenzklassen (der Myhill-Nerode-Ä\-qui\-va\-lenz \( \equiv_L \)) zu finden. Wir gehen dabei wie folgt vor:\\
+Lemma~\ref{kongruenzlemma} kann dafür verwendet werden um Äquivalenzklassen (der Myhill-Nerode-Ä\-qui\-va\-lenz \( \sim_L \)) zu finden. Wir gehen dabei wie folgt vor:\\
 Wir starten mit dem leeren Wort \( \varepsilon \) und der zugehörigen Äquivalenzklasse \( [\varepsilon]_L \). Danach wiederholen wir folgende Schritte bis keine neue Äquivalenzklassen mehr gefunden werden:\\
 Für jedes Symbol \( a \in \Sigma \) und jede bisher gefundene Äquivalenzklasse \( [u]_L \) betrachte die Äquivalenzklasse \( [ua]_L \). Ist \( [ua]_L = [v]_L \) für eine bereits gefundene Äquivalenzklasse, passiert nichts. Ist dies nicht der Fall, fügen wir \( [ua]_L \) als neue Äquivalenzklasse hinzu.\par
 Beachte, dass dieses Verfahren nur für reguläre Sprachen terminiert. Nicht-reguläre Sprachen haben unendlich viele Äquivalenzklassen (s. Satz~\ref{nerode}).\par
@@ -98,13 +98,13 @@ Dazu machen wir ein Beispiel. Sei
 \]
 \begin{itemize}
 	\item Jedes Wort aus \( \{ a, b \}^\ast \) hat eine Äquivalenzklasse, also auch \( \varepsilon \). Wir bezeichnen diese mit \( [\varepsilon]_L \).
-	\item Betrachte nun \( [\varepsilon a]_L = [a]_L \). Es ist \( [a]_L \neq [\varepsilon]_L \) (also \( a \not\equiv_L \varepsilon \)), da \( b \) die Wörter trennt, d.h. \( a \cdot b \notin L \), aber \( \varepsilon \cdot b \in L \). d.h. \( [a]_L \) ist eine neue Äquivalenzklasse.
+	\item Betrachte nun \( [\varepsilon a]_L = [a]_L \). Es ist \( [a]_L \neq [\varepsilon]_L \) (also \( a \not\sim_L \varepsilon \)), da \( b \) die Wörter trennt, d.h. \( a \cdot b \notin L \), aber \( \varepsilon \cdot b \in L \). d.h. \( [a]_L \) ist eine neue Äquivalenzklasse.
 	\item Betrachte nun \( [\varepsilon b]_L = [b]_L \). Es ist \( [b]_L \neq [\varepsilon]_L \), da \( \varepsilon \) die Wörter trennt, d.h. \( b \cdot \varepsilon \in L \), aber \( \varepsilon \cdot \varepsilon \notin L \). Außerdem \( [b]_L \neq [a]_L \), weil \( \varepsilon \) die Wörter trennt, d.h. \( b \cdot \varepsilon \in L \), aber \( a \cdot \varepsilon \notin L \).
 	\item Betrachte nun \( [aa]_L \). Es ist \( [aa]_L = [a]_L \), da es kein trennendes Wort gibt (egal, was man anhängt, man kann nicht mehr in der Sprache landen in beiden Fällen, da das Wort nicht mit \( b \) beginnt).
 	\item Betrachte nun \( [ab]_L \). Es ist \( [ab]_L = [a]_L \), da es kein trennendes Wort gibt (egal, was man anhängt, man kann nicht mehr in der Sprache landen in beiden Fällen, da das Wort nicht mit \( b \) beginnt).
 	\item Betrachte nun \( [ba]_L \). Es ist \( [ba]_L = [\varepsilon]_L \), da es kein trennendes Wort gibt.
 	\item Betrachte nun \( [bb]_L \). Es ist \( [bb]_L = [b]_L \), da es kein trennendes Wort gibt.
-	\item Damit sind alle Äquivalenzklassen gefunden: \( [\varepsilon]_L, [a]_L, [b]_L \). Dieser Punkt ist für viele Studenten oft erstmal schwierig zu sehen. Es folgt aber direkt aus der rechtsseitigen Kongruenz bzw. Lemma~\ref{kongruenzlemma}. Egal welches Wort wir betrachten, wir können es einer dieser Äquivalenklassen zuordnen. Betrachte zum Beispiel \( [bab]_L \). Wegen \( ba \equiv_L \varepsilon \) ist \( ba \cdot b \equiv_L \varepsilon \cdot b = b \) und somit \( [bab]_L = [b]_L \). 
+	\item Damit sind alle Äquivalenzklassen gefunden: \( [\varepsilon]_L, [a]_L, [b]_L \). Dieser Punkt ist für viele Studenten oft erstmal schwierig zu sehen. Es folgt aber direkt aus der rechtsseitigen Kongruenz bzw. Lemma~\ref{kongruenzlemma}. Egal welches Wort wir betrachten, wir können es einer dieser Äquivalenklassen zuordnen. Betrachte zum Beispiel \( [bab]_L \). Wegen \( ba \sim_L \varepsilon \) ist \( ba \cdot b \sim_L \varepsilon \cdot b = b \) und somit \( [bab]_L = [b]_L \). 
 \end{itemize}
 
 \subsection*{Wofür ist das nützlich?}
@@ -112,11 +112,11 @@ Die Myhill-Nerode-Äquivalenz ist inhaltlich eines der schönsten Sachen in FoSA
 \begin{theorem}[Satz von Nerode]\label{nerode}
 	Eine Sprache ist genau dann regulär, wenn die Anzahl der Myhill-Nerode-Äquivalenzklassen endlich ist.
 \end{theorem}
-Man schreibt auch \( index(\equiv_L) < \infty \). Die Sprache \( L \) im Beispiel hat \( index(\equiv_L) = 3 < \infty \) und ist somit regulär. Betrachte nun ein Standardbeispiel für eine nicht-reguläre Sprache 
+Man schreibt auch \( index(\sim_L) < \infty \). Die Sprache \( L \) im Beispiel hat \( index(\sim_L) = 3 < \infty \) und ist somit regulär. Betrachte nun ein Standardbeispiel für eine nicht-reguläre Sprache 
 \[
 	K = \{ a^n b^n : n \in \mathbb{N} \}.
 \]
-\( K \) ist nicht regulär. Betrachte die Wörter \( u_i = a^i \) und \( u_j = a^j \) mit \( i \neq j \). Es gilt offensichtlich \( u_i \not\equiv_K u_j \), denn das Wort \( b^i \) trennt die Wörter, weil \( u_i b^i = a^i b^i \in K \), aber \( u_j b^i = a^j b^i \notin K \). Da es unendlich viele \( i, j \in \mathbb{N} \) mit \( i \neq j \) gibt, gibt es auch unendlich viele Äquivalenzklassen. Also ist \( K \) nach dem Satz von Nerode nicht regulär.
+\( K \) ist nicht regulär. Betrachte die Wörter \( u_i = a^i \) und \( u_j = a^j \) mit \( i \neq j \). Es gilt offensichtlich \( u_i \not\sim_K u_j \), denn das Wort \( b^i \) trennt die Wörter, weil \( u_i b^i = a^i b^i \in K \), aber \( u_j b^i = a^j b^i \notin K \). Da es unendlich viele \( i, j \in \mathbb{N} \) mit \( i \neq j \) gibt, gibt es auch unendlich viele Äquivalenzklassen. Also ist \( K \) nach dem Satz von Nerode nicht regulär.
 
 \begin{theorem}
 	Der minimale DFA zu einer reguläre Sprache \( L \) ist isomorph zum Myhill-Nerode-DFA:
