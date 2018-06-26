@@ -1,0 +1,111 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[left=3cm, right=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage[justification=centering]{caption}
+\usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
+\parindent = 0pt
+\let\emptyset\varnothing
+
+% define environments
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem*{remark*}{Bemerkung}
+
+\theoremstyle{plain}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{theorem*}{Satz}
+
+\renewcommand{\labelenumi}{(\roman{enumi})}
+\renewcommand{\labelenumi}{(\roman{enumi})}
+
+\author{Niklas Rieken}
+\title{Unentscheidbarkeit des Eindeutigkeitsproblems\\für kontextfreie Grammatiken}
+
+\begin{document}
+\maketitle
+
+In der Vorlesung wurde erwähnt, dass es unentscheidbar (d.h. nicht auf algorithmischen Wege lösbar) ist zu einer gegebenen kontextfreien Grammatik (\textit{CFG}) zubestimmen ob diese eindeutig (\textit{unambiguous}) oder mehrdeutig (\textit{ambiguous}) ist. In diesem Dokument liefern wir einen Beweis dazu nach, der zwar bereits einige Konzepte und Sätze aus der Vorlesung \textit{Berechenbarkeit und Komplexität} verwendet, aber konzeptionell trotzdem gut verständlich sein sollte. Wir beginnen mit ein paar Definitionen.
+
+\begin{definition}
+	Sei $\mathcal{G} = (N, \Sigma, P, S)$ eine kontextfreie Grammatik. Eine Ableitung in $\mathcal{G}$ heißt \textit{Linksableitung}, wenn in jedem Ableitungsschritt das Nichtterminal ersetzt wird, welches kein Nichtterminal links von sich stehen hat.
+\end{definition}
+
+\begin{definition}
+	Sei $\mathcal{G} = (N, \Sigma, P, S)$ eine kontextfreie Grammatik. $\mathcal{G}$ heißt \textit{eindeutig}, falls für alle $w \in L(\mathcal{G})$ genau eine Linksableitung existiert. Ansonsten heißt $\mathcal{G}$ \textit{mehrdeutig}.
+\end{definition}
+
+Wir wollen nun zeigen, dass das folgende Problem unentscheidbar ist:\\
+\textsc{Unambiguous Grammar (UG)}. Gegeben kontextfreie Grammatik $\mathcal{G}$. Ist $\mathcal{G}$ eindeutig?
+
+Wir verwenden dazu das Hilfsproblem\\
+\textsc{Ambiguous Grammar (AG)}. Gegeben kontextfreie Grammatik $\mathcal{G}$. Ist $\mathcal{G}$ mehrdeutig?
+
+Es ist klar, dass wenn \textsc{AG} unentscheidbar ist, dass dann auch \textsc{UG} unentscheidbar ist, denn wenn wir einen einen Algorithmus $A$ für \textsc{AG} hätten so würde ein Algorithmus für \textsc{UG} einfach nur $A$ auf der eingegebenen Grammatik aufrufen und den Output umdrehen. Wie zeigen wir aber nun, dass \textsc{AG} unentscheidbar ist. Dazu nehmen wir uns das folgende Problem, von dem wir wissen, dass es unentscheidbar ist:\\
+\textsc{Post's Correspondence Problem (PCP)}. Gegeben eine Menge von Dominos 
+$$
+	\mathcal{D} \coloneqq \left\lbrace \left[ \frac{u_1}{v_1} \right], \ldots, \left[ \frac{u_n}{v_n} \right] \right\rbrace
+$$
+mit $u_i, v_i \in \Sigma^\ast$ für ein Alphabet $\Sigma$.
+Gibt es eine Indexfolge $(i_1, \ldots, i_k)$, sodass $u_{i_1} \ldots u_{i_k} = v_{i_1} \ldots v_{i_k}$? (D.h. gesucht ist eine Aneinanderreihung von Dominos (mit Wiederholungen) aus $\mathcal{D}$, sodass oben das selbe Wort wie unten steht).
+
+Dass \textsc{PCP} unentscheidbar ist, ist ein Satz aus Berechenbarkeit und Komplexität, den wir hier nicht beweisen. Das ist vermutlich etwas unbefriedigend, da das Problem eigentlich nicht sonderlich schwer aussieht und nun doch die Aussage im Raum steht, dass es keinen Algorithmus dafür gibt. Ein Beweis dieser Aussage würde jedoch extrem weit vorgreifen, nur so viel: Man kann zeigen, dass, wenn \textsc{PCP} entscheidbar wäre auch das \textit{Halteproblem für Turingmaschinen}, von dem man in populärwissenschaftlichen Quellen (z.B. Numberphile) gehört haben könnte, ebenfalls entscheidbar wäre.
+
+Wir führen nun das Konzept einer \textit{Reduktion} ein.
+\begin{definition}
+	Seien $A, B \subseteq \Sigma^\ast$. $A$ heißt \textit{many-one-reduzierbar} auf $B$ (geschrieben $A \leq_m B$), falls eine berechenbare Funktion $f\colon \Sigma^\ast \to \Sigma^\ast$ existiert mit $x \in A$ g.d.w. $f(x) \in B$. Man nennt $f$ dann auch \textit{Reduktionsabbildung}.
+\end{definition}
+Was bedeutet das intuitiv: Zunächst haben wir zwei Sprachen $A, B$ über einem Alphabet $\Sigma$. $A$ und $B$ codieren gewissermaßen die Probleme, die wir aufeinander reduzieren wollen. Eine Reduktion ist dann quasi eine Übersetzung von einem Problem ins andere, d.h. wir wollen eine Ja-Instanz des einen Problems (ein Wort aus der Sprache $A$) in eine Ja-Instanz des anderen Problems (ein Wort aus der Sprache $B$) überführen, genauso mit Nein-Instanzen.
+\begin{lemma*}
+	Seien $A, B \in \Sigma^\ast$ mit $A \leq_m B$.
+	\begin{enumerate}
+		\item Wenn $A$ unentscheidbar ist, so ist auch $B$ unentscheidbar.
+		\item Wenn $B$ entscheidbar ist, so ist auch $A$ entscheidbar.
+	\end{enumerate}
+	\begin{proof}
+		Nur der erste Fall, anderer ist Kontraposition: Sei $A$ unentscheidbar. Angenommen $B$ wäre entscheibar. Dann berechne für ein $x \in \Sigma^\ast$ das Wort $f(x)$, wobei $f$ die berechenbare Reduktionsabbildung ist (welche existieren muss wegen $A \leq_m B$). Da $B$ entscheidbar ist, existiert ein Algorithmus für $B$. Lasse diesen auf $f(x)$ laufen. Die Ausgabe ist auch die korrekte Ausgabe für $x$ bzgl. $A$. Also ist $A$ entscheidbar. Widerspruch.
+	\end{proof}
+\end{lemma*}
+
+Wir sehen, dass wir oben bereits bei der Aussage, dass \textsc{UG} ist unentscheidbar, wenn \textsc{AG} unentscheidbar ist, bereits eine ähnliche Argumentation wie im Lemma benutzt haben (wir benutzen die Ausgabe des einen Algorithmus um die andere Ausgabe zu erhalten, beachte jedoch, dass das dort keine many-one-Reduktion war).
+
+Wir zeigen nun, dass $\textsc{PCP} \leq_m \textsc{AG}$. Um den Beweis nicht unnötig zu chiffrieren, werden wir dabei nicht die Domino-Menge $\mathcal{D}$ bzw. die kontextfreie Grammatik $\mathcal{G}$ als Wort über einem Alphabet auffassen. Es ist relativ klar, dass dies geht, zum Beispiel könnten $\mathcal{D}$ codiert werden als $u_1\#v_1\#\#\ldots\#\#u_n\#v_n$ über dem Alphabet $\Sigma \uplus \{\#\}$. Dabei steht $\#\#$ als Trennung zwischen den Dominos und ein ein einzelnes $\#$ für die Trennung zwischen $u_i$ und $v_i$.
+
+\begin{theorem*}
+	$\textsc{PCP} \leq_m \textsc{AG}$.
+	\begin{proof}
+		Sei die \textsc{PCP}-Instanz $\mathcal{D} \coloneqq \lbrace [\frac{u_1}{v_1}], \ldots, [\frac{u_n}{v_n}] \rbrace$ codiert als $x$ gegeben. Sollte an der Codierung etwas falsch sein, können wir einfach $f(x)$ auf eine Codierung einer eindeutigen Grammtik setzen, z.B. $(\{S\}, \{a\}, \{S \to \varepsilon\}, S)$. Ansonsten setzen wir $f(x)$ auf die Codierung der Grammatik
+		$$
+			\mathcal{G}_\mathcal{D} = (\{S, A, B\}, \Sigma \uplus \{1, \ldots, n\}, P, S)
+		$$
+		mit 
+		\begin{align*}
+			P &= \{S \to A \mid B\}\\
+			&\cup \{A \to u_i A i \mid u_i i : i \in \{1, \ldots, n\}\}\\
+			&\cup \{B \to v_i B i \mid v_i i : i \in \{1, \ldots, n\}\}.
+		\end{align*}
+		Es ist klar, dass $f$ berechenbar ist, denn wir müssen einfach nur Domino für Domino durchgehen und die entsprechenden Regeln hinzufügen.
+		Wir zeigen nun, dass $\mathcal{G}_\mathcal{D}$ genau dann mehrdeutig ist (d.h. zu \textsc{AG} gehört), wenn $\mathcal{D}$ eine Lösung besitzt.
+		\begin{itemize}
+			\item Sei $\mathcal{D} \in \textsc{PCP}$. D.h. es ex. Indexfolge $(i_1, \ldots, i_k)$, sodass $u_{i_1} \ldots u_{i_k} = v_{i_1} \ldots v_{i_k}$. Dann existieren für das Wort $u_{i_1} \ldots u_{i_k}$ zwei Linksableitungen in $\mathcal{G}_\mathcal{D}$, nämlich:
+				\begin{itemize}
+					\item $S \to A \to u_{i_1} A i_1 \to \ldots \to u_{i_1} \ldots u_{i_k} i_k \ldots i_1$ und
+					\item $S \to B \to v_{i_1} B i_1 \to \ldots \to v_{i_1} \ldots v_{i_k} i_k \ldots i_1$.
+				\end{itemize}
+				Beachte dabei, dass $u_{i_1} \ldots u_{i_k} = v_{i_1} \ldots v_{i_k}$. Die Indexfolge steht außerdem in rechts nach links geschrieben rechts neben dem Wort und stimmt in beiden Ableitungen natürlich überein. Also ist $\mathcal{G}_\mathcal{D} \in \textsc{AG}$.
+			\item Sei $\mathcal{G}_\mathcal{D} \in \textsc{AG}$. Es gibt also für ein Wort $w \in L(\mathcal{G}_\mathcal{D}$ zwei verschiedene Linksableitungen. Nach Konstruktion hat $w$ die Form $w = u i_k \ldots i_1$ mit $u \in \Sigma^\ast$ und $i_1, \ldots, i_k \in \{1, \ldots, n\}$. Nun gilt aber, dass wenn $w$ zwei verschiedene Linksableitungen hat, dass eine davon mit der Produktion $S \to A$ beginnt und die andere mit $S \to B$, denn würden beide mit der selben Produktion beginnen müsste auch der Rest der Ableitung übereinstimmen, da sonst der $i_k \ldots i_1$-Teil in den Ableitungen unterschiedlich aussähe. Also ist $\bar{\imath} = (i_1, \ldots, i_k)$ eine Lösung für die \textsc{PCP}-Instanz $\mathcal{D}$, weil die durch $\bar{\imath}$ induzierten Wörter $u_{i_1} \ldots u_{i_k}$ und $v_{i_1} \ldots v_{i_k}$ übereinstimmen. Also ist $\mathcal{D} \in \textsc{PCP}$.\qedhere
+		\end{itemize}
+	\end{proof}
+\end{theorem*}
+Mit dem Lemma oben folgt, dass \textsc{AG} unentscheidbar ist und somit auch \textsc{UG}.
+\end{document}
