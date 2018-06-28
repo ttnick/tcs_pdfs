@@ -9,6 +9,7 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{tikz}
+\usetikzlibrary{shapes.multipart}
 \usepackage{listings}
 \usepackage[justification=centering]{caption}
 \usetikzlibrary{arrows, automata, graphs, shapes, petri, decorations.pathmorphing}
@@ -48,7 +49,8 @@ Die folgende Definition aus der Vorlesung beschreibt, wie sich aus einem Pushdow
 \end{definition*}
 Das Verfahren ist eigentlich sehr einfach, allerdings ist die Funktionsweise nicht sehr intuitiv, da sich die Produktionsregeln der erzeugten Grammatik nicht so leicht interpretieren lassen (oder: sie lassen sich nicht so einfach von links nach rechts lesen).
 Wir betrachten also einen PDA, der mit leerem Stack akzeptiert $\mathcal{A} = (Q, \Sigma, \Gamma, \Delta, q_0, Z_0)$ und konstruieren daraus die Grammatik $\mathcal{G_A} = (N, \Sigma, P, S)$ wie in der Definition beschrieben. Die entscheidene Kernidee des Algorithmus ist folgende: Das Nichtterminalsymbol $[pZq]$ repräsentiert einen Lauf von $p$ nach $q$ bei dem das Stacksymbol $Z$ aus dem Stack entfernt wird (d.h. wir kommen dem leeren Stack ''einen Schritt näher``).\\
-Ein Ableitungsschritt in der Grammatik entspricht dabei nicht einfach einer Transition im PDA (außer im Fall von $[pZq] \to \sigma$, was der Transition $(p, \sigma, Z, \varepsilon, q)$ entspricht), sondern auch der \textit{Hoffnung} den Stack, der sich in der Transition $(p, \sigma, Z, Z_1 \ldots Z_k, p_0)$ aufbaut (für $k > 0$) in einer der Zukunft wieder abzubauen. Die Nichtterminale $[pZq]$ \textit{hoffen} also, dass der PDA von $p$ mit Stackinhalt $Z\gamma$ nach $q$ kommt und dabei nur $\gamma$ auf dem Stack stehen lässt, wobei $\gamma \in \Gamma^\ast$. Wir gehen nun einmal auf die drei Arten der Produktionsregeln ein, hierfür sei $\sigma \in \Sigma \cup \{ \varepsilon \}$:
+Ein Ableitungsschritt in der Grammatik entspricht dabei nicht einfach einer Transition im PDA (außer im Fall von $[pZq] \to \sigma$, was der Transition $(p, \sigma, Z, \varepsilon, q)$ entspricht), sondern auch der \textit{Hoffnung} den Stack, der sich in der Transition $(p, \sigma, Z, Z_1 \ldots Z_m, p_0)$ aufbaut (für $m > 0$) wieder abzubauen. Die Nichtterminale $[pZq]$ \textit{hoffen} also, dass der PDA von $p$ mit Stackinhalt $Z\gamma$ nach $q$ kommt und dabei nur $\gamma$ auf dem Stack stehen lässt, wobei $\gamma \in \Gamma^\ast$. 
+Wir gehen nun einmal auf die drei Arten der Produktionsregeln ein, hierfür sei $\sigma \in \Sigma \cup \{ \varepsilon \}$:
 \begin{itemize}
 	\item Mit dem Startsymbol $S$ haben wir folgende Produktionsregeln: $S \to [q_0 Z_0 q]$ \textbf{für alle} $q \in Q$.\\
 	Die Akzeptanzbedingung des Automatenmodells ist allein vom Stack abhängig, in welchem Zustand ein Lauf terminiert ist also egal, deswegen bilden wir diese Regel für jedes $q$. Hier rufen wir uns nochmal die Intuition der Nichtterminale (außer $S$) in Erinnerung: Gesucht wird also ein Lauf auf $\mathcal{A}$ vom Startzustand $q_0$ zu einem beliebigen $q$, sodass das Bottom-of-Stack-Symbol $Z_0$ weggenommen wird (d.h. nur noch $\varepsilon$ auf dem Stack steht). Diese Regeln sind drücken also genau unseren gewünschten Lauf aus: Von der Startkonfiguration $(q_0, Z_0)$ zu einer Konfiguration $(q, \varepsilon)$.
@@ -56,8 +58,65 @@ Ein Ableitungsschritt in der Grammatik entspricht dabei nicht einfach einer Tran
 	\item Regeln der Form $[pZp_m] \to \sigma [p_0 Z_1 p_1][p1 Z_2 p_2] \ldots [p_{m-1} Z_m p_m]$ für eine Transition $(p, \sigma, Z, Z_1 \ldots Z_m, p_0) \in \Delta$ und alle möglichen(!) Zustände $p_1, \ldots, p_m \in Q$:\\
 	Dies ist die schwerste Art der konstruierten Produktionsregeln. Wir versuchen dies trotzdem einmal in einem Satz von links nach rechts zu beschreiben, auch wenn das etwas konstruiert wirkt:
 	Wir befinden uns in Zustand $p$ mit $Z$ oben auf dem Stack, welches wir entfernen wollen, und dabei den Zustand $p_m$ erreichen mit einer Transition über $\sigma$, wo wir den Stack mit $Z_1, \ldots, Z_m$ auffüllen, welche wir dann in der Zukunft, d.h. in einem Lauf über $p_0$ bis $p_m$, abbauen müssen über weitere Regeln dieser Form und -- schlussendlich -- über Regeln der Art aus dem vorigen Punkt.\\
-	Eine Ableitung eines Wortes repräsentiert also genau einen akzeptierenden (d.h. mit $\varepsilon$ auf dem Stack am Ende) Lauf auf dem PDA.
+	Eine Ableitung eines Wortes repräsentiert also genau einen akzeptierenden (d.h. mit $\varepsilon$ auf dem Stack am Ende) Lauf auf dem PDA. In Abbildung~\ref{fig:stacks} ist die Idee nochmal an einer Transition veranschaulicht.
 \end{itemize}
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[stack/.style={rectangle split, rectangle split parts=#1,draw, anchor=south}]
+		\node[stack=6] at (0, 0) {
+			\nodepart{one}$Z$
+			\nodepart{two}$X_\ell$
+			\nodepart{three}$\vdots$
+			\nodepart{four}$X_2$
+			\nodepart{five}$X_1$
+			\nodepart{six}$Z_0$
+		} node [below] {$p$};
+		\node at (.75, 0) {$\to$};
+		\node[stack=9] at (1.5, 0) {
+			\nodepart{one}$Z_1$
+			\nodepart{two}$Z_2$
+			\nodepart{three}$\vdots$
+			\nodepart{four}$Z_m$
+			\nodepart{five}$X_\ell$
+			\nodepart{six}$\vdots$
+			\nodepart{seven}$X_2$
+			\nodepart{eight}$X_1$
+			\nodepart{nine}$Z_0$
+		} node at (1.5, 0) [below] {$p_0$};
+		\node at (2.25, 0) {$\to^\ast$};
+		\node[stack=8] at (3, 0) {
+			\nodepart{one}$Z_2$
+			\nodepart{two}$\vdots$
+			\nodepart{three}$Z_m$
+			\nodepart{four}$X_\ell$
+			\nodepart{five}$\vdots$
+			\nodepart{six}$X_2$
+			\nodepart{seven}$X_1$
+			\nodepart{eight}$Z_0$
+		} node at (3, 0) [below] {$p_1$};
+		\node at (3.75, 0) {$\to^\ast$};
+		\node at (4.5, 0) {$\cdots$};
+		\node at (5.25, 0) {$\to^\ast$};
+		\node[stack=6] at (6, 0) {
+			\nodepart{one}$Z_m$
+			\nodepart{two}$X_\ell$
+			\nodepart{three}$\vdots$
+			\nodepart{four}$X_2$
+			\nodepart{five}$X_1$
+			\nodepart{six}$Z_0$
+		} node at (6, 0) [below] {$p_{m-1}$};
+		\node at (6.75, 0) {$\to^\ast$};
+		\node[stack=5] at (7.5, 0) {
+			\nodepart{one}$X_\ell$
+			\nodepart{two}$\vdots$
+			\nodepart{three}$X_2$
+			\nodepart{four}$X_1$
+			\nodepart{five}$Z_0$
+		} node at (7.5, 0) [below] {$p_m = q$};
+	\end{tikzpicture}
+	\caption{Ein Teillauf im PDA, welche durch das Nichtterminal $[pZq]$ simuliert wird. Zunächst benutzen wir die Transition $(p, \sigma, Z, Z_1 \ldots Z_m, p_0)$ um $Z$ zu entfernen, dadurch entstehen jedoch die Symbole $Z_1, \ldots, Z_m$ neu auf dem Stack, die im weiteren Verlauf abgebaut werden müssen. Dabei werden ist es für $[pZq]$ \textit{egal} mit welchen Zuständen $p_1, \ldots, p_{m-1}$ dies erreicht wird. Daher gibt es für jede $m$-Auswahl aus $Q$ eine Produktion. Beachte außerdem, dass die Schritte zwischen $p_i$ zu $p_{i+1}$ (für $0 \leq i < m$) \textit{Makro-Schritte} ($\to^\ast$ -- mehrere Transitionen) sind, d.h. nicht wie von $p$ nach $p_0$ eine einzelne Transition (nur durch Transition $(p_i, \sigma, Z_{i+1}, \varepsilon, p_{i+1})$), sondern durch weitere Zwischenschritte mit zwischenzeitlichem Aufbau des Stacks.}
+	\label{fig:stacks}
+\end{figure}
 Um die Philosophie der Konstruktion einmal zusammenzufassen: Wenn in einem akzeptierenden Lauf der aktuelle Stackinhalt zu einem Zeitpunkt $Z\gamma$ ist, dann wird zu einem späteren Punkt des Laufes der Stackinhalt einmal nur noch $\gamma$ sein.\\
 Wir betrachten als Beispiel den PDA, der mit leerem Stack akzeptiert in Abbildung~\ref{fig:pda}. Sei dafür 
 $$

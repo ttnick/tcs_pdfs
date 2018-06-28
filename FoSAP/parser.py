@@ -1,4 +1,5 @@
-from ete2 import Tree, TreeStyle, NodeStyle
+#! /usr/bin/env python
+import ete3
 
 # parser for context-free grammar:
 # S -> +SS | *SS | -S | 0 | 1 | x | y | z
