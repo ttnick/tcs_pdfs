@@ -10,7 +10,7 @@
 \usepackage{tablefootnote}
 \usepackage{natbib}
 \usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
+\usepackage[german]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -46,6 +46,7 @@
             ]{Asana Math}
 \setmathfont[range=bfcal, Scale=MatchUppercase, Alternate]{Asana Math}
 \setmathfont[range=bb, Scale=MatchUppercase]{Asana Math}
+\newtheorem{theorem}{Satz}
 
 \newcommand{\cmd}[1]{\colorbox{red!20}{\textcolor{red!90}{\texttt{#1}}}}
 \newcommand{\code}[1]{\texttt{#1}}
@@ -73,6 +74,7 @@ Das \emph{$n$-te Taylorpolynom} im Entwicklungspunkt $a$ ist definiert als:
 \end{align*}
 
 D.h. das $0$-te Taylorpolynom ist einfach eine Konstante mit dem Funktionswert von $f$ in $a$. Das Taylorpolynom von Grad $1$ besitzt zusätzlich die erste Ableitung gleich der zu approximierenden Funktion in der Stützstelle, damit sind auch benachbarte Punkte relativ exakt approximiert (man erinnert sich, dass die Idee einer Ableitung bzw. von Differenzierbarkeit ist, dass Funktionen auf sehr kleinen Intervallen eben fast linear verlaufen). Das $2$-te Taylorpolynom hat entsprechend auch noch die zweite Ableitung in $a$ gleich der zweiten Ableitung der Funktion usw. Intuitiv gesehen schmiegen sich die Taylorpolynome immer mehr der ursprünglichen Funktion an.
+In Abbildung~\ref{fig:taylor} sind als Beispiel die Taylorpolynome in den Entwicklungspunkten $0$ und $\frac{\pi}{2}$ in steigender Ordnung (s. Bildunterschrift) für die Sinus-Funktion.
 
 \begin{figure}
 	\centering
@@ -162,7 +164,38 @@ D.h. das $0$-te Taylorpolynom ist einfach eine Konstante mit dem Funktionswert v
 		\end{axis}
 	\end{tikzpicture}
 	\caption{Sinus-Funktion und Taylorpolynome von Grad $0$, $1$, $3$, $5$, $7$ mit Entwicklungspunkt $0$ (blau) und von Grad $0$, $2$, $4$, $6$, $8$ mit Entwicklungspunkt $\tfrac{\pi}{2}$ (rot). Beachte, dass für $T_{2n}\sin(x; 0) = T_{2n-1}\sin(x; 0)$ für $n \geq 1$ und $T_{2n}\sin(x; \frac{\pi}{2}) = T_{2n+1}\sin(x; \frac{\pi}{2})$ für $n \geq 0$.}
-	\label{fig:taylorsinus}
+	\label{fig:taylor}
 \end{figure}
 
+\begin{theorem}
+	Sei $k \geq 1$ und $f\colon A \to \mathbb{R}$ $k$-fach differenzierbar in $a \in A$. Dann existiert eine Funktion $h_k \colon A \to \mathbb{R}$, sodass
+	$$
+		f(x) = T_kf(x) + h_k(x)
+	$$
+	und $\lim_{x \to a} h_k(x) = 0$.
+	\begin{proof}
+		Sei
+		$$
+			h_k(x) = \begin{cases}
+				\tfrac{f(x) - T_kf(x)}{(x-a)^k}, & x \neq a\\
+				0, & x = a.
+			\end{cases}
+		$$
+		Wir zeigen $\lim_{x \to a} h_k(x) = 0$. Beachte, dass für $0 \leq j < k$, $f^{(j)}(a) = T_k^{(j)}f(a)$. Somit verschwindet der Zähler in $h_k(x)$ in den ersten $k-1$ Ableitungen bei $x = a$, genauso wie der Nenner (d.h. wir haben einen Ausdruck der Form $\tfrac{0}{0}$). Da $f$ in $a$ $k$-fach differenzierbar ist, ist auch in einer Umgebung von $a$ die Funktion $f$ mindestens $k-1$-fach differenzierbar, denn damit $f^{(k)}(a)$ existieren kann muss auch $f^{(k-1)}$ in einer Umgebung von $a$ existieren. Selbiges gilt für die Funktion im Nenner von $h_k(x)$. Beachte außerdem, dass für $x \neq a$, dieser Nenner, $(x-a)^k \neq 0$, somit können wir den Satz von L'H\^ospital $k$ mal anwenden.
+		\begin{align*}
+			\lim_{x \to a} \frac{f(x) - T_kf(x)}{(x-a)^k} &= \lim_{x \to a} \frac{\frac{d}{dx}(f(x) - T_kf(x))}{\frac{d}{dx}(x-a)^k}\\
+			&= \ldots\\
+			&= \lim_{x \to a} \frac{\frac{d^{k-1}}{dx^{k-1}}(f(x) - T_kf(x))}{\frac{d^{k-1}}{dx^{k-1}}(x-a)^k}\\
+			&= \frac{1}{k!} \lim_{x \to a} \frac{f^{(k-1)}(x) - T_k^{(k-1)}f(x)}{x-a}\\
+			&= \frac{1}{k!}(f^{(k)}(a) - f^{(k)}(a))\\
+			&= 0.
+		\end{align*}
+		Die letzte Umformung ist trivial. Alle vorherigen sind Anwendungen des Satzes von L'H\^ospital und die Verwendung der Definition der Ableitung an der Stelle $x = a$.
+	\end{proof}
+\end{theorem}
+Beachte, dass der Satz von Taylor auch in Funktionen in mehreren Vaiablen gilt, so erhalten wir beispielsweise für das 2. Taylorpolynom einer Funktion $f\colon \mathbb{R}^n \to \mathbb{R}$ mit Entwicklungspunkt $\bar{a}$:
+$$
+	T_2f(\bar{x}, \bar{a}) = f(\bar{a}) + \nabla f(\bar{a}) (\bar{x} - \bar{a}) + \tfrac{1}{2} \nabla^2 f(\bar{a}) (\bar{x} - \bar{a})^2,
+$$
+wobei $\nabla f$ der Gradient und $\nabla^2 f$ die Hesse-Matrix von $f$ ist.
 \end{document}
