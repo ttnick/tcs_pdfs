@@ -8,8 +8,8 @@ int max(int a, int b) {
 
 Node* construct_node(int val) {
 	Node* node;
-
-	if ((node = malloc(sizeof(*node))) == NULL) {
+	node = (Node*) malloc(sizeof(Node));
+	if (node == NULL) {
 		return NULL;
 	}
 
