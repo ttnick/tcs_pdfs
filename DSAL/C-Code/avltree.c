@@ -32,8 +32,8 @@ Node* rotate_right(Node* node) {
 	node->left = tree2;
 
 	// update heights
-	node->height = 1 + max(node->left->height, node->right->height);
-	new_root->height = 1 + max(new_root->left->height, new_root->right->height);
+	node->height = 1 + max(get_height(node->left), get_height(node->right));
+	new_root->height = 1 + max(get_height(new_root->left), get_height(new_root->right));
 
 	return new_root;
 }
@@ -45,21 +45,28 @@ Node* rotate_left(Node* node) {
 	tree2 = new_root->left;
 
 	// rotation
-	new_root = node;
+	new_root->left = node;
 	node->right = tree2;
 
 	// update heights
-	node->height = 1 + max(node->left->height, node->right->height);
-	new_root->height = 1 + max(new_root->left->height, new_root->right->height);
+	node->height = 1 + max(get_height(node->left), get_height(node->right));
+	new_root->height = 1 + max(get_height(new_root->left), get_height(new_root->right));
 
 	return new_root;
+}
+
+int get_height(Node* node) {
+	if (node == NULL) {
+		return 0;
+	}
+	return node->height;
 }
 
 int get_balance(Node* node) {
 	if (node == NULL) {
 		return 0;
 	}
-	return (node->left->height - node->right->height);
+	return (get_height(node->left) - get_height(node->right));
 }
 
 Node* insert(Node* node, int key) {
@@ -80,7 +87,7 @@ Node* insert(Node* node, int key) {
 	}
 
 	// update height of this node
-	node->height = 1 + max(node->left->height, node->right->height);
+	node->height = 1 + max(get_height(node->left), get_height(node->right));
 
 	// balancing if necessary
 	b = get_balance(node);
@@ -101,6 +108,9 @@ Node* insert(Node* node, int key) {
 }
 
 void print_tree(Node* node, int space) {
+	if (space == 0) {
+		printf("========================================================");
+	}
 	if (node != NULL) {
 		space += 10;
 

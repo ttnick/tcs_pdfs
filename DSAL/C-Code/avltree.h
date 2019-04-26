@@ -40,6 +40,13 @@ Node* rotate_right(Node*);
 Node* rotate_left(Node*);
 
 /**
+ * get height of a node
+ * @param node	root node
+ * @returns int	height
+ */
+int get_height(Node*);
+
+/**
  * get balance value of a node
  * how much longer is the left subtree compared to the right subtree?
  * @param node	root node
@@ -58,6 +65,6 @@ Node* insert(Node*, int);
 /**
  * print tree
  * @param node		root node
- * @param space		how much space to next level
+ * @param space		space to next level
  */
 void print_tree(Node*, int);
