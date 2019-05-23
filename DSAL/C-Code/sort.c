@@ -144,6 +144,29 @@ void heapsort(int** ary, int len) {
 	}
 }
 
+void radixsort(int** ary, int len) {
+	int i, j, k;
+	int n[2] = {0, 0};
+	int part[2][len];
+
+	for (i = 0; i < 32; i++) {
+		n[0] = 0;
+		n[1] = 0;
+
+		for (j = 0; j < len; j++) {
+			k = ((*ary)[j] >> i) & 1;
+			part[k][n[k]++] = (*ary)[j];
+		}
+
+		for (j = 0; j < n[0]; j++) {
+			(*ary)[j] = part[0][j];
+		}
+		for (j = 0; j < n[1]; j++) {
+			(*ary)[j+n[0]] = part[1][j];
+		}
+	}
+}
+
 void print_array(int* ary, int len) {
 	int i;
 	printf("[");
@@ -172,7 +195,8 @@ int main(int argc, char** argv) {
 	//selectionsort(&ary, argc-1);
 	//mergesort(&ary, 0, argc-2);
 	//quicksort(&ary, 0, argc-2);
-	heapsort(&ary, argc-1);
+	//heapsort(&ary, argc-1);
+	radixsort(&ary, argc-1);
 
 	print_array(ary, argc-1);
 
