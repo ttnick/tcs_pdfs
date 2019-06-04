@@ -9,3 +9,5 @@ Außerdem habe ich begonnen ein Vorlesungsskript für die Vorlesung *Formale
 Systeme, Automaten, Prozesse* zu schreiben auf Basis der Vorlesungen von Prof.
 Grohe und Prof. Thomas. Der aktuelle Stand befindet sich im Ordner 
 `FoSAP/Skript`. Ich freue mich über Fehlermeldungen oder auch Pull Requests.
+
+Dieses Repo ist kopiert aus dem GitLab der RWTH Aachen. Der Master hier ist unter Umständen nicht aktuell.
